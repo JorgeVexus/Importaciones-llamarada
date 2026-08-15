@@ -1,0 +1,255 @@
+{%- assign selected_collection = section.settings.collection -%}
+
+<section class="ll-featured-deals" aria-labelledby="ll-deals-title-{{ section.id }}">
+  <div class="ll-section-header">
+    <div>
+      <div class="ll-section-title-wrap">
+        <span class="ll-section-title-icon">
+          <svg width="20" height="20" viewBox="0 0 16 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M8 0C8 0 10.5 3 10.5 5.5C10.5 7.5 9 8.5 8 9.5C7 8.5 5.5 7.5 5.5 5.5C5.5 3 8 0 8 0ZM13.5 6.5C13.5 6.5 16 9.5 16 12C16 15.5 12.5 18.5 8 18.5C3.5 18.5 0 15.5 0 12C0 8.5 4.5 4.5 4.5 4.5C4.5 4.5 3 7.5 3 9.5C3 11.5 5 12.5 6 12.5C7 12.5 7.5 11.5 7.5 10.5C7.5 8.5 5.5 7.5 5.5 7.5C5.5 7.5 13.5 6.5 13.5 6.5Z" fill="#f9321f"/>
+          </svg>
+        </span>
+        <h2 id="ll-deals-title-{{ section.id }}" class="ll-section-title">
+          {{ section.settings.title | default: 'Ofertas de Mayoreo' }}
+        </h2>
+      </div>
+      <p class="ll-section-subtitle">
+        {{ section.settings.subtitle | default: 'Precios especiales por caja cerrada' }}
+      </p>
+    </div>
+
+    <a href="{{ section.settings.view_all_link | default: selected_collection.url | default: '/collections/all' }}" class="ll-section-link">
+      <span>{{ section.settings.view_all_text | default: 'Ver todas' }}</span>
+      <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 5H9M9 5L5 1M9 5L5 9" stroke="#F9321F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+  </div>
+
+  <div class="ll-products-grid">
+    {%- if selected_collection != blank and selected_collection.products_count > 0 -%}
+      {%- for product in selected_collection.products limit: section.settings.products_to_show -%}
+        <article class="ll-product-card">
+          <div class="ll-product-card__badges">
+            {%- if product.compare_at_price > product.price -%}
+              <span class="ll-badge ll-badge--red">DESCUENTO</span>
+            {%- elsif product.tags contains 'nuevo' or product.tags contains 'Nuevo' -%}
+              <span class="ll-badge ll-badge--green">NUEVO</span>
+            {%- else -%}
+              <span class="ll-badge ll-badge--yellow">MAYOREO</span>
+            {%- endif -%}
+          </div>
+
+          <div class="ll-product-card__media">
+            {%- if product.featured_media != blank -%}
+              <img src="{{ product.featured_media | image_url: width: 400 }}" alt="{{ product.title | escape }}" loading="lazy" width="300" height="192">
+            {%- else -%}
+              {{ 'product-1' | placeholder_svg_tag }}
+            {%- endif -%}
+          </div>
+
+          <div class="ll-product-card__body">
+            <div>
+              <div class="ll-product-card__meta">
+                <span class="ll-product-card__category">{{ product.type | default: 'Mayoreo' }}</span>
+              </div>
+              <h3 class="ll-product-card__title">{{ product.title }}</h3>
+            </div>
+
+            <div class="ll-product-card__footer">
+              <div>
+                <p class="ll-product-card__price">{{ product.price | money }}</p>
+                <p class="ll-product-card__unit-info">Caja mayorista</p>
+              </div>
+
+              {%- if product.available -%}
+                <form method="post" action="/cart/add">
+                  <input type="hidden" name="id" value="{{ product.variants.first.id }}">
+                  <button type="submit" class="ll-product-card__btn">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M19 13H13V19H11V13H5V11H11V5H13V11H19V13Z" fill="#9424A4"/></svg>
+                    <span>Agregar</span>
+                  </button>
+                </form>
+              {%- else -%}
+                <button type="button" class="ll-product-card__btn" disabled style="opacity:0.6; cursor:not-allowed;">
+                  <span>Agotado</span>
+                </button>
+              {%- endif -%}
+            </div>
+          </div>
+        </article>
+      {%- endfor -%}
+    {%- else -%}
+      <!-- Demo Items fallback matching Figma design -->
+      <!-- Product 1 -->
+      <article class="ll-product-card">
+        <div class="ll-product-card__badges">
+          <span class="ll-badge ll-badge--yellow">MAYOREO</span>
+          <span class="ll-badge ll-badge--red">-25%</span>
+        </div>
+        <div class="ll-product-card__media">
+          <img src="{{ 'prod-candles.png' | asset_url }}" alt="Caja 24 Velas Aromáticas Surtidas" loading="lazy" width="300" height="192">
+        </div>
+        <div class="ll-product-card__body">
+          <div>
+            <div class="ll-product-card__meta">
+              <span class="ll-product-card__category">Hogar / Decoración</span>
+              <div class="ll-product-card__rating">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 0L7.8 3.6L11.7 4.2L8.9 6.9L9.5 10.8L6 9L2.5 10.8L3.1 6.9L0.3 4.2L4.2 3.6L6 0Z" fill="#FEC017"/></svg>
+                <span>4.8</span>
+              </div>
+            </div>
+            <h3 class="ll-product-card__title">Caja 24 Velas Aromáticas Surtidas…</h3>
+          </div>
+          <div class="ll-product-card__footer">
+            <div>
+              <p class="ll-product-card__price">$480.00</p>
+              <p class="ll-product-card__unit-info">Caja con 24 pzas ($20.00 c/u)</p>
+            </div>
+            <a href="/products/caja-velas" class="ll-product-card__btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M19 13H13V19H11V13H5V11H11V5H13V11H19V13Z" fill="#9424A4"/></svg>
+              <span>Agregar Caja</span>
+            </a>
+          </div>
+        </div>
+      </article>
+
+      <!-- Product 2 -->
+      <article class="ll-product-card">
+        <div class="ll-product-card__badges">
+          <span class="ll-badge ll-badge--yellow">MAYOREO</span>
+        </div>
+        <div class="ll-product-card__media">
+          <img src="{{ 'prod-cups.png' | asset_url }}" alt="Lote 12 Vasos Vidrio Kawaii" loading="lazy" width="300" height="192">
+        </div>
+        <div class="ll-product-card__body">
+          <div>
+            <div class="ll-product-card__meta">
+              <span class="ll-product-card__category">Cocina / Termos</span>
+              <div class="ll-product-card__rating">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 0L7.8 3.6L11.7 4.2L8.9 6.9L9.5 10.8L6 9L2.5 10.8L3.1 6.9L0.3 4.2L4.2 3.6L6 0Z" fill="#FEC017"/></svg>
+                <span>4.9</span>
+              </div>
+            </div>
+            <h3 class="ll-product-card__title">Lote 12 Vasos Vidrio Kawaii con Perlas…</h3>
+          </div>
+          <div class="ll-product-card__footer">
+            <div>
+              <p class="ll-product-card__price">$840.00</p>
+              <p class="ll-product-card__unit-info">Lote con 12 pzas ($70.00 c/u)</p>
+            </div>
+            <a href="/products/lote-vasos" class="ll-product-card__btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M19 13H13V19H11V13H5V11H11V5H13V11H19V13Z" fill="#9424A4"/></svg>
+              <span>Agregar Lote</span>
+            </a>
+          </div>
+        </div>
+      </article>
+
+      <!-- Product 3 -->
+      <article class="ll-product-card">
+        <div class="ll-product-card__badges">
+          <span class="ll-badge ll-badge--yellow">MAYOREO</span>
+        </div>
+        <div class="ll-product-card__media">
+          <img src="{{ 'prod-brushes.png' | asset_url }}" alt="Caja 50 Sets Brochas Profesionales" loading="lazy" width="300" height="192">
+        </div>
+        <div class="ll-product-card__body">
+          <div>
+            <div class="ll-product-card__meta">
+              <span class="ll-product-card__category">Belleza</span>
+            </div>
+            <h3 class="ll-product-card__title">Caja 50 Sets Brochas Profesionales 12 pzas</h3>
+          </div>
+          <div class="ll-product-card__footer">
+            <div>
+              <p class="ll-product-card__price">$3,250.00</p>
+              <p class="ll-product-card__unit-info">Caja con 50 sets ($65.00 c/u)</p>
+            </div>
+            <a href="/products/caja-brochas" class="ll-product-card__btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M19 13H13V19H11V13H5V11H11V5H13V11H19V13Z" fill="#9424A4"/></svg>
+              <span>Agregar Caja</span>
+            </a>
+          </div>
+        </div>
+      </article>
+
+      <!-- Product 4 -->
+      <article class="ll-product-card">
+        <div class="ll-product-card__badges">
+          <span class="ll-badge ll-badge--green">NUEVO</span>
+        </div>
+        <div class="ll-product-card__media">
+          <img src="{{ 'prod-bibs.png' | asset_url }}" alt="Lote 30 Baberos Silicón Ajustables" loading="lazy" width="300" height="192">
+        </div>
+        <div class="ll-product-card__body">
+          <div>
+            <div class="ll-product-card__meta">
+              <span class="ll-product-card__category">Bebés</span>
+            </div>
+            <h3 class="ll-product-card__title">Lote 30 Baberos Silicón Ajustables Tonos Pastel</h3>
+          </div>
+          <div class="ll-product-card__footer">
+            <div>
+              <p class="ll-product-card__price">$1,050.00</p>
+              <p class="ll-product-card__unit-info">Lote con 30 pzas ($35.00 c/u)</p>
+            </div>
+            <a href="/products/lote-baberos" class="ll-product-card__btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M19 13H13V19H11V13H5V11H11V5H13V11H19V13Z" fill="#9424A4"/></svg>
+              <span>Agregar Lote</span>
+            </a>
+          </div>
+        </div>
+      </article>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Ofertas de Mayoreo",
+  "class": "section-llamarada-deals",
+  "settings": [
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Colección de productos a mostrar"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Título de la sección",
+      "default": "Ofertas de Mayoreo"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtítulo explicativo",
+      "default": "Precios especiales por caja cerrada"
+    },
+    {
+      "type": "text",
+      "id": "view_all_text",
+      "label": "Texto enlace Ver todas",
+      "default": "Ver todas"
+    },
+    {
+      "type": "url",
+      "id": "view_all_link",
+      "label": "Enlace Ver todas"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "min": 4,
+      "max": 16,
+      "step": 4,
+      "default": 4,
+      "label": "Límite de productos a mostrar"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Ofertas de Mayoreo"
+    }
+  ]
+}
+{% endschema %}

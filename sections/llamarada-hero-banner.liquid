@@ -1,0 +1,93 @@
+<section class="ll-hero" aria-label="Banner principal" style="background: linear-gradient(105deg, {{ section.settings.gradient_start | default: '#9424a4' }} 0%, {{ section.settings.gradient_end | default: '#f9321f' }} 100%);">
+  <div class="ll-hero__glow-1" aria-hidden="true"></div>
+  <div class="ll-hero__glow-2" aria-hidden="true"></div>
+  
+  <div class="ll-hero__content">
+    <h1 class="ll-hero__title" style="color: {{ section.settings.title_color | default: '#ffffff' }};">
+      {{ section.settings.title | default: 'Importamos lo que necesitas' }}
+    </h1>
+    <p class="ll-hero__subtitle" style="color: {{ section.settings.subtitle_color | default: '#e8d0ed' }};">
+      {{ section.settings.subtitle | default: 'Abastece tu negocio con los mejores precios de mayoreo directamente desde fábrica.' }}
+    </p>
+    <a
+      href="{{ section.settings.cta_link | default: '/collections/all' }}"
+      class="ll-hero__cta"
+      style="background-color: {{ section.settings.cta_bg_color | default: '#91c441' }}; color: {{ section.settings.cta_text_color | default: '#1b1b1b' }};"
+    >
+      {{ section.settings.cta_text | default: 'Ver Catálogo Mayorista' }}
+    </a>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Banner Hero Principal",
+  "class": "section-llamarada-hero",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Título principal",
+      "default": "Importamos lo que necesitas"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Color del título",
+      "default": "#ffffff"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Subtítulo explicativo",
+      "default": "Abastece tu negocio con los mejores precios de mayoreo directamente desde fábrica."
+    },
+    {
+      "type": "color",
+      "id": "subtitle_color",
+      "label": "Color del subtítulo",
+      "default": "#e8d0ed"
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "Texto del botón CTA",
+      "default": "Ver Catálogo Mayorista"
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "Enlace del botón CTA"
+    },
+    {
+      "type": "color",
+      "id": "cta_bg_color",
+      "label": "Color de fondo del botón CTA",
+      "default": "#91c441"
+    },
+    {
+      "type": "color",
+      "id": "cta_text_color",
+      "label": "Color de texto del botón CTA",
+      "default": "#1b1b1b"
+    },
+    {
+      "type": "color",
+      "id": "gradient_start",
+      "label": "Color inicio de gradiente",
+      "default": "#9424a4"
+    },
+    {
+      "type": "color",
+      "id": "gradient_end",
+      "label": "Color fin de gradiente",
+      "default": "#f9321f"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Banner Hero Principal"
+    }
+  ]
+}
+{% endschema %}

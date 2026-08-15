@@ -1,10 +1,18 @@
 {
   "sections": {
-    "product_grid": {
-      "type": "main-collection-product-grid"
+    "sidebar": {
+      "type": "llamarada-sidebar-nav"
+    },
+    "banner": {
+      "type": "llamarada-collection-banner"
+    },
+    "grid": {
+      "type": "llamarada-collection-grid"
     }
   },
   "order": [
-    "product_grid"
+    "sidebar",
+    "banner",
+    "grid"
   ]
 }

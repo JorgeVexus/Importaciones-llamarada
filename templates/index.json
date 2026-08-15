@@ -1,10 +1,22 @@
 {
   "sections": {
-    "image_banner": {
-      "type": "image-banner"
+    "sidebar": {
+      "type": "llamarada-sidebar-nav"
+    },
+    "hero": {
+      "type": "llamarada-hero-banner"
+    },
+    "categories": {
+      "type": "llamarada-popular-categories"
+    },
+    "deals": {
+      "type": "llamarada-wholesale-deals"
     }
   },
   "order": [
-    "image_banner"
+    "sidebar",
+    "hero",
+    "categories",
+    "deals"
   ]
 }
