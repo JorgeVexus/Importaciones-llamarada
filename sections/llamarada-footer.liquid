@@ -1,0 +1,58 @@
+<footer class="ll-footer">
+  <div class="ll-footer__container">
+    <!-- Brand -->
+    <div class="ll-footer__brand">
+      {{ section.settings.brand_text | default: 'Llamarada: home & market' }}
+    </div>
+
+    <!-- Navigation -->
+    <nav class="ll-footer__nav" aria-label="Enlaces de pie de página">
+      {%- if section.settings.footer_menu != blank -%}
+        {%- for link in section.settings.footer_menu.links -%}
+          <a href="{{ link.url }}" class="ll-footer__link">{{ link.title }}</a>
+        {%- endfor -%}
+      {%- else -%}
+        <a href="/pages/mayoreo" class="ll-footer__link">Mayoreo</a>
+        <a href="/policies/terms-of-service" class="ll-footer__link">Términos</a>
+        <a href="/pages/contact" class="ll-footer__link">Contacto</a>
+        <a href="/blogs/news" class="ll-footer__link">Novedades</a>
+      {%- endif -%}
+    </nav>
+
+    <!-- Copyright -->
+    <div class="ll-footer__copy">
+      {{ section.settings.copyright_text | default: '© 2024 Importadora Global. Importamos lo que necesitas.' }}
+    </div>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Llamarada Footer",
+  "class": "section-llamarada-footer",
+  "settings": [
+    {
+      "type": "text",
+      "id": "brand_text",
+      "label": "Texto de Marca",
+      "default": "Llamarada: home & market"
+    },
+    {
+      "type": "link_list",
+      "id": "footer_menu",
+      "label": "Menú del footer"
+    },
+    {
+      "type": "text",
+      "id": "copyright_text",
+      "label": "Texto de Copyright",
+      "default": "© 2024 Importadora Global. Importamos lo que necesitas."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Llamarada Footer"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,127 @@
+<header class="ll-header">
+  <div class="ll-header__container">
+    <div class="ll-header__top">
+      <!-- Brand Logo -->
+      <a href="{{ routes.root_url }}" class="ll-header__brand" aria-label="{{ shop.name }}">
+        {%- if section.settings.logo != blank -%}
+          <img
+            src="{{ section.settings.logo | image_url: width: 300 }}"
+            alt="{{ shop.name }}"
+            class="ll-header__logo-img"
+            loading="eager"
+            width="{{ section.settings.logo_width }}"
+            height="auto"
+          >
+        {%- else -%}
+          <img
+            src="{{ 'figma-logo.png' | asset_url }}"
+            alt="La Llamarada - Importaciones"
+            class="ll-header__logo-img"
+            loading="eager"
+            width="220"
+            height="60"
+          >
+        {%- endif -%}
+      </a>
+
+      <!-- Search Input Bar -->
+      <div class="ll-header__search-wrap">
+        <form action="{{ routes.search_url }}" method="get" role="search" class="ll-header__search-form">
+          <input
+            type="search"
+            name="q"
+            id="ll-header-search"
+            class="ll-header__search-input"
+            placeholder="{{ section.settings.search_placeholder | default: 'Buscar productos por mayoreo...' }}"
+            value="{{ search.terms | escape }}"
+            autocomplete="off"
+          >
+          <button type="submit" class="ll-header__search-btn" aria-label="Buscar">
+            <img src="{{ 'icon-header-search.svg' | asset_url }}" alt="Buscar" width="18" height="18">
+          </button>
+        </form>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="ll-header__actions">
+        <!-- Cart -->
+        <a href="{{ routes.cart_url }}" class="ll-header__action-btn" id="ll-cart-icon-bubble" aria-label="Carrito de compras">
+          <img src="{{ 'icon-header-cart.svg' | asset_url }}" alt="Carrito" width="22" height="22">
+          <span class="ll-header__badge" id="ll-cart-count">
+            {%- if cart.item_count > 0 -%}
+              {{ cart.item_count }}
+            {%- else -%}
+              3
+            {%- endif -%}
+          </span>
+        </a>
+
+        <!-- User / Account -->
+        <a href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}" class="ll-header__action-btn" aria-label="Mi Cuenta">
+          <img src="{{ 'icon-header-user.svg' | asset_url }}" alt="Usuario" width="22" height="22">
+        </a>
+      </div>
+    </div>
+
+    <!-- Sub-navigation row -->
+    <nav class="ll-header__nav" aria-label="Categorías principales">
+      {%- if section.settings.menu != blank -%}
+        {%- for link in section.settings.menu.links -%}
+          <a
+            href="{{ link.url }}"
+            class="ll-header__nav-link{% if link.current or forloop.first %} is-active{% endif %}"
+          >
+            {{ link.title }}
+          </a>
+        {%- endfor -%}
+      {%- else -%}
+        <a href="/collections/hogar" class="ll-header__nav-link is-active">Hogar</a>
+        <a href="/collections/juguetes" class="ll-header__nav-link">Juguetes</a>
+        <a href="/collections/fiesta" class="ll-header__nav-link">Fiesta</a>
+        <a href="/collections/belleza" class="ll-header__nav-link">Belleza</a>
+        <a href="/collections/cocina" class="ll-header__nav-link">Cocina</a>
+        <a href="/collections/bebes" class="ll-header__nav-link">Bebés</a>
+      {%- endif -%}
+    </nav>
+  </div>
+</header>
+
+{% schema %}
+{
+  "name": "Llamarada Header",
+  "class": "section-llamarada-header",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo de la tienda"
+    },
+    {
+      "type": "range",
+      "id": "logo_width",
+      "min": 100,
+      "max": 300,
+      "step": 10,
+      "default": 220,
+      "unit": "px",
+      "label": "Ancho del logo"
+    },
+    {
+      "type": "text",
+      "id": "search_placeholder",
+      "label": "Placeholder del buscador",
+      "default": "Buscar productos por mayoreo..."
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Menú de navegación"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Llamarada Header"
+    }
+  ]
+}
+{% endschema %}

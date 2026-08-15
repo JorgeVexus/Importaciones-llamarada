@@ -1,0 +1,452 @@
+<div class="ll-home">
+  <!-- =========================================================================
+       SIDEBAR NAVIGATION (DESKTOP)
+       ========================================================================= -->
+  <aside class="ll-sidebar" aria-label="Menú lateral de navegación mayorista">
+    <!-- Top card CTA -->
+    <div class="ll-sidebar__card">
+      <h2 class="ll-sidebar__title">{{ section.settings.sidebar_title | default: 'Importamos lo que necesitas' }}</h2>
+      <p class="ll-sidebar__subtitle">{{ section.settings.sidebar_subtitle | default: 'Venta por Mayoreo' }}</p>
+      <a href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}" class="ll-sidebar__btn-login">
+        {{ section.settings.sidebar_login_btn | default: 'Iniciar Sesión' }}
+      </a>
+    </div>
+
+    <!-- Category Nav List -->
+    <nav class="ll-sidebar__nav" aria-label="Categorías">
+      <a href="/collections/hogar" class="ll-sidebar__nav-item is-active">
+        <span class="ll-sidebar__icon">
+          <img src="{{ 'icon-nav-hogar.svg' | asset_url }}" alt="Hogar" width="20" height="20">
+        </span>
+        <span>Hogar</span>
+      </a>
+
+      <a href="/collections/juguetes" class="ll-sidebar__nav-item">
+        <span class="ll-sidebar__icon">
+          <img src="{{ 'icon-nav-juguetes.svg' | asset_url }}" alt="Juguetes" width="20" height="20">
+        </span>
+        <span>Juguetes</span>
+      </a>
+
+      <a href="/collections/fiesta" class="ll-sidebar__nav-item">
+        <span class="ll-sidebar__icon">
+          <img src="{{ 'icon-nav-fiesta.svg' | asset_url }}" alt="Fiesta" width="20" height="20">
+        </span>
+        <span>Fiesta</span>
+      </a>
+
+      <a href="/collections/belleza" class="ll-sidebar__nav-item">
+        <span class="ll-sidebar__icon">
+          <img src="{{ 'icon-nav-belleza.svg' | asset_url }}" alt="Belleza" width="20" height="20">
+        </span>
+        <span>Belleza</span>
+      </a>
+
+      <a href="/collections/cocina" class="ll-sidebar__nav-item">
+        <span class="ll-sidebar__icon">
+          <img src="{{ 'icon-nav-cocina.svg' | asset_url }}" alt="Cocina" width="20" height="20">
+        </span>
+        <span>Cocina</span>
+      </a>
+
+      <a href="/collections/limpieza" class="ll-sidebar__nav-item">
+        <span class="ll-sidebar__icon">
+          <img src="{{ 'icon-nav-limpieza.svg' | asset_url }}" alt="Limpieza" width="20" height="20">
+        </span>
+        <span>Limpieza</span>
+      </a>
+
+      <a href="/collections/bebes" class="ll-sidebar__nav-item">
+        <span class="ll-sidebar__icon">
+          <img src="{{ 'icon-nav-bebes.svg' | asset_url }}" alt="Bebés" width="20" height="20">
+        </span>
+        <span>Bebés</span>
+      </a>
+
+      <a href="/collections/abarrotes" class="ll-sidebar__nav-item">
+        <span class="ll-sidebar__icon">
+          <img src="{{ 'icon-nav-abarrotes.svg' | asset_url }}" alt="Abarrotes" width="20" height="20">
+        </span>
+        <span>Abarrotes</span>
+      </a>
+    </nav>
+
+    <!-- Secondary Purple Login CTA -->
+    <a href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}" class="ll-sidebar__btn-purple">
+      Iniciar Sesión
+    </a>
+
+    <!-- Footer Links -->
+    <div class="ll-sidebar__footer-links">
+      <a href="/blogs/news" class="ll-sidebar__footer-link">
+        <span class="ll-sidebar__icon">
+          <img src="{{ 'icon-nav-novedades.svg' | asset_url }}" alt="Novedades" width="20" height="20">
+        </span>
+        <span>Novedades</span>
+      </a>
+
+      <a href="/pages/contact" class="ll-sidebar__footer-link">
+        <span class="ll-sidebar__icon">
+          <img src="{{ 'icon-nav-ayuda.svg' | asset_url }}" alt="Ayuda" width="20" height="20">
+        </span>
+        <span>Ayuda</span>
+      </a>
+    </div>
+  </aside>
+
+  <!-- =========================================================================
+       MAIN CANVAS CONTENT
+       ========================================================================= -->
+  <main class="ll-canvas">
+    <!-- 1. HERO BANNER -->
+    <section class="ll-hero" aria-label="Banner principal">
+      <div class="ll-hero__glow-1" aria-hidden="true"></div>
+      <div class="ll-hero__glow-2" aria-hidden="true"></div>
+      
+      <div class="ll-hero__content">
+        <h1 class="ll-hero__title">
+          {{ section.settings.hero_title | default: 'Importamos lo que necesitas' }}
+        </h1>
+        <p class="ll-hero__subtitle">
+          {{ section.settings.hero_subtitle | default: 'Abastece tu negocio con los mejores precios de mayoreo directamente desde fábrica.' }}
+        </p>
+        <a href="{{ section.settings.hero_btn_link | default: '/collections/all' }}" class="ll-hero__cta">
+          {{ section.settings.hero_btn_text | default: 'Ver Catálogo Mayorista' }}
+        </a>
+      </div>
+    </section>
+
+    <!-- 2. POPULAR CATEGORIES -->
+    <section class="ll-categories" aria-labelledby="ll-categories-title">
+      <div class="ll-section-header">
+        <div class="ll-section-title-wrap">
+          <span class="ll-section-title-icon">
+            <img src="{{ 'icon-categories.svg' | asset_url }}" alt="" width="20" height="20">
+          </span>
+          <h2 id="ll-categories-title" class="ll-section-title">
+            {{ section.settings.categories_title | default: 'Categorías Populares' }}
+          </h2>
+        </div>
+      </div>
+
+      <div class="ll-categories__grid">
+        <!-- Hogar -->
+        <a href="/collections/hogar" class="ll-category-card">
+          <div class="ll-category-card__box ll-category-card__box--hogar">
+            <img src="{{ 'icon-hogar.svg' | asset_url }}" alt="Hogar" width="32" height="32">
+          </div>
+          <span class="ll-category-card__label">Hogar</span>
+        </a>
+
+        <!-- Juguetes -->
+        <a href="/collections/juguetes" class="ll-category-card">
+          <div class="ll-category-card__box ll-category-card__box--juguetes">
+            <img src="{{ 'icon-juguetes.svg' | asset_url }}" alt="Juguetes" width="32" height="32">
+          </div>
+          <span class="ll-category-card__label">Juguetes</span>
+        </a>
+
+        <!-- Fiesta -->
+        <a href="/collections/fiesta" class="ll-category-card">
+          <div class="ll-category-card__box ll-category-card__box--fiesta">
+            <img src="{{ 'icon-fiesta.svg' | asset_url }}" alt="Fiesta" width="32" height="32">
+          </div>
+          <span class="ll-category-card__label">Fiesta</span>
+        </a>
+
+        <!-- Belleza -->
+        <a href="/collections/belleza" class="ll-category-card">
+          <div class="ll-category-card__box ll-category-card__box--belleza">
+            <img src="{{ 'icon-belleza.svg' | asset_url }}" alt="Belleza" width="32" height="32">
+          </div>
+          <span class="ll-category-card__label">Belleza</span>
+        </a>
+
+        <!-- Cocina -->
+        <a href="/collections/cocina" class="ll-category-card">
+          <div class="ll-category-card__box ll-category-card__box--cocina">
+            <img src="{{ 'icon-cocina.svg' | asset_url }}" alt="Cocina" width="32" height="32">
+          </div>
+          <span class="ll-category-card__label">Cocina</span>
+        </a>
+
+        <!-- Abarrotes -->
+        <a href="/collections/abarrotes" class="ll-category-card">
+          <div class="ll-category-card__box ll-category-card__box--abarrotes">
+            <img src="{{ 'icon-abarrotes.svg' | asset_url }}" alt="Abarrotes" width="32" height="32">
+          </div>
+          <span class="ll-category-card__label">Abarrotes</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- 3. WHOLESALE FEATURED DEALS (OFERTAS DE MAYOREO) -->
+    <section class="ll-featured-deals" aria-labelledby="ll-deals-title">
+      <div class="ll-section-header">
+        <div>
+          <div class="ll-section-title-wrap">
+            <span class="ll-section-title-icon">
+              <img src="{{ 'icon-flame-deal.svg' | asset_url }}" alt="" width="20" height="20">
+            </span>
+            <h2 id="ll-deals-title" class="ll-section-title">
+              {{ section.settings.deals_title | default: 'Ofertas de Mayoreo' }}
+            </h2>
+          </div>
+          <p class="ll-section-subtitle">
+            {{ section.settings.deals_subtitle | default: 'Precios especiales por caja cerrada' }}
+          </p>
+        </div>
+
+        <a href="{{ section.settings.deals_link | default: '/collections/all' }}" class="ll-section-link">
+          <span>Ver todas</span>
+          <img src="{{ 'icon-arrow-right.svg' | asset_url }}" alt="Ver todas" width="10" height="10">
+        </a>
+      </div>
+
+      <div class="ll-products-grid">
+        <!-- Product 1: Velas Aromáticas -->
+        <article class="ll-product-card">
+          <div class="ll-product-card__badges">
+            <span class="ll-badge ll-badge--yellow">MAYOREO</span>
+            <span class="ll-badge ll-badge--red">-25%</span>
+          </div>
+
+          <div class="ll-product-card__media">
+            <img src="{{ 'prod-candles.png' | asset_url }}" alt="Caja 24 Velas Aromáticas Surtidas" loading="lazy" width="300" height="192">
+          </div>
+
+          <div class="ll-product-card__body">
+            <div>
+              <div class="ll-product-card__meta">
+                <span class="ll-product-card__category">Hogar / Decoración</span>
+                <div class="ll-product-card__rating">
+                  <img src="{{ 'icon-star.svg' | asset_url }}" alt="Estrellas" class="ll-product-card__rating-star" width="12" height="12">
+                  <span>4.8</span>
+                </div>
+              </div>
+
+              <h3 class="ll-product-card__title">
+                Caja 24 Velas Aromáticas Surtidas…
+              </h3>
+            </div>
+
+            <div class="ll-product-card__footer">
+              <div>
+                <p class="ll-product-card__price">$480.00</p>
+                <p class="ll-product-card__unit-info">Caja con 24 pzas ($20.00 c/u)</p>
+              </div>
+
+              <a href="/products/caja-velas" class="ll-product-card__btn">
+                <img src="{{ 'icon-cart-add.svg' | asset_url }}" alt="Agregar" class="ll-product-card__btn-icon" width="14" height="14">
+                <span>Agregar Caja</span>
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Product 2: Vasos Vidrio Kawaii -->
+        <article class="ll-product-card">
+          <div class="ll-product-card__badges">
+            <span class="ll-badge ll-badge--yellow">MAYOREO</span>
+          </div>
+
+          <div class="ll-product-card__media">
+            <img src="{{ 'prod-cups.png' | asset_url }}" alt="Lote 12 Vasos Vidrio Kawaii con Perlas" loading="lazy" width="300" height="192">
+          </div>
+
+          <div class="ll-product-card__body">
+            <div>
+              <div class="ll-product-card__meta">
+                <span class="ll-product-card__category">Cocina / Termos</span>
+                <div class="ll-product-card__rating">
+                  <img src="{{ 'icon-star.svg' | asset_url }}" alt="Estrellas" class="ll-product-card__rating-star" width="12" height="12">
+                  <span>4.9</span>
+                </div>
+              </div>
+
+              <h3 class="ll-product-card__title">
+                Lote 12 Vasos Vidrio Kawaii con Perlas y…
+              </h3>
+            </div>
+
+            <div class="ll-product-card__footer">
+              <div>
+                <p class="ll-product-card__price">$840.00</p>
+                <p class="ll-product-card__unit-info">Lote con 12 pzas ($70.00 c/u)</p>
+              </div>
+
+              <a href="/products/lote-vasos" class="ll-product-card__btn">
+                <img src="{{ 'icon-cart-add.svg' | asset_url }}" alt="Agregar" class="ll-product-card__btn-icon" width="14" height="14">
+                <span>Agregar Lote</span>
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Product 3: Sets Brochas Profesionales -->
+        <article class="ll-product-card">
+          <div class="ll-product-card__badges">
+            <span class="ll-badge ll-badge--yellow">MAYOREO</span>
+          </div>
+
+          <div class="ll-product-card__media">
+            <img src="{{ 'prod-brushes.png' | asset_url }}" alt="Caja 50 Sets Brochas Profesionales 12 pzas" loading="lazy" width="300" height="192">
+          </div>
+
+          <div class="ll-product-card__body">
+            <div>
+              <div class="ll-product-card__meta">
+                <span class="ll-product-card__category">Belleza</span>
+              </div>
+
+              <h3 class="ll-product-card__title">
+                Caja 50 Sets Brochas Profesionales 12 pzas
+              </h3>
+            </div>
+
+            <div class="ll-product-card__footer">
+              <div>
+                <p class="ll-product-card__price">$3,250.00</p>
+                <p class="ll-product-card__unit-info">Caja con 50 sets ($65.00 c/u)</p>
+              </div>
+
+              <a href="/products/caja-brochas" class="ll-product-card__btn">
+                <img src="{{ 'icon-cart-add.svg' | asset_url }}" alt="Agregar" class="ll-product-card__btn-icon" width="14" height="14">
+                <span>Agregar Caja</span>
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Product 4: Baberos Silicón -->
+        <article class="ll-product-card">
+          <div class="ll-product-card__badges">
+            <span class="ll-badge ll-badge--green">NUEVO</span>
+          </div>
+
+          <div class="ll-product-card__media">
+            <img src="{{ 'prod-bibs.png' | asset_url }}" alt="Lote 30 Baberos Silicón Ajustables Tonos Pastel" loading="lazy" width="300" height="192">
+          </div>
+
+          <div class="ll-product-card__body">
+            <div>
+              <div class="ll-product-card__meta">
+                <span class="ll-product-card__category">Bebés</span>
+              </div>
+
+              <h3 class="ll-product-card__title">
+                Lote 30 Baberos Silicón Ajustables Tonos Pastel
+              </h3>
+            </div>
+
+            <div class="ll-product-card__footer">
+              <div>
+                <p class="ll-product-card__price">$1,050.00</p>
+                <p class="ll-product-card__unit-info">Lote con 30 pzas ($35.00 c/u)</p>
+              </div>
+
+              <a href="/products/lote-baberos" class="ll-product-card__btn">
+                <img src="{{ 'icon-cart-add.svg' | asset_url }}" alt="Agregar" class="ll-product-card__btn-icon" width="14" height="14">
+                <span>Agregar Lote</span>
+              </a>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+</div>
+
+{% schema %}
+{
+  "name": "Llamarada Homepage",
+  "class": "section-llamarada-home",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Barra Lateral (Sidebar)"
+    },
+    {
+      "type": "text",
+      "id": "sidebar_title",
+      "label": "Título del card sidebar",
+      "default": "Importamos lo que necesitas"
+    },
+    {
+      "type": "text",
+      "id": "sidebar_subtitle",
+      "label": "Subtítulo del card sidebar",
+      "default": "Venta por Mayoreo"
+    },
+    {
+      "type": "text",
+      "id": "sidebar_login_btn",
+      "label": "Texto botón login",
+      "default": "Iniciar Sesión"
+    },
+    {
+      "type": "header",
+      "content": "Hero Banner"
+    },
+    {
+      "type": "text",
+      "id": "hero_title",
+      "label": "Título principal del Hero",
+      "default": "Importamos lo que necesitas"
+    },
+    {
+      "type": "textarea",
+      "id": "hero_subtitle",
+      "label": "Subtítulo del Hero",
+      "default": "Abastece tu negocio con los mejores precios de mayoreo directamente desde fábrica."
+    },
+    {
+      "type": "text",
+      "id": "hero_btn_text",
+      "label": "Texto del botón CTA",
+      "default": "Ver Catálogo Mayorista"
+    },
+    {
+      "type": "url",
+      "id": "hero_btn_link",
+      "label": "Enlace del botón CTA"
+    },
+    {
+      "type": "header",
+      "content": "Categorías Populares"
+    },
+    {
+      "type": "text",
+      "id": "categories_title",
+      "label": "Título de la sección de categorías",
+      "default": "Categorías Populares"
+    },
+    {
+      "type": "header",
+      "content": "Ofertas de Mayoreo"
+    },
+    {
+      "type": "text",
+      "id": "deals_title",
+      "label": "Título de ofertas de mayoreo",
+      "default": "Ofertas de Mayoreo"
+    },
+    {
+      "type": "text",
+      "id": "deals_subtitle",
+      "label": "Subtítulo de ofertas de mayoreo",
+      "default": "Precios especiales por caja cerrada"
+    },
+    {
+      "type": "url",
+      "id": "deals_link",
+      "label": "Enlace para ver todas las ofertas"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Llamarada Homepage"
+    }
+  ]
+}
+{% endschema %}
