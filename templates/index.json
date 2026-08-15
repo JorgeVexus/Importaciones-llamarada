@@ -40,6 +40,32 @@
     },
     "categories": {
       "type": "llamarada-popular-categories",
+      "blocks": {
+        "category_card_e3KYnw": {
+          "type": "category_card",
+          "settings": {
+            "title": "Decoración",
+            "collection": "decoracion",
+            "url": "",
+            "bg_color": "#fee8e5",
+            "icon_preset": "hogar"
+          }
+        },
+        "category_card_h9MeC3": {
+          "type": "category_card",
+          "settings": {
+            "title": "Hogar",
+            "collection": "hogar",
+            "url": "",
+            "bg_color": "#fee8e5",
+            "icon_preset": "hogar"
+          }
+        }
+      },
+      "block_order": [
+        "category_card_e3KYnw",
+        "category_card_h9MeC3"
+      ],
       "settings": {
         "title": "Categorías Populares"
       }
