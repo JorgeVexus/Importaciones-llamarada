@@ -74,9 +74,9 @@
         
         {%- if request.page_type == 'collection' and current_handle != blank and current_handle == cat_handle -%}
           {%- assign is_block_active = true -%}
-        {%- elsif request.page_type == 'index' and (block.settings.url == '/' or block.settings.url == routes.root_url or cat_handle == 'inicio') -%}
+        {%- elsif request.page_type == 'index' and cat_handle == 'inicio' -%}
           {%- assign is_block_active = true -%}
-        {%- elsif block.settings.is_active and request.page_type == 'collection' -%}
+        {%- elsif request.page_type == 'index' and block.settings.url != blank and (block.settings.url == '/' or block.settings.url == routes.root_url) -%}
           {%- assign is_block_active = true -%}
         {%- endif -%}
 

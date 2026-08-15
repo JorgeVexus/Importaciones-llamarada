@@ -1,0 +1,244 @@
+{%- assign selected_collection = section.settings.collection -%}
+
+<div class="ll-new-trends-sec">
+  <div class="ll-new-trends-sec__container">
+    <div class="ll-new-trends-sec__header">
+      <div class="ll-new-trends-sec__title-wrap">
+        <span class="ll-new-trends-sec__icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M13 2L3 14H12L11 22L21 10H12L13 2Z" fill="currentColor"/></svg>
+        </span>
+        <h2 class="ll-new-trends-sec__title">{{ section.settings.title | default: 'Tendencias de Temporada' }}</h2>
+      </div>
+
+      {%- if section.settings.show_link -%}
+        <a href="{{ section.settings.link_url | default: selected_collection.url | default: '/collections/all' }}" class="ll-new-trends-sec__link">
+          <span>{{ section.settings.link_text | default: 'Ver todo en tendencia' }}</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      {%- endif -%}
+    </div>
+
+    <!-- Grid items -->
+    <div class="ll-new-trends-sec__grid">
+      {%- if section.blocks.size > 0 -%}
+        {%- for block in section.blocks -%}
+          {%- assign item_product = block.settings.product -%}
+          <div class="ll-new-trend-card" {{ block.shopify_attributes }}>
+            {%- if block.settings.badge != blank -%}
+              <span class="ll-new-trend-card__badge">{{ block.settings.badge }}</span>
+            {%- endif -%}
+
+            <div class="ll-new-trend-card__media">
+              {%- if block.settings.image != blank -%}
+                <img src="{{ block.settings.image | image_url: width: 500 }}" alt="{{ block.settings.title }}" loading="lazy" width="500" height="400">
+              {%- elsif item_product != blank and item_product.featured_image != blank -%}
+                <img src="{{ item_product.featured_image | image_url: width: 500 }}" alt="{{ item_product.title }}" loading="lazy" width="500" height="400">
+              {%- else -%}
+                {%- case forloop.index -%}
+                  {%- when 1 -%}
+                    <img src="{{ 'novedades_trend_1.png' | asset_url }}" alt="Trend 1" loading="lazy" width="500" height="400">
+                  {%- when 2 -%}
+                    <img src="{{ 'novedades_trend_2.png' | asset_url }}" alt="Trend 2" loading="lazy" width="500" height="400">
+                  {%- when 3 -%}
+                    <img src="{{ 'novedades_trend_3.png' | asset_url }}" alt="Trend 3" loading="lazy" width="500" height="400">
+                  {%- else -%}
+                    <img src="{{ 'novedades_trend_4.png' | asset_url }}" alt="Trend 4" loading="lazy" width="500" height="400">
+                {%- endcase -%}
+              {%- endif -%}
+            </div>
+
+            <div class="ll-new-trend-card__body">
+              <h3 class="ll-new-trend-card__title">
+                <a href="{{ block.settings.url | default: item_product.url | default: '#' }}">
+                  {{ block.settings.title | default: item_product.title | default: 'Producto Tendencia' }}
+                </a>
+              </h3>
+
+              <div class="ll-new-trend-card__footer">
+                <span class="ll-new-trend-card__price">
+                  {%- if item_product != blank -%}
+                    {{ item_product.price | money }}
+                  {%- else -%}
+                    {{ block.settings.price | default: '$320.00 MXN' }}
+                  {%- endif -%}
+                </span>
+
+                <a href="{{ block.settings.url | default: item_product.url | default: '#' }}" class="ll-new-trend-card__btn-add" aria-label="Ver detalle">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                </a>
+              </div>
+            </div>
+          </div>
+        {%- endfor -%}
+      {%- elsif selected_collection != blank and selected_collection.products.size > 0 -%}
+        {%- for product in selected_collection.products limit: 4 -%}
+          <div class="ll-new-trend-card">
+            <span class="ll-new-trend-card__badge">Nuevo</span>
+            <div class="ll-new-trend-card__media">
+              {%- if product.featured_image != blank -%}
+                <img src="{{ product.featured_image | image_url: width: 500 }}" alt="{{ product.title }}" loading="lazy" width="500" height="400">
+              {%- else -%}
+                <img src="{{ 'novedades_trend_1.png' | asset_url }}" alt="{{ product.title }}" loading="lazy" width="500" height="400">
+              {%- endif -%}
+            </div>
+            <div class="ll-new-trend-card__body">
+              <h3 class="ll-new-trend-card__title">
+                <a href="{{ product.url }}">{{ product.title }}</a>
+              </h3>
+              <div class="ll-new-trend-card__footer">
+                <span class="ll-new-trend-card__price">{{ product.price | money }}</span>
+                <a href="{{ product.url }}" class="ll-new-trend-card__btn-add" aria-label="Ver producto">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                </a>
+              </div>
+            </div>
+          </div>
+        {%- endfor -%}
+      {%- else -%}
+        <!-- Demo fallback cards matching Figma design -->
+        <div class="ll-new-trend-card">
+          <span class="ll-new-trend-card__badge">Viral</span>
+          <div class="ll-new-trend-card__media">
+            <img src="{{ 'novedades_trend_1.png' | asset_url }}" alt="Lámpara Táctil Cristal" loading="lazy" width="500" height="400">
+          </div>
+          <div class="ll-new-trend-card__body">
+            <h3 class="ll-new-trend-card__title"><a href="#">Lámparas Táctiles Cristal RGB (Caja x 24 pzas)</a></h3>
+            <div class="ll-new-trend-card__footer">
+              <span class="ll-new-trend-card__price">$1,450.00 MXN</span>
+              <a href="#" class="ll-new-trend-card__btn-add"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></a>
+            </div>
+          </div>
+        </div>
+
+        <div class="ll-new-trend-card">
+          <span class="ll-new-trend-card__badge">Más Vendido</span>
+          <div class="ll-new-trend-card__media">
+            <img src="{{ 'novedades_trend_2.png' | asset_url }}" alt="Humidificador Volcán LED" loading="lazy" width="500" height="400">
+          </div>
+          <div class="ll-new-trend-card__body">
+            <h3 class="ll-new-trend-card__title"><a href="#">Humidificadores Efecto Volcán LED (Caja x 30 pzas)</a></h3>
+            <div class="ll-new-trend-card__footer">
+              <span class="ll-new-trend-card__price">$2,100.00 MXN</span>
+              <a href="#" class="ll-new-trend-card__btn-add"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></a>
+            </div>
+          </div>
+        </div>
+
+        <div class="ll-new-trend-card">
+          <span class="ll-new-trend-card__badge">Alta Rotación</span>
+          <div class="ll-new-trend-card__media">
+            <img src="{{ 'novedades_trend_3.png' | asset_url }}" alt="Dispensador de Agua Eléctrico" loading="lazy" width="500" height="400">
+          </div>
+          <div class="ll-new-trend-card__body">
+            <h3 class="ll-new-trend-card__title"><a href="#">Dispensadores de Agua Recargables USB (Caja x 50 pzas)</a></h3>
+            <div class="ll-new-trend-card__footer">
+              <span class="ll-new-trend-card__price">$1,950.00 MXN</span>
+              <a href="#" class="ll-new-trend-card__btn-add"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></a>
+            </div>
+          </div>
+        </div>
+
+        <div class="ll-new-trend-card">
+          <span class="ll-new-trend-card__badge">Estreno</span>
+          <div class="ll-new-trend-card__media">
+            <img src="{{ 'novedades_trend_4.png' | asset_url }}" alt="Audífonos Bluetooth In-Ear" loading="lazy" width="500" height="400">
+          </div>
+          <div class="ll-new-trend-card__body">
+            <h3 class="ll-new-trend-card__title"><a href="#">Audífonos Bluetooth In-Ear M10 (Caja x 100 pzas)</a></h3>
+            <div class="ll-new-trend-card__footer">
+              <span class="ll-new-trend-card__price">$3,800.00 MXN</span>
+              <a href="#" class="ll-new-trend-card__btn-add"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></a>
+            </div>
+          </div>
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Novedades - Tendencias",
+  "class": "section-llamarada-new-arrivals-trends",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Título de la sección",
+      "default": "Tendencias de Temporada"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Colección de productos (opcional)"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_link",
+      "label": "Mostrar enlace al final del encabezado",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "link_text",
+      "label": "Texto del enlace",
+      "default": "Ver todo en tendencia"
+    },
+    {
+      "type": "url",
+      "id": "link_url",
+      "label": "URL del enlace"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "trend_item",
+      "name": "Producto en Tendencia",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Producto (opcional)"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Título manual"
+        },
+        {
+          "type": "text",
+          "id": "price",
+          "label": "Precio manual"
+        },
+        {
+          "type": "text",
+          "id": "badge",
+          "label": "Badge superior (ej. Viral, Estreno)",
+          "default": "Nuevo"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Imagen personalizada"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "Enlace personalizado"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Novedades - Tendencias",
+      "blocks": [
+        { "type": "trend_item", "settings": { "title": "Lámparas Táctiles Cristal RGB (Caja x 24 pzas)", "price": "$1,450.00 MXN", "badge": "Viral" } },
+        { "type": "trend_item", "settings": { "title": "Humidificadores Efecto Volcán LED (Caja x 30 pzas)", "price": "$2,100.00 MXN", "badge": "Más Vendido" } },
+        { "type": "trend_item", "settings": { "title": "Dispensadores de Agua Recargables USB (Caja x 50 pzas)", "price": "$1,950.00 MXN", "badge": "Alta Rotación" } },
+        { "type": "trend_item", "settings": { "title": "Audífonos Bluetooth In-Ear M10 (Caja x 100 pzas)", "price": "$3,800.00 MXN", "badge": "Estreno" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

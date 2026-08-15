@@ -1,0 +1,87 @@
+<div class="ll-new-header-sec">
+  <div class="ll-new-header-sec__container">
+    {%- if section.settings.show_badge -%}
+      <div class="ll-new-header-sec__badge">
+        <span class="ll-new-header-sec__badge-dot"></span>
+        <span>{{ section.settings.badge_text | default: 'Temporada 2026' }}</span>
+      </div>
+    {%- endif -%}
+
+    <h1 class="ll-new-header-sec__title">{{ section.settings.title | default: 'Recién Llegados' }}</h1>
+    <p class="ll-new-header-sec__subtitle">{{ section.settings.subtitle | default: 'Descubre los últimos productos importados con precios exclusivos de mayoreo.' }}</p>
+
+    {%- if section.settings.show_stats -%}
+      <div class="ll-new-header-sec__stats">
+        <span class="ll-new-header-sec__stat-item">
+          <strong>{{ section.settings.stat_count | default: '+50' }}</strong> {{ section.settings.stat_label | default: 'Nuevos productos este mes' }}
+        </span>
+        <span class="ll-new-header-sec__stat-divider">•</span>
+        <span class="ll-new-header-sec__stat-item">
+          <strong>{{ section.settings.stat_tag | default: 'Directo de Fábrica' }}</strong>
+        </span>
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Novedades - Encabezado",
+  "class": "section-llamarada-new-arrivals-header",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Título Principal",
+      "default": "Recién Llegados"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Subtítulo / Descripción",
+      "default": "Descubre los últimos productos importados con precios exclusivos de mayoreo."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_badge",
+      "label": "Mostrar insignia de temporada",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "badge_text",
+      "label": "Texto de la insignia",
+      "default": "Temporada 2026"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_stats",
+      "label": "Mostrar datos de actualización",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "stat_count",
+      "label": "Número de productos",
+      "default": "+50"
+    },
+    {
+      "type": "text",
+      "id": "stat_label",
+      "label": "Etiqueta del dato",
+      "default": "Nuevos productos este mes"
+    },
+    {
+      "type": "text",
+      "id": "stat_tag",
+      "label": "Etiqueta secundaria",
+      "default": "Directo de Fábrica"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Novedades - Encabezado"
+    }
+  ]
+}
+{% endschema %}

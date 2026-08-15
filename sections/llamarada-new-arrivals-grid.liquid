@@ -1,0 +1,222 @@
+{%- assign selected_collection = section.settings.collection -%}
+
+<div class="ll-new-grid-sec">
+  <div class="ll-new-grid-sec__container">
+    <div class="ll-new-grid-sec__header">
+      <h2 class="ll-new-grid-sec__title">{{ section.settings.title | default: 'Catálogo de Mas Novedades' }}</h2>
+      
+      <!-- iOS Pill Filter Bar -->
+      <div class="ll-new-grid-sec__pills-wrap">
+        <button type="button" class="ll-new-grid-sec__pill is-active">Todos</button>
+        <button type="button" class="ll-new-grid-sec__pill">Hogar</button>
+        <button type="button" class="ll-new-grid-sec__pill">Juguetes</button>
+        <button type="button" class="ll-new-grid-sec__pill">Cocina</button>
+        <button type="button" class="ll-new-grid-sec__pill">Limpieza</button>
+      </div>
+    </div>
+
+    <!-- Products Grid -->
+    <div class="ll-new-grid-sec__grid">
+      {%- if section.blocks.size > 0 -%}
+        {%- for block in section.blocks -%}
+          {%- assign item_product = block.settings.product -%}
+          <div class="ll-new-mini-card-sec" {{ block.shopify_attributes }}>
+            <div class="ll-new-mini-card-sec__media">
+              {%- if block.settings.image != blank -%}
+                <img src="{{ block.settings.image | image_url: width: 400 }}" alt="{{ block.settings.title }}" loading="lazy" width="400" height="300">
+              {%- elsif item_product != blank and item_product.featured_image != blank -%}
+                <img src="{{ item_product.featured_image | image_url: width: 400 }}" alt="{{ item_product.title }}" loading="lazy" width="400" height="300">
+              {%- else -%}
+                {%- assign img_num = forloop.index | modulo: 5 | plus: 1 -%}
+                <img src="{{ 'novedades_more_' | append: img_num | append: '.png' | asset_url }}" alt="Novedad" loading="lazy" width="400" height="300">
+              {%- endif -%}
+            </div>
+            
+            <div class="ll-new-mini-card-sec__body">
+              <h3 class="ll-new-mini-card-sec__title">
+                <a href="{{ block.settings.url | default: item_product.url | default: '#' }}">
+                  {{ block.settings.title | default: item_product.title | default: 'Producto Novedad' }}
+                </a>
+              </h3>
+              
+              <div class="ll-new-mini-card-sec__footer">
+                <span class="ll-new-mini-card-sec__price">
+                  {%- if item_product != blank -%}
+                    {{ item_product.price | money }}
+                  {%- else -%}
+                    {{ block.settings.price | default: '$180.00 MXN' }}
+                  {%- endif -%}
+                </span>
+
+                <a href="{{ block.settings.url | default: item_product.url | default: '#' }}" class="ll-new-mini-card-sec__btn-view">
+                  Ver
+                </a>
+              </div>
+            </div>
+          </div>
+        {%- endfor -%}
+      {%- elsif selected_collection != blank and selected_collection.products.size > 0 -%}
+        {%- for product in selected_collection.products limit: section.settings.products_to_show -%}
+          <div class="ll-new-mini-card-sec">
+            <div class="ll-new-mini-card-sec__media">
+              {%- if product.featured_image != blank -%}
+                <img src="{{ product.featured_image | image_url: width: 400 }}" alt="{{ product.title }}" loading="lazy" width="400" height="300">
+              {%- else -%}
+                <img src="{{ 'novedades_more_1.png' | asset_url }}" alt="{{ product.title }}" loading="lazy" width="400" height="300">
+              {%- endif -%}
+            </div>
+            <div class="ll-new-mini-card-sec__body">
+              <h3 class="ll-new-mini-card-sec__title">
+                <a href="{{ product.url }}">{{ product.title }}</a>
+              </h3>
+              <div class="ll-new-mini-card-sec__footer">
+                <span class="ll-new-mini-card-sec__price">{{ product.price | money }}</span>
+                <a href="{{ product.url }}" class="ll-new-mini-card-sec__btn-view">Ver</a>
+              </div>
+            </div>
+          </div>
+        {%- endfor -%}
+      {%- else -%}
+        <!-- Fallback cards matching Figma design -->
+        <div class="ll-new-mini-card-sec">
+          <div class="ll-new-mini-card-sec__media">
+            <img src="{{ 'novedades_more_1.png' | asset_url }}" alt="Mini Cámara HD" loading="lazy" width="400" height="300">
+          </div>
+          <div class="ll-new-mini-card-sec__body">
+            <h3 class="ll-new-mini-card-sec__title"><a href="#">Mini Cámaras Seguridad WiFi A9</a></h3>
+            <div class="ll-new-mini-card-sec__footer">
+              <span class="ll-new-mini-card-sec__price">$85.00 MXN</span>
+              <a href="#" class="ll-new-mini-card-sec__btn-view">Ver</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="ll-new-mini-card-sec">
+          <div class="ll-new-mini-card-sec__media">
+            <img src="{{ 'novedades_more_2.png' | asset_url }}" alt="Organizador Acrílico" loading="lazy" width="400" height="300">
+          </div>
+          <div class="ll-new-mini-card-sec__body">
+            <h3 class="ll-new-mini-card-sec__title"><a href="#">Organizadores Acrílicos Cosmetiqueros</a></h3>
+            <div class="ll-new-mini-card-sec__footer">
+              <span class="ll-new-mini-card-sec__price">$120.00 MXN</span>
+              <a href="#" class="ll-new-mini-card-sec__btn-view">Ver</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="ll-new-mini-card-sec">
+          <div class="ll-new-mini-card-sec__media">
+            <img src="{{ 'novedades_more_3.png' | asset_url }}" alt="Foco Proyector Galaxia" loading="lazy" width="400" height="300">
+          </div>
+          <div class="ll-new-mini-card-sec__body">
+            <h3 class="ll-new-mini-card-sec__title"><a href="#">Focos Proyectores Galaxia Astronauta</a></h3>
+            <div class="ll-new-mini-card-sec__footer">
+              <span class="ll-new-mini-card-sec__price">$290.00 MXN</span>
+              <a href="#" class="ll-new-mini-card-sec__btn-view">Ver</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="ll-new-mini-card-sec">
+          <div class="ll-new-mini-card-sec__media">
+            <img src="{{ 'novedades_more_4.png' | asset_url }}" alt="Sellador de Bolsas USB" loading="lazy" width="400" height="300">
+          </div>
+          <div class="ll-new-mini-card-sec__body">
+            <h3 class="ll-new-mini-card-sec__title"><a href="#">Mini Selladores de Bolsas Portátiles USB</a></h3>
+            <div class="ll-new-mini-card-sec__footer">
+              <span class="ll-new-mini-card-sec__price">$45.00 MXN</span>
+              <a href="#" class="ll-new-mini-card-sec__btn-view">Ver</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="ll-new-mini-card-sec">
+          <div class="ll-new-mini-card-sec__media">
+            <img src="{{ 'novedades_more_5.png' | asset_url }}" alt="Set de Brochas Maquillaje" loading="lazy" width="400" height="300">
+          </div>
+          <div class="ll-new-mini-card-sec__body">
+            <h3 class="ll-new-mini-card-sec__title"><a href="#">Set Brochas de Maquillaje 12 pzas</a></h3>
+            <div class="ll-new-mini-card-sec__footer">
+              <span class="ll-new-mini-card-sec__price">$65.00 MXN</span>
+              <a href="#" class="ll-new-mini-card-sec__btn-view">Ver</a>
+            </div>
+          </div>
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Novedades - Catálogo",
+  "class": "section-llamarada-new-arrivals-grid",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Título de la grilla",
+      "default": "Catálogo de Más Novedades"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Colección de productos"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "min": 4,
+      "max": 20,
+      "step": 1,
+      "default": 10,
+      "label": "Cantidad de productos a mostrar"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "grid_item",
+      "name": "Producto Individual",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Producto"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Título manual"
+        },
+        {
+          "type": "text",
+          "id": "price",
+          "label": "Precio manual"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Imagen personalizada"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "Enlace del producto"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Novedades - Catálogo",
+      "blocks": [
+        { "type": "grid_item", "settings": { "title": "Mini Cámaras Seguridad WiFi A9", "price": "$85.00 MXN" } },
+        { "type": "grid_item", "settings": { "title": "Organizadores Acrílicos Cosmetiqueros", "price": "$120.00 MXN" } },
+        { "type": "grid_item", "settings": { "title": "Focos Proyectores Galaxia Astronauta", "price": "$290.00 MXN" } },
+        { "type": "grid_item", "settings": { "title": "Mini Selladores de Bolsas Portátiles USB", "price": "$45.00 MXN" } },
+        { "type": "grid_item", "settings": { "title": "Set Brochas de Maquillaje 12 pzas", "price": "$65.00 MXN" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
