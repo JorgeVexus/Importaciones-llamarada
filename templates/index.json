@@ -1,16 +1,29 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "sidebar": {
-      "type": "llamarada-sidebar-nav"
+      "type": "llamarada-sidebar-nav",
+      "settings": {}
     },
     "hero": {
-      "type": "llamarada-hero-banner"
+      "type": "llamarada-hero-banner",
+      "settings": {}
     },
     "categories": {
-      "type": "llamarada-popular-categories"
+      "type": "llamarada-popular-categories",
+      "settings": {}
     },
     "deals": {
-      "type": "llamarada-wholesale-deals"
+      "type": "llamarada-wholesale-deals",
+      "settings": {}
     }
   },
   "order": [
