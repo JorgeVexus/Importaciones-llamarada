@@ -1922,15 +1922,21 @@ body {
   font-weight: 700 !important;
   font-size: 14px !important;
   padding: 9px 12px;
-  border-radius: 6px;
+  border-radius: 8px;
   text-decoration: none !important;
-  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1);
-  transition: background 0.2s;
+  box-shadow: 0px 2px 6px rgba(249, 50, 31, 0.25);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), background 0.2s;
   box-sizing: border-box;
+  cursor: pointer;
 }
 
 .ll-sidebar__btn-login:hover {
   background: var(--ll-flame-red-dark) !important;
+  transform: translateY(-1px);
+}
+
+.ll-sidebar__btn-login:active {
+  transform: scale(0.97);
 }
 
 .ll-sidebar__user-box {
@@ -1961,23 +1967,28 @@ body {
   align-items: center;
   gap: 12px;
   padding: 9px 12px;
-  border-radius: 6px;
+  border-radius: 8px;
   color: var(--ll-text-muted) !important;
   font-family: var(--ll-font-body) !important;
   font-weight: 700 !important;
   font-size: 14px !important;
   text-decoration: none !important;
-  transition: background 0.15s, color 0.15s;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), background 0.15s, color 0.15s;
 }
 
 .ll-sidebar__nav-item:hover {
-  background: #f8f8f8;
+  background: rgba(248, 248, 248, 0.9);
   color: var(--ll-text-dark) !important;
+}
+
+.ll-sidebar__nav-item:active {
+  transform: scale(0.98);
 }
 
 .ll-sidebar__nav-item.is-active {
   background: var(--ll-flame-red) !important;
   color: #ffffff !important;
+  box-shadow: 0 4px 12px rgba(249, 50, 31, 0.25);
 }
 
 .ll-sidebar__nav-item.is-active svg path {
@@ -2003,14 +2014,20 @@ body {
   font-weight: 600 !important;
   font-size: 16px !important;
   padding: 9px 12px;
-  border-radius: 6px;
+  border-radius: 8px;
   text-decoration: none !important;
-  transition: background 0.2s;
+  box-shadow: 0 4px 12px rgba(148, 36, 164, 0.2);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), background 0.2s;
   box-sizing: border-box;
 }
 
 .ll-sidebar__btn-purple:hover {
   background: var(--ll-purple-dark) !important;
+  transform: translateY(-1px);
+}
+
+.ll-sidebar__btn-purple:active {
+  transform: scale(0.97);
 }
 
 .ll-sidebar__footer-links {
@@ -2026,16 +2043,20 @@ body {
   align-items: center;
   gap: 12px;
   padding: 8px 12px;
-  border-radius: 6px;
+  border-radius: 8px;
   color: var(--ll-text-muted) !important;
   font-family: var(--ll-font-body) !important;
   font-size: 15px !important;
   text-decoration: none !important;
-  transition: color 0.15s;
+  transition: color 0.15s, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .ll-sidebar__footer-link:hover {
   color: var(--ll-purple) !important;
+}
+
+.ll-sidebar__footer-link:active {
+  transform: scale(0.98);
 }
 
 /* ==========================================================================
@@ -2060,7 +2081,7 @@ body {
   justify-content: center;
   text-align: center;
   overflow: hidden;
-  box-shadow: 0px 10px 20px -3px rgba(0, 0, 0, 0.12), 0px 4px 6px -4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 14px 28px -4px rgba(0, 0, 0, 0.12), 0px 6px 12px -4px rgba(0, 0, 0, 0.08);
 }
 
 .ll-hero__glow-1 {
@@ -2103,10 +2124,10 @@ body {
   font-family: var(--ll-font-heading) !important;
   font-weight: 800 !important;
   font-size: 46px !important;
-  line-height: 1.15 !important;
+  line-height: 1.12 !important;
   color: #ffffff !important;
   margin: 0 !important;
-  letter-spacing: -0.8px;
+  letter-spacing: -0.02em !important;
 }
 
 .ll-hero__subtitle {
@@ -2127,13 +2148,18 @@ body {
   padding: 16px 36px !important;
   border-radius: 12px !important;
   text-decoration: none !important;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
-  transition: transform 0.15s, background-color 0.2s;
+  box-shadow: 0px 6px 16px rgba(145, 196, 65, 0.35);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s, box-shadow 0.3s;
 }
 
 .ll-hero__cta:hover {
   background: var(--ll-accent-green-hover) !important;
-  transform: translateY(-2px);
+  transform: translateY(-2px) scale(1.01);
+  box-shadow: 0px 10px 22px rgba(145, 196, 65, 0.45);
+}
+
+.ll-hero__cta:active {
+  transform: scale(0.97);
 }
 
 /* Popular Categories Section */
@@ -2166,10 +2192,11 @@ body {
 
 .ll-section-title {
   font-family: var(--ll-font-heading) !important;
-  font-weight: 700 !important;
+  font-weight: 800 !important;
   font-size: 24px !important;
   line-height: 1.2 !important;
   color: var(--ll-text-dark) !important;
+  letter-spacing: -0.015em !important;
   margin: 0 !important;
 }
 
@@ -2189,6 +2216,12 @@ body {
   font-weight: 700 !important;
   font-size: 14px !important;
   text-decoration: none !important;
+  transition: opacity 0.2s, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ll-section-link:hover {
+  opacity: 0.8;
+  transform: translateX(2px);
 }
 
 .ll-categories__grid {
@@ -2205,20 +2238,31 @@ body {
   gap: 10px;
   text-decoration: none !important;
   cursor: pointer;
-  transition: transform 0.2s ease;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .ll-category-card:hover {
   transform: translateY(-4px);
 }
 
+.ll-category-card:active {
+  transform: scale(0.95);
+}
+
 .ll-category-card__box {
   width: 80px;
   height: 80px;
-  border-radius: 12px;
+  border-radius: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+  transition: box-shadow 0.3s ease;
+}
+
+.ll-category-card:hover .ll-category-card__box {
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
 }
 
 .ll-category-card__box--hogar { background-color: var(--ll-pastel-peach); }
@@ -2253,18 +2297,23 @@ body {
 
 .ll-product-card {
   background: var(--ll-bg-card);
-  border: 1px solid var(--ll-border-color);
-  border-radius: 8px;
+  border: 1px solid rgba(226, 226, 226, 0.7);
+  border-radius: 14px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
   position: relative;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.04);
-  transition: transform 0.2s ease;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.03);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
 }
 
 .ll-product-card:hover {
   transform: translateY(-4px);
+  box-shadow: 0 16px 32px -8px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.03);
+}
+
+.ll-product-card:active {
+  transform: scale(0.98);
 }
 
 .ll-product-card__badges {
