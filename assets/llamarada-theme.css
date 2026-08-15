@@ -141,11 +141,15 @@ body {
 }
 
 .ll-header__logo-img {
-  height: 60px;
+  height: 55px;
   width: auto;
-  max-width: 220px;
+  max-width: 240px;
   object-fit: contain;
   display: block;
+  background: #ffffff;
+  padding: 4px 10px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .ll-header__search-wrap {

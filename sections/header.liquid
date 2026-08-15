@@ -1,4 +1,4 @@
-<header class="ll-header">
+<header class="ll-header" style="background-color: {{ section.settings.header_bg_color | default: '#9424a4' }}; border-bottom-color: {{ section.settings.header_bg_color | default: '#9424a4' }};">
   <div class="ll-header__container">
     <div class="ll-header__top">
       <!-- Brand Logo -->
@@ -14,12 +14,12 @@
           >
         {%- else -%}
           <img
-            src="{{ 'figma-logo.png' | asset_url }}"
+            src="{{ 'llamarada-logo.png' | asset_url }}"
             alt="La Llamarada - Importaciones"
             class="ll-header__logo-img"
             loading="eager"
             width="220"
-            height="60"
+            height="55"
           >
         {%- endif -%}
       </a>
@@ -87,6 +87,7 @@
         <a href="/collections/belleza" class="ll-header__nav-link">Belleza</a>
         <a href="/collections/cocina" class="ll-header__nav-link">Cocina</a>
         <a href="/collections/bebes" class="ll-header__nav-link">Bebés</a>
+        <a href="/collections/abarrotes" class="ll-header__nav-link">Abarrotes</a>
       {%- endif -%}
     </nav>
   </div>
@@ -97,6 +98,12 @@
   "name": "Header",
   "class": "section-header",
   "settings": [
+    {
+      "type": "color",
+      "id": "header_bg_color",
+      "label": "Color de fondo del Header",
+      "default": "#9424a4"
+    },
     {
       "type": "image_picker",
       "id": "logo",
