@@ -14,10 +14,11 @@
     "header": {
       "type": "header",
       "settings": {
+        "header_bg_color": "#9424a4",
         "logo": "shopify://shop_images/logo_llamarada_png_-_Ventas_La_Llamarada_2.png",
         "logo_width": 220,
         "search_placeholder": "Buscar productos por mayoreo...",
-        "menu": ""
+        "menu": "main-menu"
       }
     }
   },

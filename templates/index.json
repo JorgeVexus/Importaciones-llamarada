@@ -11,19 +11,50 @@
   "sections": {
     "sidebar": {
       "type": "llamarada-sidebar-nav",
-      "settings": {}
+      "settings": {
+        "card_title": "Importamos lo que necesitas",
+        "card_subtitle": "Venta por Mayoreo",
+        "login_btn_text": "Iniciar Sesión",
+        "login_link": "",
+        "secondary_btn_text": "Iniciar Sesión",
+        "secondary_btn_link": "",
+        "news_text": "Novedades",
+        "news_link": "",
+        "help_text": "Ayuda",
+        "help_link": ""
+      }
     },
     "hero": {
       "type": "llamarada-hero-banner",
-      "settings": {}
+      "settings": {
+        "title": "Importamos lo que necesitas",
+        "title_color": "#ffffff",
+        "subtitle": "Abastece tu negocio con los mejores precios de mayoreo directamente desde fábrica.",
+        "subtitle_color": "#e8d0ed",
+        "cta_text": "Ver Catálogo Mayorista",
+        "cta_link": "",
+        "cta_bg_color": "#91c441",
+        "cta_text_color": "#1b1b1b",
+        "gradient_start": "#9424a4",
+        "gradient_end": "#f9321f"
+      }
     },
     "categories": {
       "type": "llamarada-popular-categories",
-      "settings": {}
+      "settings": {
+        "title": "Categorías Populares"
+      }
     },
     "deals": {
       "type": "llamarada-wholesale-deals",
-      "settings": {}
+      "settings": {
+        "collection": "mayoreo",
+        "title": "Ofertas de Mayoreo",
+        "subtitle": "Precios especiales por caja cerrada",
+        "view_all_text": "Ver todas",
+        "view_all_link": "",
+        "products_to_show": 4
+      }
     }
   },
   "order": [
