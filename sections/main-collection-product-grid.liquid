@@ -1,415 +1,297 @@
-{{ 'template-collection.css' | asset_url | stylesheet_tag }}
-{{ 'component-card.css' | asset_url | stylesheet_tag }}
-{{ 'component-price.css' | asset_url | stylesheet_tag }}
+{%- paginate collection.products by section.settings.products_per_page | default: 16 -%}
+<div class="ll-home">
+  <!-- Reusable Sidebar with active category detection -->
+  {% render 'llamarada-sidebar', active_handle: collection.handle %}
 
-{% if section.settings.image_shape == 'blob' %}
-  {{ 'mask-blobs.css' | asset_url | stylesheet_tag }}
-{%- endif -%}
-
-{%- unless section.settings.quick_add == 'none' -%}
-  {{ 'quick-add.css' | asset_url | stylesheet_tag }}
-{%- endunless -%}
-
-{%- if section.settings.quick_add == 'standard' -%}
-  <script src="{{ 'quick-add.js' | asset_url }}" defer="defer"></script>
-  <script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
-{%- endif -%}
-
-{%- if section.settings.quick_add == 'bulk' -%}
-  <script src="{{ 'quick-add-bulk.js' | asset_url }}" defer="defer"></script>
-  <script src="{{ 'quantity-popover.js' | asset_url }}" defer="defer"></script>
-  <script src="{{ 'price-per-item.js' | asset_url }}" defer="defer"></script>
-  <script src="{{ 'quick-order-list.js' | asset_url }}" defer="defer"></script>
-{%- endif -%}
-
-{%- style -%}
-  .section-{{ section.id }}-padding {
-    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
-    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
-  }
-
-  @media screen and (min-width: 750px) {
-    .section-{{ section.id }}-padding {
-      padding-top: {{ section.settings.padding_top }}px;
-      padding-bottom: {{ section.settings.padding_bottom }}px;
-    }
-  }
-{%- endstyle -%}
-
-<collection-component
-  view-event-payload="{{ collection | standard_event_data: 'view' | escape }}"
-  data-collection-id="{{ collection.id }}"
->
-  <div class="section-{{ section.id }}-padding gradient color-{{ section.settings.color_scheme }}">
-    {%- paginate collection.products by section.settings.products_per_page -%}
-      {% comment %} Sort is the first tabbable element when filter type is vertical {% endcomment %}
-      {%- if section.settings.enable_sorting and section.settings.filter_type == 'vertical' -%}
-        <facet-filters-form class="facets facets-vertical-sort page-width small-hide">
-          <form class="facets-vertical-form" id="FacetSortForm">
-            <div class="facet-filters sorting caption">
-              <div class="facet-filters__field">
-                <h2 class="facet-filters__label caption-large text-body">
-                  <label for="SortBy">{{ 'products.facets.sort_by_label' | t }}</label>
-                </h2>
-                <div class="select">
-                  {%- assign sort_by = collection.sort_by | default: collection.default_sort_by -%}
-                  <select
-                    name="sort_by"
-                    class="facet-filters__sort select__select caption-large"
-                    id="SortBy"
-                    aria-describedby="a11y-refresh-page-message"
-                  >
-                    {%- for option in collection.sort_options -%}
-                      <option
-                        value="{{ option.value | escape }}"
-                        {% if option.value == sort_by %}
-                          selected="selected"
-                        {% endif %}
-                      >
-                        {{ option.name | escape }}
-                      </option>
-                    {%- endfor -%}
-                  </select>
-                  <span class="svg-wrapper">
-                    {{- 'icon-caret.svg' | inline_asset_content -}}
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            <div class="product-count-vertical light" role="status">
-              <h2 class="product-count__text text-body">
-                <span id="ProductCountDesktop">
-                  {%- if collection.results_count -%}
-                    {{
-                      'templates.search.results_with_count'
-                      | t: terms: collection.terms, count: collection.results_count
-                    }}
-                  {%- elsif collection.products_count == collection.all_products_count -%}
-                    {{ 'products.facets.product_count_simple' | t: count: collection.products_count }}
-                  {%- else -%}
-                    {{
-                      'products.facets.product_count'
-                      | t: product_count: collection.products_count, count: collection.all_products_count
-                    }}
-                  {%- endif -%}
-                </span>
-              </h2>
-              {%- render 'loading-spinner' -%}
-            </div>
-          </form>
-        </facet-filters-form>
+  <!-- Main Collection Canvas -->
+  <main class="ll-canvas">
+    <!-- 1. Category Hero Banner -->
+    <section class="ll-category-hero" aria-label="{{ collection.title | default: 'Limpieza' }}">
+      {%- if collection.image != blank -%}
+        <img
+          src="{{ collection.image | image_url: width: 1400 }}"
+          alt="{{ collection.title | escape }}"
+          class="ll-category-hero__bg"
+          loading="eager"
+          width="1400"
+          height="256"
+        >
+      {%- else -%}
+        <img
+          src="{{ 'cat-banner-limpieza.png' | asset_url }}"
+          alt="{{ collection.title | default: 'Limpieza' }}"
+          class="ll-category-hero__bg"
+          loading="eager"
+          width="1400"
+          height="256"
+        >
       {%- endif -%}
 
-      <div class="{% if section.settings.filter_type == 'vertical' %} facets-vertical page-width{% endif %}">
-        {{ 'component-facets.css' | asset_url | stylesheet_tag }}
-        <script src="{{ 'facets.js' | asset_url }}" defer="defer"></script>
-        {%- if section.settings.enable_filtering or section.settings.enable_sorting -%}
-          <aside
-            aria-labelledby="verticalTitle"
-            class="facets-wrapper{% unless section.settings.enable_filtering %} facets-wrapper--no-filters{% endunless %}{% if section.settings.filter_type != 'vertical' %} page-width{% endif %}"
-            id="main-collection-filters"
-            data-id="{{ section.id }}"
-          >
-            {% render 'facets',
-              results: collection,
-              enable_filtering: section.settings.enable_filtering,
-              enable_sorting: section.settings.enable_sorting,
-              filter_type: section.settings.filter_type,
-              paginate: paginate
-            %}
-          </aside>
-        {%- endif -%}
-
-        <div
-          class="product-grid-container{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
-          id="ProductGridContainer"
-          {% if settings.animations_reveal_on_scroll %}
-            data-cascade
-          {% endif %}
-        >
-          {%- if collection.products.size == 0 -%}
-            <div class="collection collection--empty page-width" id="product-grid" data-id="{{ section.id }}">
-              <div class="loading-overlay gradient"></div>
-              <div class="title-wrapper center">
-                <h2 class="title title--primary">
-                  {{ 'sections.collection_template.empty' | t -}}
-                  <br>
-                  {{
-                    'sections.collection_template.use_fewer_filters_html'
-                    | t: link: collection.url, class: 'underlined-link link'
-                  }}
-                </h2>
-              </div>
-            </div>
+      <div class="ll-category-hero__overlay">
+        <h1 class="ll-category-hero__title">
+          {{ collection.title | default: 'Limpieza' }}
+        </h1>
+        <p class="ll-category-hero__subtitle">
+          {%- if collection.description != blank -%}
+            {{ collection.description | strip_html }}
           {%- else -%}
-            <div
-              class="collection{% if section.settings.filter_type != 'vertical' %} page-width{% endif %}"
-            >
-              <div class="loading-overlay gradient"></div>
-              <ul
-                id="product-grid"
-                data-id="{{ section.id }}"
-                class="
-                  grid product-grid grid--{{ section.settings.columns_mobile }}-col-tablet-down
-                  grid--{{ section.settings.columns_desktop }}-col-desktop
-                  {% if section.settings.quick_add == 'bulk' %} collection-quick-add-bulk{% endif %}
-                "
-              >
-                {% assign skip_card_product_styles = false %}
-                {%- for product in collection.products -%}
-                  {% assign lazy_load = false %}
-                  {%- if forloop.index > 2 -%}
-                    {%- assign lazy_load = true -%}
-                  {%- endif -%}
-                  <li
-                    class="grid__item{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
-                    {% if settings.animations_reveal_on_scroll %}
-                      data-cascade
-                      style="--animation-order: {{ forloop.index }};"
-                    {% endif %}
-                  >
-                    {% render 'card-product',
-                      card_product: product,
-                      media_aspect_ratio: section.settings.image_ratio,
-                      image_shape: section.settings.image_shape,
-                      show_secondary_image: section.settings.show_secondary_image,
-                      show_vendor: section.settings.show_vendor,
-                      show_rating: section.settings.show_rating,
-                      lazy_load: lazy_load,
-                      skip_styles: skip_card_product_styles,
-                      quick_add: section.settings.quick_add,
-                      section_id: section.id,
-                      product_view_context: 'collection'
-                    %}
-                  </li>
-                  {%- assign skip_card_product_styles = true -%}
-                {%- endfor -%}
-              </ul>
+            Soluciones efectivas para un entorno impecable. Calidad industrial a tu alcance.
+          {%- endif -%}
+        </p>
+      </div>
+    </section>
 
-              {%- if paginate.pages > 1 -%}
-                {% render 'pagination', paginate: paginate, anchor: '' %}
+    <!-- 2. Collection Products Grid -->
+    <section class="ll-products-grid" aria-label="Productos de la categoría">
+      {%- if collection.products.size > 0 -%}
+        {%- for product in collection.products -%}
+          <article class="ll-cat-card">
+            <!-- Badges -->
+            <div class="ll-product-card__badges">
+              {%- if product.available == false -%}
+                <span class="ll-badge ll-badge--red">AGOTADO</span>
+              {%- elsif product.compare_at_price > product.price -%}
+                <span class="ll-badge ll-badge--red">DESCUENTO</span>
+              {%- elsif product.tags contains 'nuevo' or product.tags contains 'Nuevo' -%}
+                <span class="ll-badge ll-badge--green">NUEVO</span>
+              {%- else -%}
+                <span class="ll-badge ll-badge--green">EN STOCK</span>
               {%- endif -%}
             </div>
-          {%- endif -%}
-        </div>
-      </div>
-    {%- endpaginate -%}
-    {% if section.settings.image_shape == 'arch' %}
-      {{ 'mask-arch.svg' | inline_asset_content }}
-    {%- endif -%}
-  </div>
-</collection-component>
+
+            <!-- Media -->
+            <div class="ll-cat-card__media">
+              {%- if product.featured_media != blank -%}
+                <img
+                  src="{{ product.featured_media | image_url: width: 400 }}"
+                  alt="{{ product.title | escape }}"
+                  loading="lazy"
+                  width="300"
+                  height="211"
+                >
+              {%- else -%}
+                {{ 'product-1' | placeholder_svg_tag }}
+              {%- endif -%}
+            </div>
+
+            <!-- Body -->
+            <div class="ll-cat-card__body">
+              <div>
+                <h3 class="ll-cat-card__title">
+                  <a href="{{ product.url }}" style="color: inherit; text-decoration: none;">
+                    {{ product.title }}
+                  </a>
+                </h3>
+
+                <p class="ll-cat-card__package-info">
+                  {%- if product.metafields.custom.empaque != blank -%}
+                    {{ product.metafields.custom.empaque }}
+                  {%- else -%}
+                    Caja mayorista
+                  {%- endif -%}
+                </p>
+              </div>
+
+              <div>
+                <div class="ll-cat-card__price-row">
+                  <div class="ll-cat-card__unit-price-wrap">
+                    <span class="ll-cat-card__unit-price{% if product.compare_at_price > product.price %} ll-cat-card__unit-price--discount{% endif %}">
+                      {{ product.price | money }}
+                    </span>
+                    {%- if product.compare_at_price > product.price -%}
+                      <span class="ll-cat-card__unit-compare">
+                        {{ product.compare_at_price | money }}
+                      </span>
+                    {%- endif -%}
+                    <span class="ll-cat-card__unit-label">/pza</span>
+                  </div>
+
+                  <div class="ll-cat-card__box-total">
+                    <span>Caja: {{ product.price | times: 12 | money_without_trailing_zeros }}</span>
+                  </div>
+                </div>
+
+                <!-- Add button -->
+                {%- if product.available -%}
+                  <form method="post" action="/cart/add">
+                    <input type="hidden" name="id" value="{{ product.variants.first.id }}">
+                    <button type="submit" class="ll-cat-card__btn">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M19 13H13V19H11V13H5V11H11V5H13V11H19V13Z" fill="#9424A4"/></svg>
+                      <span>Agregar</span>
+                    </button>
+                  </form>
+                {%- else -%}
+                  <button type="button" class="ll-cat-card__btn" disabled style="opacity: 0.6; cursor: not-allowed;">
+                    <span>Agotado</span>
+                  </button>
+                {%- endif -%}
+              </div>
+            </div>
+          </article>
+        {%- endfor -%}
+      {%- else -%}
+        <!-- DEMO SAMPLE PRODUCTS MATCHING FIGMA SPEC -->
+        <!-- Product 1 -->
+        <article class="ll-cat-card">
+          <div class="ll-product-card__badges">
+            <span class="ll-badge ll-badge--green">EN STOCK</span>
+          </div>
+
+          <div class="ll-cat-card__media">
+            <img src="{{ 'prod-limpieza-1.png' | asset_url }}" alt="Set 3 Cepillos Limpieza Baño Colores Pastel" loading="lazy" width="300" height="211">
+          </div>
+
+          <div class="ll-cat-card__body">
+            <div>
+              <h3 class="ll-cat-card__title">
+                Set 3 Cepillos Limpieza Baño Colores Pastel
+              </h3>
+              <p class="ll-cat-card__package-info">Caja con 24 pzas</p>
+            </div>
+
+            <div>
+              <div class="ll-cat-card__price-row">
+                <div class="ll-cat-card__unit-price-wrap">
+                  <span class="ll-cat-card__unit-price">$45.00</span>
+                  <span class="ll-cat-card__unit-label">/pza</span>
+                </div>
+                <div class="ll-cat-card__box-total">
+                  <div>Caja:</div>
+                  <div>$1,080</div>
+                </div>
+              </div>
+
+              <a href="/products/set-cepillos-limpieza" class="ll-cat-card__btn">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M19 13H13V19H11V13H5V11H11V5H13V11H19V13Z" fill="#9424A4"/></svg>
+                <span>Agregar</span>
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Product 2 -->
+        <article class="ll-cat-card">
+          <div class="ll-product-card__badges">
+            <span class="ll-badge ll-badge--red">DESCUENTO</span>
+          </div>
+
+          <div class="ll-cat-card__media">
+            <img src="{{ 'prod-limpieza-2.png' | asset_url }}" alt="Cepillo Premium Acero Inoxidable Base Rosa" loading="lazy" width="300" height="211">
+          </div>
+
+          <div class="ll-cat-card__body">
+            <div>
+              <h3 class="ll-cat-card__title">
+                Cepillo Premium Acero Inoxidable Base Rosa
+              </h3>
+              <p class="ll-cat-card__package-info">Caja con 12 pzas</p>
+            </div>
+
+            <div>
+              <div class="ll-cat-card__price-row">
+                <div class="ll-cat-card__unit-price-wrap">
+                  <span class="ll-cat-card__unit-price ll-cat-card__unit-price--discount">$85.00</span>
+                  <span class="ll-cat-card__unit-compare">$95.00</span>
+                </div>
+                <div class="ll-cat-card__box-total">
+                  <div>Caja:</div>
+                  <div>$1,020</div>
+                </div>
+              </div>
+
+              <a href="/products/cepillo-premium-rosa" class="ll-cat-card__btn">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M19 13H13V19H11V13H5V11H11V5H13V11H19V13Z" fill="#9424A4"/></svg>
+                <span>Agregar</span>
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Product 3 -->
+        <article class="ll-cat-card">
+          <div class="ll-cat-card__media">
+            <img src="{{ 'prod-limpieza-3.png' | asset_url }}" alt="Paquetes Paños Microfibra Industrial" loading="lazy" width="300" height="211">
+          </div>
+
+          <div class="ll-cat-card__body">
+            <div>
+              <h3 class="ll-cat-card__title">
+                Paquetes Paños Microfibra Industrial…
+              </h3>
+              <p class="ll-cat-card__package-info">Fardo con 50 paq</p>
+            </div>
+
+            <div>
+              <div class="ll-cat-card__price-row">
+                <div class="ll-cat-card__unit-price-wrap">
+                  <span class="ll-cat-card__unit-price">$22.50</span>
+                  <span class="ll-cat-card__unit-label">/paq</span>
+                </div>
+                <div class="ll-cat-card__box-total">
+                  <div>Fardo:</div>
+                  <div>$1,125</div>
+                </div>
+              </div>
+
+              <a href="/products/panos-microfibra" class="ll-cat-card__btn">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M19 13H13V19H11V13H5V11H11V5H13V11H19V13Z" fill="#9424A4"/></svg>
+                <span>Agregar</span>
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Product 4 -->
+        <article class="ll-cat-card">
+          <div class="ll-cat-card__media">
+            <img src="{{ 'prod-limpieza-4.png' | asset_url }}" alt="Atomizador Industrial Translúcido 1 Litro" loading="lazy" width="300" height="211">
+          </div>
+
+          <div class="ll-cat-card__body">
+            <div>
+              <h3 class="ll-cat-card__title">
+                Atomizador Industrial Translúcido 1 Litro
+              </h3>
+              <p class="ll-cat-card__package-info">Caja con 36 pzas</p>
+            </div>
+
+            <div>
+              <div class="ll-cat-card__price-row">
+                <div class="ll-cat-card__unit-price-wrap">
+                  <span class="ll-cat-card__unit-price">$18.00</span>
+                  <span class="ll-cat-card__unit-label">/pza</span>
+                </div>
+                <div class="ll-cat-card__box-total">
+                  <span>Caja: $648</span>
+                </div>
+              </div>
+
+              <a href="/products/atomizador-industrial" class="ll-cat-card__btn">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M19 13H13V19H11V13H5V11H11V5H13V11H19V13Z" fill="#9424A4"/></svg>
+                <span>Agregar</span>
+              </a>
+            </div>
+          </div>
+        </article>
+      {%- endif -%}
+    </section>
+  </main>
+</div>
+{%- endpaginate -%}
 
 {% schema %}
 {
-  "name": "t:sections.main-collection-product-grid.name",
-  "class": "section",
+  "name": "Product grid",
+  "class": "section-collection-product-grid",
   "settings": [
     {
       "type": "range",
       "id": "products_per_page",
-      "min": 8,
-      "max": 36,
+      "min": 4,
+      "max": 24,
       "step": 4,
       "default": 16,
-      "label": "t:sections.main-collection-product-grid.settings.products_per_page.label"
-    },
-    {
-      "type": "range",
-      "id": "columns_desktop",
-      "min": 1,
-      "max": 6,
-      "step": 1,
-      "default": 4,
-      "label": "t:sections.main-collection-product-grid.settings.columns_desktop.label"
-    },
-    {
-      "type": "select",
-      "id": "columns_mobile",
-      "default": "2",
-      "label": "t:sections.main-collection-product-grid.settings.columns_mobile.label",
-      "options": [
-        {
-          "value": "1",
-          "label": "t:sections.main-collection-product-grid.settings.columns_mobile.options__1.label"
-        },
-        {
-          "value": "2",
-          "label": "t:sections.main-collection-product-grid.settings.columns_mobile.options__2.label"
-        }
-      ]
-    },
-    {
-      "type": "color_scheme",
-      "id": "color_scheme",
-      "label": "t:sections.all.colors.label",
-      "info": "t:sections.all.colors.has_cards_info",
-      "default": "scheme-1"
-    },
-    {
-      "type": "header",
-      "content": "t:sections.main-collection-product-grid.settings.header__3.content"
-    },
-    {
-      "type": "select",
-      "id": "image_ratio",
-      "options": [
-        {
-          "value": "adapt",
-          "label": "t:sections.main-collection-product-grid.settings.image_ratio.options__1.label"
-        },
-        {
-          "value": "portrait",
-          "label": "t:sections.main-collection-product-grid.settings.image_ratio.options__2.label"
-        },
-        {
-          "value": "square",
-          "label": "t:sections.main-collection-product-grid.settings.image_ratio.options__3.label"
-        }
-      ],
-      "default": "adapt",
-      "label": "t:sections.main-collection-product-grid.settings.image_ratio.label"
-    },
-    {
-      "type": "select",
-      "id": "image_shape",
-      "options": [
-        {
-          "value": "default",
-          "label": "t:sections.all.image_shape.options__1.label"
-        },
-        {
-          "value": "arch",
-          "label": "t:sections.all.image_shape.options__2.label"
-        },
-        {
-          "value": "blob",
-          "label": "t:sections.all.image_shape.options__3.label"
-        },
-        {
-          "value": "chevronleft",
-          "label": "t:sections.all.image_shape.options__4.label"
-        },
-        {
-          "value": "chevronright",
-          "label": "t:sections.all.image_shape.options__5.label"
-        },
-        {
-          "value": "diamond",
-          "label": "t:sections.all.image_shape.options__6.label"
-        },
-        {
-          "value": "parallelogram",
-          "label": "t:sections.all.image_shape.options__7.label"
-        },
-        {
-          "value": "round",
-          "label": "t:sections.all.image_shape.options__8.label"
-        }
-      ],
-      "default": "default",
-      "label": "t:sections.all.image_shape.label"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_secondary_image",
-      "default": false,
-      "label": "t:sections.main-collection-product-grid.settings.show_secondary_image.label"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_vendor",
-      "default": false,
-      "label": "t:sections.main-collection-product-grid.settings.show_vendor.label"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_rating",
-      "default": false,
-      "label": "t:sections.main-collection-product-grid.settings.show_rating.label",
-      "info": "t:sections.main-collection-product-grid.settings.show_rating.info"
-    },
-    {
-      "type": "select",
-      "id": "quick_add",
-      "default": "none",
-      "label": "t:sections.main-collection-product-grid.settings.quick_add.label",
-      "options": [
-        {
-          "value": "none",
-          "label": "t:sections.main-collection-product-grid.settings.quick_add.options.option_1"
-        },
-        {
-          "value": "standard",
-          "label": "t:sections.main-collection-product-grid.settings.quick_add.options.option_2"
-        },
-        {
-          "value": "bulk",
-          "label": "t:sections.main-collection-product-grid.settings.quick_add.options.option_3"
-        }
-      ]
-    },
-    {
-      "type": "header",
-      "content": "t:sections.main-collection-product-grid.settings.header__1.content"
-    },
-    {
-      "type": "checkbox",
-      "id": "enable_filtering",
-      "default": true,
-      "label": "t:sections.main-collection-product-grid.settings.enable_filtering.label",
-      "info": "t:sections.main-collection-product-grid.settings.enable_filtering.info"
-    },
-    {
-      "type": "select",
-      "id": "filter_type",
-      "options": [
-        {
-          "value": "horizontal",
-          "label": "t:sections.main-collection-product-grid.settings.filter_type.options__1.label"
-        },
-        {
-          "value": "vertical",
-          "label": "t:sections.main-collection-product-grid.settings.filter_type.options__2.label"
-        },
-        {
-          "value": "drawer",
-          "label": "t:sections.main-collection-product-grid.settings.filter_type.options__3.label"
-        }
-      ],
-      "default": "horizontal",
-      "label": "t:sections.main-collection-product-grid.settings.filter_type.label"
-    },
-    {
-      "type": "checkbox",
-      "id": "enable_sorting",
-      "default": true,
-      "label": "t:sections.main-collection-product-grid.settings.enable_sorting.label"
-    },
-    {
-      "type": "header",
-      "content": "t:sections.all.padding.section_padding_heading"
-    },
-    {
-      "type": "range",
-      "id": "padding_top",
-      "min": 0,
-      "max": 100,
-      "step": 4,
-      "unit": "px",
-      "label": "t:sections.all.padding.padding_top",
-      "default": 36
-    },
-    {
-      "type": "range",
-      "id": "padding_bottom",
-      "min": 0,
-      "max": 100,
-      "step": 4,
-      "unit": "px",
-      "label": "t:sections.all.padding.padding_bottom",
-      "default": 36
+      "label": "Productos por página"
     }
   ]
 }

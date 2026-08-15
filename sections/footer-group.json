@@ -1,9 +1,9 @@
 {
-  "name": "Footer Group",
+  "name": "t:sections.footer.name",
   "type": "footer",
   "sections": {
-    "llamarada_footer": {
-      "type": "llamarada-footer",
+    "footer": {
+      "type": "footer",
       "settings": {
         "brand_text": "Llamarada: home & market",
         "copyright_text": "© 2024 Importadora Global. Importamos lo que necesitas."
@@ -11,6 +11,6 @@
     }
   },
   "order": [
-    "llamarada_footer"
+    "footer"
   ]
 }

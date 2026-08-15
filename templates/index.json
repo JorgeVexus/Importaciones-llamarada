@@ -1,23 +1,10 @@
 {
   "sections": {
-    "llamarada_home": {
-      "type": "llamarada-home",
-      "settings": {
-        "sidebar_title": "Importamos lo que necesitas",
-        "sidebar_subtitle": "Venta por Mayoreo",
-        "sidebar_login_btn": "Iniciar Sesión",
-        "hero_title": "Importamos lo que necesitas",
-        "hero_subtitle": "Abastece tu negocio con los mejores precios de mayoreo directamente desde fábrica.",
-        "hero_btn_text": "Ver Catálogo Mayorista",
-        "hero_btn_link": "shopify://collections/all",
-        "categories_title": "Categorías Populares",
-        "deals_title": "Ofertas de Mayoreo",
-        "deals_subtitle": "Precios especiales por caja cerrada",
-        "deals_link": "shopify://collections/all"
-      }
+    "image_banner": {
+      "type": "image-banner"
     }
   },
   "order": [
-    "llamarada_home"
+    "image_banner"
   ]
 }

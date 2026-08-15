@@ -1,15 +1,15 @@
 {
-  "name": "Header Group",
+  "name": "t:sections.header.name",
   "type": "header",
   "sections": {
-    "llamarada_header": {
-      "type": "llamarada-header",
+    "header": {
+      "type": "header",
       "settings": {
         "search_placeholder": "Buscar productos por mayoreo..."
       }
     }
   },
   "order": [
-    "llamarada_header"
+    "header"
   ]
 }

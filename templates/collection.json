@@ -1,15 +1,10 @@
 {
   "sections": {
-    "llamarada_collection": {
-      "type": "llamarada-collection",
-      "settings": {
-        "products_per_page": 16,
-        "fallback_title": "Limpieza",
-        "fallback_description": "Soluciones efectivas para un entorno impecable. Calidad industrial a tu alcance."
-      }
+    "product_grid": {
+      "type": "main-collection-product-grid"
     }
   },
   "order": [
-    "llamarada_collection"
+    "product_grid"
   ]
 }
