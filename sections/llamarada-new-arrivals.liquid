@@ -1,0 +1,356 @@
+<div class="ll-new-arrivals">
+  <!-- 1. Header Section -->
+  <header class="ll-new-header">
+    <div class="ll-new-header__container">
+      <h1 class="ll-new-header__title">{{ section.settings.page_title | default: 'Recién Llegados' }}</h1>
+      <p class="ll-new-header__subtitle">{{ section.settings.page_subtitle | default: 'Descubre las últimas novedades para tu negocio.' }}</p>
+    </div>
+  </header>
+
+  <!-- 2. Hero Feature Spotlight (Magazine Style) -->
+  <section class="ll-new-spotlight" aria-label="Producto destacado de novedades">
+    <div class="ll-new-spotlight__container">
+      <!-- Large Image Left -->
+      <div class="ll-new-spotlight__media-wrap">
+        <div class="ll-new-spotlight__badge">NUEVO</div>
+        <div class="ll-new-spotlight__media">
+          {%- if section.settings.hero_image != blank -%}
+            <img src="{{ section.settings.hero_image | image_url: width: 900 }}" alt="{{ section.settings.hero_title | escape }}" loading="eager" width="690" height="376">
+          {%- else -%}
+            <img src="{{ 'new-hero-vasos.png' | asset_url }}" alt="Vasos Foco Neón" loading="eager" width="690" height="376">
+          {%- endif -%}
+        </div>
+      </div>
+
+      <!-- Copy Right -->
+      <div class="ll-new-spotlight__copy">
+        <h2 class="ll-new-spotlight__title">{{ section.settings.hero_title | default: 'Vasos Foco Neón' }}</h2>
+        
+        <p class="ll-new-spotlight__description">
+          {{ section.settings.hero_description | default: 'Añade un toque divertido a cualquier evento. Estos vasos con forma de bombilla vienen en colores vibrantes, perfectos para fiestas temáticas, bares o como regalo original. Fabricados en plástico resistente de grado alimenticio.' }}
+        </p>
+
+        <div class="ll-new-spotlight__price-row">
+          <span class="ll-new-spotlight__price">{{ section.settings.hero_price | default: '$45.00 MXN' }}</span>
+          {%- if section.settings.hero_compare_price != blank -%}
+            <span class="ll-new-spotlight__compare">{{ section.settings.hero_compare_price }}</span>
+          {%- else -%}
+            <span class="ll-new-spotlight__compare">Menudeo: $60.00 MXN</span>
+          {%- endif -%}
+        </div>
+
+        <div class="ll-new-spotlight__actions">
+          <a href="{{ section.settings.hero_cta_link | default: '/cart/add' }}" class="ll-new-spotlight__btn-primary">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7 18C5.9 18 5.01 18.9 5.01 20C5.01 21.1 5.9 22 7 22C8.1 22 9 21.1 9 20C9 18.9 8.1 18 7 18ZM1 2V4H3L6.6 11.59L5.25 14.04C5.09 14.32 5 14.65 5 15C5 16.1 5.9 17 7 17H19V15H7.42C7.28 15 7.17 14.89 7.17 14.75L7.2 14.63L8.1 13H15.55C16.3 13 16.96 12.59 17.3 11.97L20.88 5.48C20.96 5.34 21 5.17 21 5C21 4.45 20.55 4 20 4H5.21L4.27 2H1ZM17 18C15.9 18 15.01 18.9 15.01 20C15.01 21.1 15.9 22 17 22C18.1 22 19 21.1 19 20C19 18.9 18.1 18 17 18Z" fill="#FFFFFF"/></svg>
+            <span>{{ section.settings.hero_cta_text | default: 'Agregar al Carrito' }}</span>
+          </a>
+
+          <a href="{{ section.settings.hero_details_link | default: '/products/vasos-foco-neon' }}" class="ll-new-spotlight__btn-secondary">
+            {{ section.settings.hero_details_text | default: 'Ver Detalles' }}
+          </a>
+        </div>
+
+        <div class="ll-new-spotlight__stock-info">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10 0C4.48 0 0 4.48 0 10C0 15.52 4.48 20 10 20C15.52 20 20 15.52 20 10C20 4.48 15.52 0 10 0ZM8 15L3 10L4.41 8.59L8 12.17L15.59 4.58L17 6L8 15Z" fill="#2C6C09"/></svg>
+          <span>{{ section.settings.hero_stock_text | default: 'En Stock - Envío Inmediato' }}</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. Secondary Features Grid (Tendencias de Temporada) -->
+  <section class="ll-new-trends" aria-labelledby="ll-trends-title">
+    <div class="ll-new-trends__header">
+      <h2 id="ll-trends-title" class="ll-new-trends__title">{{ section.settings.trends_title | default: 'Tendencias de Temporada' }}</h2>
+      <a href="{{ section.settings.trends_link | default: '/collections/all' }}" class="ll-new-trends__link">
+        <span>{{ section.settings.trends_view_all | default: 'Ver todo' }}</span>
+      </a>
+    </div>
+
+    <div class="ll-new-trends__grid">
+      {%- assign trends_col = section.settings.trends_collection -%}
+      {%- if trends_col != blank and trends_col.products_count > 0 -%}
+        {%- for product in trends_col.products limit: 4 -%}
+          <article class="ll-new-card">
+            <div class="ll-new-card__badge">NUEVO</div>
+            <div class="ll-new-card__media">
+              {%- if product.featured_media != blank -%}
+                <img src="{{ product.featured_media | image_url: width: 400 }}" alt="{{ product.title | escape }}" loading="lazy" width="280" height="280">
+              {%- else -%}
+                {{ 'product-1' | placeholder_svg_tag }}
+              {%- endif -%}
+            </div>
+            <div class="ll-new-card__body">
+              <h3 class="ll-new-card__title"><a href="{{ product.url }}">{{ product.title }}</a></h3>
+              <div class="ll-new-card__footer">
+                <span class="ll-new-card__price">{{ product.price | money }}</span>
+                <a href="{{ product.url }}" class="ll-new-card__btn-add" aria-label="Agregar">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M19 13H13V19H11V13H5V11H11V5H13V11H19V13Z" fill="#9424A4"/></svg>
+                </a>
+              </div>
+            </div>
+          </article>
+        {%- endfor -%}
+      {%- else -%}
+        <!-- Demo Card 1 -->
+        <article class="ll-new-card">
+          <div class="ll-new-card__badge">NUEVO</div>
+          <div class="ll-new-card__media">
+            <img src="{{ 'new-trend-1.png' | asset_url }}" alt="Set Utensilios Silicona Premium" loading="lazy" width="280" height="280">
+          </div>
+          <div class="ll-new-card__body">
+            <h3 class="ll-new-card__title"><a href="/products/set-utensilios-silicona">Set Utensilios Silicona Premium</a></h3>
+            <div class="ll-new-card__footer">
+              <span class="ll-new-card__price">$120.00</span>
+              <a href="/products/set-utensilios-silicona" class="ll-new-card__btn-add" aria-label="Agregar">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M19 13H13V19H11V13H5V11H11V5H13V11H19V13Z" fill="#9424A4"/></svg>
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Demo Card 2 -->
+        <article class="ll-new-card">
+          <div class="ll-new-card__badge">NUEVO</div>
+          <div class="ll-new-card__media">
+            <img src="{{ 'new-trend-2.png' | asset_url }}" alt="Paños Microfibra Neón (Pack 12)" loading="lazy" width="280" height="280">
+          </div>
+          <div class="ll-new-card__body">
+            <h3 class="ll-new-card__title"><a href="/products/panos-microfibra-neon">Paños Microfibra Neón (Pack 12)</a></h3>
+            <div class="ll-new-card__footer">
+              <span class="ll-new-card__price">$85.00</span>
+              <a href="/products/panos-microfibra-neon" class="ll-new-card__btn-add" aria-label="Agregar">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M19 13H13V19H11V13H5V11H11V5H13V11H19V13Z" fill="#9424A4"/></svg>
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Demo Card 3 -->
+        <article class="ll-new-card">
+          <div class="ll-new-card__badge">NUEVO</div>
+          <div class="ll-new-card__media">
+            <img src="{{ 'new-trend-3.png' | asset_url }}" alt="Termo Acero Inox Minimalista" loading="lazy" width="280" height="280">
+          </div>
+          <div class="ll-new-card__body">
+            <h3 class="ll-new-card__title"><a href="/products/termo-acero-inox">Termo Acero Inox Minimalista</a></h3>
+            <div class="ll-new-card__footer">
+              <span class="ll-new-card__price">$95.00</span>
+              <a href="/products/termo-acero-inox" class="ll-new-card__btn-add" aria-label="Agregar">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M19 13H13V19H11V13H5V11H11V5H13V11H19V13Z" fill="#9424A4"/></svg>
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Demo Card 4 -->
+        <article class="ll-new-card">
+          <div class="ll-new-card__badge">NUEVO</div>
+          <div class="ll-new-card__media">
+            <img src="{{ 'new-trend-4.png' | asset_url }}" alt="Caja Squishies Surtidos (50 pz)" loading="lazy" width="280" height="280">
+          </div>
+          <div class="ll-new-card__body">
+            <h3 class="ll-new-card__title"><a href="/products/caja-squishies">Caja Squishies Surtidos (50 pz)</a></h3>
+            <div class="ll-new-card__footer">
+              <span class="ll-new-card__price">$350.00</span>
+              <a href="/products/caja-squishies" class="ll-new-card__btn-add" aria-label="Agregar">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M19 13H13V19H11V13H5V11H11V5H13V11H19V13Z" fill="#9424A4"/></svg>
+              </a>
+            </div>
+          </div>
+        </article>
+      {%- endif -%}
+    </div>
+  </section>
+
+  <!-- 4. More New Arrivals (Horizontal Grid / Carousel) -->
+  <section class="ll-new-more" aria-labelledby="ll-more-title">
+    <div class="ll-new-more__header">
+      <h2 id="ll-more-title" class="ll-new-more__title">{{ section.settings.more_title | default: 'Más Novedades' }}</h2>
+    </div>
+
+    <div class="ll-new-more__grid">
+      <!-- Item 1 -->
+      <article class="ll-new-mini-card">
+        <div class="ll-new-mini-card__media">
+          <img src="{{ 'new-more-1.png' | asset_url }}" alt="Organizador Acrílico" loading="lazy" width="240" height="240">
+        </div>
+        <div class="ll-new-mini-card__body">
+          <h3 class="ll-new-mini-card__title">Organizador Acrílico</h3>
+          <p class="ll-new-mini-card__price">$65.00</p>
+        </div>
+      </article>
+
+      <!-- Item 2 -->
+      <article class="ll-new-mini-card">
+        <div class="ll-new-mini-card__media">
+          <img src="{{ 'new-more-2.png' | asset_url }}" alt="Aro de Luz Portátil" loading="lazy" width="240" height="240">
+        </div>
+        <div class="ll-new-mini-card__body">
+          <h3 class="ll-new-mini-card__title">Aro de Luz Portátil</h3>
+          <p class="ll-new-mini-card__price">$110.00</p>
+        </div>
+      </article>
+
+      <!-- Item 3 -->
+      <article class="ll-new-mini-card">
+        <div class="ll-new-mini-card__media">
+          <img src="{{ 'new-more-3.png' | asset_url }}" alt="Pads Desmaquillantes" loading="lazy" width="240" height="240">
+        </div>
+        <div class="ll-new-mini-card__body">
+          <h3 class="ll-new-mini-card__title">Pads Desmaquillantes</h3>
+          <p class="ll-new-mini-card__price">$45.00</p>
+        </div>
+      </article>
+
+      <!-- Item 4 -->
+      <article class="ll-new-mini-card">
+        <div class="ll-new-mini-card__media">
+          <img src="{{ 'new-more-4.png' | asset_url }}" alt="Set Globos Metálicos" loading="lazy" width="240" height="240">
+        </div>
+        <div class="ll-new-mini-card__body">
+          <h3 class="ll-new-mini-card__title">Set Globos Metálicos</h3>
+          <p class="ll-new-mini-card__price">$35.00</p>
+        </div>
+      </article>
+
+      <!-- Item 5 -->
+      <article class="ll-new-mini-card">
+        <div class="ll-new-mini-card__media">
+          <img src="{{ 'new-more-5.png' | asset_url }}" alt="Molino Eléctrico Inox" loading="lazy" width="240" height="240">
+        </div>
+        <div class="ll-new-mini-card__body">
+          <h3 class="ll-new-mini-card__title">Molino Eléctrico Inox</h3>
+          <p class="ll-new-mini-card__price">$180.00</p>
+        </div>
+      </article>
+    </div>
+  </section>
+</div>
+
+{% schema %}
+{
+  "name": "Página Recién Llegados",
+  "class": "section-llamarada-new-arrivals",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Encabezado de la Página"
+    },
+    {
+      "type": "text",
+      "id": "page_title",
+      "label": "Título principal",
+      "default": "Recién Llegados"
+    },
+    {
+      "type": "text",
+      "id": "page_subtitle",
+      "label": "Subtítulo explicativo",
+      "default": "Descubre las últimas novedades para tu negocio."
+    },
+    {
+      "type": "header",
+      "content": "Producto Destacado Principal (Spotlight)"
+    },
+    {
+      "type": "image_picker",
+      "id": "hero_image",
+      "label": "Imagen del producto destacado"
+    },
+    {
+      "type": "text",
+      "id": "hero_title",
+      "label": "Título del producto destacado",
+      "default": "Vasos Foco Neón"
+    },
+    {
+      "type": "textarea",
+      "id": "hero_description",
+      "label": "Descripción del producto",
+      "default": "Añade un toque divertido a cualquier evento. Estos vasos con forma de bombilla vienen en colores vibrantes, perfectos para fiestas temáticas, bares o como regalo original. Fabricados en plástico resistente de grado alimenticio."
+    },
+    {
+      "type": "text",
+      "id": "hero_price",
+      "label": "Precio de mayoreo",
+      "default": "$45.00 MXN"
+    },
+    {
+      "type": "text",
+      "id": "hero_compare_price",
+      "label": "Precio de menudeo",
+      "default": "Menudeo: $60.00 MXN"
+    },
+    {
+      "type": "text",
+      "id": "hero_cta_text",
+      "label": "Texto del botón principal",
+      "default": "Agregar al Carrito"
+    },
+    {
+      "type": "url",
+      "id": "hero_cta_link",
+      "label": "Enlace del botón principal"
+    },
+    {
+      "type": "text",
+      "id": "hero_details_text",
+      "label": "Texto del botón secundario",
+      "default": "Ver Detalles"
+    },
+    {
+      "type": "url",
+      "id": "hero_details_link",
+      "label": "Enlace del botón secundario"
+    },
+    {
+      "type": "text",
+      "id": "hero_stock_text",
+      "label": "Texto de disponibilidad",
+      "default": "En Stock - Envío Inmediato"
+    },
+    {
+      "type": "header",
+      "content": "Sección Tendencias de Temporada"
+    },
+    {
+      "type": "text",
+      "id": "trends_title",
+      "label": "Título de tendencias",
+      "default": "Tendencias de Temporada"
+    },
+    {
+      "type": "collection",
+      "id": "trends_collection",
+      "label": "Colección de tendencias"
+    },
+    {
+      "type": "text",
+      "id": "trends_view_all",
+      "label": "Texto de enlace Ver todo",
+      "default": "Ver todo"
+    },
+    {
+      "type": "url",
+      "id": "trends_link",
+      "label": "Enlace Ver todo"
+    },
+    {
+      "type": "header",
+      "content": "Sección Más Novedades"
+    },
+    {
+      "type": "text",
+      "id": "more_title",
+      "label": "Título de Más Novedades",
+      "default": "Más Novedades"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Página Recién Llegados"
+    }
+  ]
+}
+{% endschema %}

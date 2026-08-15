@@ -1,0 +1,10 @@
+{
+  "sections": {
+    "new_arrivals": {
+      "type": "llamarada-new-arrivals"
+    }
+  },
+  "order": [
+    "new_arrivals"
+  ]
+}
