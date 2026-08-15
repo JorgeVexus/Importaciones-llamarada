@@ -349,6 +349,23 @@ body {
   background: var(--ll-flame-red-dark) !important;
 }
 
+.ll-sidebar__user-box {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+}
+
+.ll-sidebar__btn-logout {
+  font-family: var(--ll-font-body) !important;
+  font-size: 13px !important;
+  color: var(--ll-text-muted) !important;
+  text-decoration: underline !important;
+  text-align: center;
+  margin-top: 2px;
+  display: block;
+}
+
 .ll-sidebar__nav {
   display: flex;
   flex-direction: column;
