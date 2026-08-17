@@ -26,6 +26,9 @@
     "hero": {
       "type": "llamarada-hero-banner",
       "settings": {
+        "image": "shopify://shop_images/hero-banner.jpg",
+        "overlay_color": "#000000",
+        "overlay_opacity": 55,
         "title": "Importamos lo que necesitas",
         "title_color": "#ffffff",
         "subtitle": "Abastece tu negocio con los mejores precios de mayoreo directamente desde fábrica.",
