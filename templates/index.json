@@ -26,13 +26,15 @@
     "hero": {
       "type": "llamarada-hero-banner",
       "settings": {
+        "image": "shopify://shop_images/hero-banner.jpg",
+        "overlay_opacity": 90,
         "title": "Importamos lo que necesitas",
-        "title_color": "#ffffff",
+        "title_color": "#000000",
         "subtitle": "Abastece tu negocio con los mejores precios de mayoreo directamente desde fábrica.",
-        "subtitle_color": "#e8d0ed",
+        "subtitle_color": "#000000",
         "cta_text": "Ver Catálogo Mayorista",
         "cta_link": "",
-        "cta_bg_color": "#91c441",
+        "cta_bg_color": "#3E3E3E",
         "cta_text_color": "#1b1b1b",
         "gradient_start": "#9424a4",
         "gradient_end": "#f9321f"
