@@ -22,8 +22,11 @@
         height="{{ section.settings.image.height }}"
       >
     </picture>
-    {%- assign overlay_opacity = section.settings.overlay_opacity | default: 30 | divided_by: 100.0 -%}
-    <div class="ll-hero__overlay" style="opacity: {{ overlay_opacity }};"></div>
+    {%- assign overlay_opacity = section.settings.overlay_opacity | default: 50 | divided_by: 100.0 -%}
+    <div
+      class="ll-hero__overlay"
+      style="background: linear-gradient(105deg, {{ section.settings.gradient_start | default: '#9424a4' }} 0%, {{ section.settings.gradient_end | default: '#f9321f' }} 100%); opacity: {{ overlay_opacity }};"
+    ></div>
   {%- else -%}
     <div class="ll-hero__glow-1" aria-hidden="true"></div>
     <div class="ll-hero__glow-2" aria-hidden="true"></div>
