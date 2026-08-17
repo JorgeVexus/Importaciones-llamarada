@@ -23,9 +23,10 @@
       >
     </picture>
     {%- assign overlay_opacity = section.settings.overlay_opacity | default: 50 | divided_by: 100.0 -%}
+    {%- assign overlay_color = section.settings.overlay_color | default: '#000000' -%}
     <div
       class="ll-hero__overlay"
-      style="background: linear-gradient(105deg, {{ section.settings.gradient_start | default: '#9424a4' }} 0%, {{ section.settings.gradient_end | default: '#f9321f' }} 100%); opacity: {{ overlay_opacity }};"
+      style="background-color: {{ overlay_color }}; opacity: {{ overlay_opacity }}; z-index: 2;"
     ></div>
   {%- else -%}
     <div class="ll-hero__glow-1" aria-hidden="true"></div>
@@ -75,14 +76,20 @@
       "label": "Imagen de fondo (Móvil - Opcional)"
     },
     {
+      "type": "color",
+      "id": "overlay_color",
+      "label": "Color de oscurecimiento (Overlay)",
+      "default": "#000000"
+    },
+    {
       "type": "range",
       "id": "overlay_opacity",
       "min": 0,
-      "max": 90,
+      "max": 100,
       "step": 5,
       "unit": "%",
       "label": "Oscurecimiento de imagen (Overlay)",
-      "default": 30
+      "default": 40
     },
     {
       "type": "header",

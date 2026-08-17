@@ -28,10 +28,11 @@
             height="{{ section.settings.hero_image.height }}"
           >
         </picture>
-        {%- assign hero_overlay_opacity = section.settings.hero_overlay_opacity | default: 50 | divided_by: 100.0 -%}
+        {%- assign hero_overlay_opacity = section.settings.hero_overlay_opacity | default: 40 | divided_by: 100.0 -%}
+        {%- assign hero_overlay_color = section.settings.hero_overlay_color | default: '#000000' -%}
         <div
           class="ll-hero__overlay"
-          style="background: linear-gradient(105deg, var(--ll-purple) 0%, var(--ll-flame-red) 100%); opacity: {{ hero_overlay_opacity }};"
+          style="background-color: {{ hero_overlay_color }}; opacity: {{ hero_overlay_opacity }}; z-index: 2;"
         ></div>
       {%- else -%}
         <div class="ll-hero__glow-1" aria-hidden="true"></div>

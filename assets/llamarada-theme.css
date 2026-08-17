@@ -2133,7 +2133,7 @@ body {
 
 .ll-hero__content {
   position: relative;
-  z-index: 2;
+  z-index: 5 !important;
   max-width: 680px;
   display: flex;
   flex-direction: column;
@@ -2145,31 +2145,27 @@ body {
   font-family: var(--ll-font-heading) !important;
   font-weight: 800 !important;
   font-size: 46px !important;
-  line-height: 1.12 !important;
-  color: #ffffff !important;
+  line-height: 1.15 !important;
   margin: 0 !important;
-  letter-spacing: -0.02em !important;
+  letter-spacing: -0.8px;
 }
 
 .ll-hero__subtitle {
   font-family: var(--ll-font-body) !important;
   font-size: 18px !important;
   line-height: 1.5 !important;
-  color: var(--ll-purple-pastel) !important;
   margin: 0 0 8px 0 !important;
 }
 
 .ll-hero__cta {
   display: inline-block;
-  background: var(--ll-accent-green) !important;
-  color: #1b1b1b !important;
   font-family: var(--ll-font-heading) !important;
   font-weight: 700 !important;
   font-size: 18px !important;
   padding: 16px 36px !important;
   border-radius: 12px !important;
   text-decoration: none !important;
-  box-shadow: 0px 6px 16px rgba(145, 196, 65, 0.35);
+  box-shadow: 0px 6px 16px rgba(0, 0, 0, 0.2);
   transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s, box-shadow 0.3s;
 }
 
