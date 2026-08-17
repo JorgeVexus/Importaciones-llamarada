@@ -74,8 +74,10 @@
               {%- assign is_hdr_active = true -%}
             {%- endif -%}
           {%- elsif request.page_type == 'collection' -%}
-            {%- if collection.handle != blank and (collection.handle == link_h or link.url contains collection.handle) -%}
-              {%- assign is_hdr_active = true -%}
+            {%- if collection.handle != blank -%}
+              {%- if collection.handle == link_h or link.url contains collection.handle -%}
+                {%- assign is_hdr_active = true -%}
+              {%- endif -%}
             {%- endif -%}
           {%- elsif link.active or link.current -%}
             {%- assign is_hdr_active = true -%}

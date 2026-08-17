@@ -42,7 +42,7 @@
       <span class="ll-sidebar__icon"><svg width="20" height="20" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M18 6H2V4H18V6ZM16 16H4V8H16V16ZM19 2H1V0H19V2ZM10 10H6V14H10V10Z" fill="currentColor"/></svg></span>
       <span>Cocina</span>
     </a>
-    <a href="/collections/articulos-de-limpieza" class="ll-sidebar__nav-item{% if request.page_type == 'collection' and (current_handle == 'articulos-de-limpieza' or current_handle == 'limpieza') %} is-active{% endif %}">
+    <a href="/collections/articulos-de-limpieza" class="ll-sidebar__nav-item{% if request.page_type == 'collection' and current_handle contains 'limpieza' %} is-active{% endif %}">
       <span class="ll-sidebar__icon"><svg width="20" height="20" viewBox="0 0 18 22" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14 8V2H16V0H2V2H4V8L0 12V22H18V12L14 8ZM6 2H12V8H6V2ZM16 20H2V13H16V20Z" fill="currentColor"/></svg></span>
       <span>Artículos de Limpieza</span>
     </a>
