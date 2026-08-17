@@ -67,20 +67,34 @@
     <nav class="ll-header__nav" aria-label="Categorías principales">
       {%- if section.settings.menu != blank -%}
         {%- for link in section.settings.menu.links -%}
+          {%- assign is_hdr_active = false -%}
+          {%- assign link_h = link.object.handle | default: link.title | handleize -%}
+          {%- if request.page_type == 'index' -%}
+            {%- if link.url == '/' or link.url == routes.root_url or link_h == 'inicio' -%}
+              {%- assign is_hdr_active = true -%}
+            {%- endif -%}
+          {%- elsif request.page_type == 'collection' -%}
+            {%- if collection.handle != blank and (collection.handle == link_h or link.url contains collection.handle) -%}
+              {%- assign is_hdr_active = true -%}
+            {%- endif -%}
+          {%- elsif link.active or link.current -%}
+            {%- assign is_hdr_active = true -%}
+          {%- endif -%}
           <a
             href="{{ link.url }}"
-            class="ll-header__nav-link{% if link.current or forloop.first %} is-active{% endif %}"
+            class="ll-header__nav-link{% if is_hdr_active %} is-active{% endif %}"
           >
             {{ link.title }}
           </a>
         {%- endfor -%}
       {%- else -%}
-        <a href="/collections/hogar" class="ll-header__nav-link is-active">Hogar</a>
-        <a href="/collections/juguetes" class="ll-header__nav-link">Juguetes</a>
-        <a href="/collections/fiesta" class="ll-header__nav-link">Fiesta</a>
-        <a href="/collections/belleza" class="ll-header__nav-link">Belleza</a>
-        <a href="/collections/cocina" class="ll-header__nav-link">Cocina</a>
-        <a href="/collections/bebes" class="ll-header__nav-link">Bebés</a>
+        <a href="{{ routes.root_url }}" class="ll-header__nav-link{% if request.page_type == 'index' %} is-active{% endif %}">Inicio</a>
+        <a href="/collections/hogar" class="ll-header__nav-link{% if request.page_type == 'collection' and collection.handle == 'hogar' %} is-active{% endif %}">Hogar</a>
+        <a href="/collections/juguetes" class="ll-header__nav-link{% if request.page_type == 'collection' and collection.handle == 'juguetes' %} is-active{% endif %}">Juguetes</a>
+        <a href="/collections/fiesta" class="ll-header__nav-link{% if request.page_type == 'collection' and collection.handle == 'fiesta' %} is-active{% endif %}">Fiesta</a>
+        <a href="/collections/belleza" class="ll-header__nav-link{% if request.page_type == 'collection' and collection.handle == 'belleza' %} is-active{% endif %}">Belleza</a>
+        <a href="/collections/cocina" class="ll-header__nav-link{% if request.page_type == 'collection' and collection.handle == 'cocina' %} is-active{% endif %}">Cocina</a>
+        <a href="/collections/bebes" class="ll-header__nav-link{% if request.page_type == 'collection' and collection.handle == 'bebes' %} is-active{% endif %}">Bebés</a>
       {%- endif -%}
     </nav>
   </div>

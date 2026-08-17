@@ -26,6 +26,10 @@
 
   <!-- Category Nav List -->
   <nav class="ll-sidebar__nav" aria-label="Categorías">
+    <a href="{{ routes.root_url }}" class="ll-sidebar__nav-item{% if request.page_type == 'index' %} is-active{% endif %}">
+      <span class="ll-sidebar__icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" fill="currentColor"/></svg></span>
+      <span>Inicio</span>
+    </a>
     <a href="/collections/hogar" class="ll-sidebar__nav-item{% if request.page_type == 'collection' and current_handle == 'hogar' %} is-active{% endif %}">
       <span class="ll-sidebar__icon"><svg width="20" height="20" viewBox="0 0 22 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M16 6H18V4H16V6V6M16 10H18V8H16V10V10M16 14H18V12H16V14V14M16 18V16H20V2H11V3.4L9 1.95V0H22V18H16V18M0 18V8L7 3L14 8V18H8V13H6V18H0V18M2 16H4V11H10V16H12V9L7 5.45L2 9V16V16M16 7V7V7V7V7V7V7V7M10 16V16V11H4V16V16V11H7H10V16V16" fill="currentColor"/></svg></span>
       <span>Hogar</span>

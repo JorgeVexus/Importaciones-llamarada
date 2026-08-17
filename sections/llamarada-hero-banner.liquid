@@ -1,21 +1,54 @@
-<section class="ll-hero" aria-label="Banner principal" style="background: linear-gradient(105deg, {{ section.settings.gradient_start | default: '#9424a4' }} 0%, {{ section.settings.gradient_end | default: '#f9321f' }} 100%);">
-  <div class="ll-hero__glow-1" aria-hidden="true"></div>
-  <div class="ll-hero__glow-2" aria-hidden="true"></div>
+{%- assign has_image = false -%}
+{%- if section.settings.image != blank -%}
+  {%- assign has_image = true -%}
+{%- endif -%}
+
+<section
+  class="ll-hero{% if has_image %} ll-hero--has-image{% endif %}"
+  aria-label="Banner principal"
+  style="{% if has_image == false %}background: linear-gradient(105deg, {{ section.settings.gradient_start | default: '#9424a4' }} 0%, {{ section.settings.gradient_end | default: '#f9321f' }} 100%);{% endif %}"
+>
+  {%- if has_image -%}
+    <picture>
+      {%- if section.settings.image_mobile != blank -%}
+        <source media="(max-width: 749px)" srcset="{{ section.settings.image_mobile | image_url: width: 800 }}">
+      {%- endif -%}
+      <img
+        src="{{ section.settings.image | image_url: width: 1600 }}"
+        alt="{{ section.settings.image.alt | escape | default: section.settings.title }}"
+        class="ll-hero__bg-img"
+        loading="eager"
+        width="{{ section.settings.image.width }}"
+        height="{{ section.settings.image.height }}"
+      >
+    </picture>
+    {%- assign overlay_opacity = section.settings.overlay_opacity | default: 30 | divided_by: 100.0 -%}
+    <div class="ll-hero__overlay" style="opacity: {{ overlay_opacity }};"></div>
+  {%- else -%}
+    <div class="ll-hero__glow-1" aria-hidden="true"></div>
+    <div class="ll-hero__glow-2" aria-hidden="true"></div>
+  {%- endif -%}
   
   <div class="ll-hero__content">
-    <h1 class="ll-hero__title" style="color: {{ section.settings.title_color | default: '#ffffff' }};">
-      {{ section.settings.title | default: 'Importamos lo que necesitas' }}
-    </h1>
-    <p class="ll-hero__subtitle" style="color: {{ section.settings.subtitle_color | default: '#e8d0ed' }};">
-      {{ section.settings.subtitle | default: 'Abastece tu negocio con los mejores precios de mayoreo directamente desde fábrica.' }}
-    </p>
-    <a
-      href="{{ section.settings.cta_link | default: '/collections/all' }}"
-      class="ll-hero__cta"
-      style="background-color: {{ section.settings.cta_bg_color | default: '#91c441' }}; color: {{ section.settings.cta_text_color | default: '#1b1b1b' }};"
-    >
-      {{ section.settings.cta_text | default: 'Ver Catálogo Mayorista' }}
-    </a>
+    {%- if section.settings.title != blank -%}
+      <h1 class="ll-hero__title" style="color: {{ section.settings.title_color | default: '#ffffff' }};">
+        {{ section.settings.title }}
+      </h1>
+    {%- endif -%}
+    {%- if section.settings.subtitle != blank -%}
+      <p class="ll-hero__subtitle" style="color: {{ section.settings.subtitle_color | default: '#e8d0ed' }};">
+        {{ section.settings.subtitle }}
+      </p>
+    {%- endif -%}
+    {%- if section.settings.cta_text != blank -%}
+      <a
+        href="{{ section.settings.cta_link | default: '/collections/all' }}"
+        class="ll-hero__cta"
+        style="background-color: {{ section.settings.cta_bg_color | default: '#91c441' }}; color: {{ section.settings.cta_text_color | default: '#1b1b1b' }};"
+      >
+        {{ section.settings.cta_text }}
+      </a>
+    {%- endif -%}
   </div>
 </section>
 
@@ -24,6 +57,34 @@
   "name": "Banner Hero Principal",
   "class": "section-llamarada-hero",
   "settings": [
+    {
+      "type": "header",
+      "content": "Imagen de Fondo"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Imagen de fondo (Desktop)"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_mobile",
+      "label": "Imagen de fondo (Móvil - Opcional)"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "min": 0,
+      "max": 90,
+      "step": 5,
+      "unit": "%",
+      "label": "Oscurecimiento de imagen (Overlay)",
+      "default": 30
+    },
+    {
+      "type": "header",
+      "content": "Contenido de Texto"
+    },
     {
       "type": "text",
       "id": "title",
@@ -49,6 +110,10 @@
       "default": "#e8d0ed"
     },
     {
+      "type": "header",
+      "content": "Botón CTA"
+    },
+    {
       "type": "text",
       "id": "cta_text",
       "label": "Texto del botón CTA",
@@ -70,6 +135,10 @@
       "id": "cta_text_color",
       "label": "Color de texto del botón CTA",
       "default": "#1b1b1b"
+    },
+    {
+      "type": "header",
+      "content": "Gradiente de Fondo (sin imagen)"
     },
     {
       "type": "color",

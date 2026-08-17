@@ -9,9 +9,31 @@
        ========================================================================= -->
   <main class="ll-canvas">
     <!-- 1. HERO BANNER -->
-    <section class="ll-hero" aria-label="Banner principal">
-      <div class="ll-hero__glow-1" aria-hidden="true"></div>
-      <div class="ll-hero__glow-2" aria-hidden="true"></div>
+    {%- assign has_hero_image = false -%}
+    {%- if section.settings.hero_image != blank -%}
+      {%- assign has_hero_image = true -%}
+    {%- endif -%}
+    <section class="ll-hero{% if has_hero_image %} ll-hero--has-image{% endif %}" aria-label="Banner principal">
+      {%- if has_hero_image -%}
+        <picture>
+          {%- if section.settings.hero_image_mobile != blank -%}
+            <source media="(max-width: 749px)" srcset="{{ section.settings.hero_image_mobile | image_url: width: 800 }}">
+          {%- endif -%}
+          <img
+            src="{{ section.settings.hero_image | image_url: width: 1600 }}"
+            alt="{{ section.settings.hero_image.alt | escape | default: section.settings.hero_title }}"
+            class="ll-hero__bg-img"
+            loading="eager"
+            width="{{ section.settings.hero_image.width }}"
+            height="{{ section.settings.hero_image.height }}"
+          >
+        </picture>
+        {%- assign hero_overlay_opacity = section.settings.hero_overlay_opacity | default: 30 | divided_by: 100.0 -%}
+        <div class="ll-hero__overlay" style="opacity: {{ hero_overlay_opacity }};"></div>
+      {%- else -%}
+        <div class="ll-hero__glow-1" aria-hidden="true"></div>
+        <div class="ll-hero__glow-2" aria-hidden="true"></div>
+      {%- endif -%}
       
       <div class="ll-hero__content">
         <h1 class="ll-hero__title">
@@ -297,6 +319,26 @@
     {
       "type": "header",
       "content": "Hero Banner"
+    },
+    {
+      "type": "image_picker",
+      "id": "hero_image",
+      "label": "Imagen de fondo del Hero (Desktop)"
+    },
+    {
+      "type": "image_picker",
+      "id": "hero_image_mobile",
+      "label": "Imagen de fondo del Hero (Móvil - Opcional)"
+    },
+    {
+      "type": "range",
+      "id": "hero_overlay_opacity",
+      "min": 0,
+      "max": 90,
+      "step": 5,
+      "unit": "%",
+      "label": "Oscurecimiento de imagen (Overlay)",
+      "default": 30
     },
     {
       "type": "text",
