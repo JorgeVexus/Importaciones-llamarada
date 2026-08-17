@@ -16,18 +16,10 @@
       <p class="ll-section-subtitle">
         {{ section.settings.subtitle | default: 'Precios especiales por caja cerrada' }}
       </p>
-    </div>
-
     <a href="{{ section.settings.view_all_link | default: selected_collection.url | default: '/collections/all' }}" class="ll-section-link">
       <span>{{ section.settings.view_all_text | default: 'Ver todas' }}</span>
       <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 5H9M9 5L5 1M9 5L5 9" stroke="#F9321F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-  </div>
-
-  <div class="ll-deals-pills-bar">
-    <button type="button" class="ll-deal-pill is-active">Todos</button>
-    <button type="button" class="ll-deal-pill">Cajas Cerradas</button>
-    <button type="button" class="ll-deal-pill">Lotes Pequeños</button>
-    <button type="button" class="ll-deal-pill">Más Vendidos</button>
+    </a>
   </div>
 
   <div class="ll-products-grid">

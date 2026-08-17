@@ -22,25 +22,25 @@
         height="{{ section.settings.image.height }}"
       >
     </picture>
-    {%- assign overlay_opacity = section.settings.overlay_opacity | default: 50 | divided_by: 100.0 -%}
+    {%- assign overlay_opacity = section.settings.overlay_opacity | default: 40 | divided_by: 100.0 -%}
     {%- assign overlay_color = section.settings.overlay_color | default: '#000000' -%}
     <div
       class="ll-hero__overlay"
-      style="background-color: {{ overlay_color }}; opacity: {{ overlay_opacity }}; z-index: 2;"
+      style="background: {{ overlay_color }} !important; opacity: {{ overlay_opacity }} !important; z-index: 2 !important;"
     ></div>
   {%- else -%}
     <div class="ll-hero__glow-1" aria-hidden="true"></div>
     <div class="ll-hero__glow-2" aria-hidden="true"></div>
   {%- endif -%}
   
-  <div class="ll-hero__content">
+  <div class="ll-hero__content" style="z-index: 5 !important;">
     {%- if section.settings.title != blank -%}
-      <h1 class="ll-hero__title" style="color: {{ section.settings.title_color | default: '#ffffff' }};">
+      <h1 class="ll-hero__title" style="color: {{ section.settings.title_color | default: '#ffffff' }} !important;">
         {{ section.settings.title }}
       </h1>
     {%- endif -%}
     {%- if section.settings.subtitle != blank -%}
-      <p class="ll-hero__subtitle" style="color: {{ section.settings.subtitle_color | default: '#e8d0ed' }};">
+      <p class="ll-hero__subtitle" style="color: {{ section.settings.subtitle_color | default: '#e8d0ed' }} !important;">
         {{ section.settings.subtitle }}
       </p>
     {%- endif -%}
@@ -48,7 +48,7 @@
       <a
         href="{{ section.settings.cta_link | default: '/collections/all' }}"
         class="ll-hero__cta"
-        style="background-color: {{ section.settings.cta_bg_color | default: '#91c441' }}; color: {{ section.settings.cta_text_color | default: '#1b1b1b' }};"
+        style="background-color: {{ section.settings.cta_bg_color | default: '#91c441' }} !important; color: {{ section.settings.cta_text_color | default: '#1b1b1b' }} !important;"
       >
         {{ section.settings.cta_text }}
       </a>

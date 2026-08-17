@@ -32,21 +32,21 @@
         {%- assign hero_overlay_color = section.settings.hero_overlay_color | default: '#000000' -%}
         <div
           class="ll-hero__overlay"
-          style="background-color: {{ hero_overlay_color }}; opacity: {{ hero_overlay_opacity }}; z-index: 2;"
+          style="background: {{ hero_overlay_color }} !important; opacity: {{ hero_overlay_opacity }} !important; z-index: 2 !important;"
         ></div>
       {%- else -%}
         <div class="ll-hero__glow-1" aria-hidden="true"></div>
         <div class="ll-hero__glow-2" aria-hidden="true"></div>
       {%- endif -%}
       
-      <div class="ll-hero__content">
-        <h1 class="ll-hero__title">
+      <div class="ll-hero__content" style="z-index: 5 !important;">
+        <h1 class="ll-hero__title" style="color: {{ section.settings.hero_title_color | default: '#ffffff' }} !important;">
           {{ section.settings.hero_title | default: 'Importamos lo que necesitas' }}
         </h1>
-        <p class="ll-hero__subtitle">
+        <p class="ll-hero__subtitle" style="color: {{ section.settings.hero_subtitle_color | default: '#e8d0ed' }} !important;">
           {{ section.settings.hero_subtitle | default: 'Abastece tu negocio con los mejores precios de mayoreo directamente desde fábrica.' }}
         </p>
-        <a href="{{ section.settings.hero_btn_link | default: '/collections/all' }}" class="ll-hero__cta">
+        <a href="{{ section.settings.hero_btn_link | default: '/collections/all' }}" class="ll-hero__cta" style="background-color: {{ section.settings.hero_cta_bg | default: '#91c441' }} !important; color: {{ section.settings.hero_cta_color | default: '#1b1b1b' }} !important;">
           {{ section.settings.hero_btn_text | default: 'Ver Catálogo Mayorista' }}
         </a>
       </div>
@@ -137,13 +137,6 @@
           <span>Ver todas</span>
           <img src="{{ 'icon-arrow-right.svg' | asset_url }}" alt="Ver todas" width="10" height="10">
         </a>
-      </div>
-
-      <div class="ll-deals-pills-bar">
-        <button type="button" class="ll-deal-pill is-active">Todos</button>
-        <button type="button" class="ll-deal-pill">Cajas Cerradas</button>
-        <button type="button" class="ll-deal-pill">Lotes Pequeños</button>
-        <button type="button" class="ll-deal-pill">Más Vendidos</button>
       </div>
 
       <div class="ll-products-grid">
