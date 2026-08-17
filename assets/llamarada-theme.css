@@ -2362,15 +2362,61 @@ body {
   font-family: var(--ll-font-body);
   font-size: 10px;
   font-weight: 700;
-  padding: 3px 8px;
-  border-radius: 2px;
+  padding: 4px 9px;
+  border-radius: 4px;
   display: inline-block;
-  line-height: 1.3;
+  line-height: 1.2;
+  letter-spacing: 0.02em;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
 }
 
 .ll-badge--yellow { background: var(--ll-accent-yellow); color: var(--ll-text-dark); }
 .ll-badge--red { background: var(--ll-badge-red); color: #ffffff; }
 .ll-badge--green { background: var(--ll-badge-green); color: #ffffff; }
+
+/* Wholesale Deals Pills Filter Bar */
+.ll-deals-pills-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 4px;
+}
+
+.ll-deal-pill {
+  background: var(--ll-bg-card);
+  border: 1px solid var(--ll-border-color);
+  color: var(--ll-text-muted);
+  font-family: var(--ll-font-body);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 160ms var(--ll-ease-out);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+}
+
+.ll-deal-pill:hover {
+  border-color: var(--ll-purple-pastel);
+  color: var(--ll-purple);
+  background: #faf6fc;
+}
+
+.ll-deal-pill:active {
+  transform: scale(0.95);
+  transition: transform 100ms ease-out;
+}
+
+.ll-deal-pill.is-active {
+  background: var(--ll-purple) !important;
+  color: #ffffff !important;
+  border-color: var(--ll-purple) !important;
+  box-shadow: 0 2px 6px rgba(148, 36, 164, 0.25);
+}
 
 .ll-product-card__media {
   width: 100%;
