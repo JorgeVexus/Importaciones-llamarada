@@ -9,7 +9,7 @@
   style="{% if has_image == false %}background: linear-gradient(105deg, {{ section.settings.gradient_start | default: '#9424a4' }} 0%, {{ section.settings.gradient_end | default: '#f9321f' }} 100%);{% endif %}"
 >
   {%- if has_image -%}
-    <picture>
+    <picture class="ll-hero__picture">
       {%- if section.settings.image_mobile != blank -%}
         <source media="(max-width: 749px)" srcset="{{ section.settings.image_mobile | image_url: width: 800 }}">
       {%- endif -%}

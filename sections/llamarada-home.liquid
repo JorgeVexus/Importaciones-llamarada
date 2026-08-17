@@ -15,7 +15,7 @@
     {%- endif -%}
     <section class="ll-hero{% if has_hero_image %} ll-hero--has-image{% endif %}" aria-label="Banner principal">
       {%- if has_hero_image -%}
-        <picture>
+        <picture class="ll-hero__picture">
           {%- if section.settings.hero_image_mobile != blank -%}
             <source media="(max-width: 749px)" srcset="{{ section.settings.hero_image_mobile | image_url: width: 800 }}">
           {%- endif -%}
