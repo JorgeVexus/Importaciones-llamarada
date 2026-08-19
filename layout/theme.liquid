@@ -1,411 +1,242 @@
 <!doctype html>
-<html class="js" lang="{{ request.locale.iso_code }}">
+{%- assign rtl_languages = 'ae,ar,arc,bcc,bqi,ckb,dv,fa,glk,ha,he,kwh,ks,ku,mzn,nqo,pnb,ps,sd,ug,ur,yi' | split: ',' %}
+<html
+  lang="{{ request.locale.iso_code }}"
+  data-theme="next"
+  dir="{% if rtl_languages contains localization.language.iso_code %}rtl{% else %}ltr{% endif %}"
+  class="no-js btn-hover-up {% if request.design_mode %}theme-editor{% endif %}{% if settings.button_style == 'inv' %} btn-hover-inv{% endif %}{% if settings.button_wide_mobile %} btn-mobile-wide{% endif %}{% unless settings.enable_hyphens %} no-hyph{% endunless %}"
+>
   <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="theme-color" content="">
-    <link rel="canonical" href="{{ canonical_url }}">
-
-    {%- if settings.favicon != blank -%}
-      <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32, height: 32 }}">
-    {%- endif -%}
-
-    {%- unless settings.type_header_font.system? and settings.type_body_font.system? -%}
-      <link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
-    {%- endunless -%}
-
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
     <title>
       {{ page_title }}
-      {%- if current_tags %} &ndash; tagged "{{ current_tags | join: ', ' }}"{% endif -%}
-      {%- if current_page != 1 %} &ndash; Page {{ current_page }}{% endif -%}
-      {%- unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless -%}
+      {% unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless %}
     </title>
-
-    {% if page_description %}
-      <meta name="description" content="{{ page_description | escape }}">
-    {% endif %}
-
-    {% render 'meta-tags' %}
-
-    <script type="module">
-      import * as StandardEvents from 'https://cdn.shopify.com/storefront/standard-events.js';
-
-      window.StandardEvents = StandardEvents;
-
-      customElements.define('collection-component', StandardEvents.createViewEventElement());
-      customElements.define(
-        'product-component',
-        StandardEvents.createViewEventElement(HTMLElement, { defaultTrigger: 'intersect' }),
-      );
-
-      document.addEventListener('DOMContentLoaded', () => {
-        const template = document.querySelector('main[data-template]')?.dataset.template || '';
-        document.dispatchEvent(
-          new StandardEvents.PageViewEvent({
-            page: { template, title: document.title, url: window.location.href },
-          })
-        );
-      }, { once: true });
-    </script>
-
-    <script src="{{ 'constants.js' | asset_url }}" defer="defer"></script>
-    <script src="{{ 'pubsub.js' | asset_url }}" defer="defer"></script>
-    <script src="{{ 'global.js' | asset_url }}" defer="defer"></script>
-    <script src="{{ 'cart-disclosure-modal.js' | asset_url }}" defer="defer"></script>
-    <script src="{{ 'cart-disclosure-tooltip.js' | asset_url }}" defer="defer"></script>
-    <script src="{{ 'details-disclosure.js' | asset_url }}" defer="defer"></script>
-    <script src="{{ 'details-modal.js' | asset_url }}" defer="defer"></script>
-    <script src="{{ 'search-form.js' | asset_url }}" defer="defer"></script>
-    <script src="{{ 'standard-actions-override.js' | asset_url }}" defer="defer"></script>
-
-    {%- if settings.animations_reveal_on_scroll -%}
-      <script src="{{ 'animations.js' | asset_url }}" defer="defer"></script>
-    {%- endif -%}
-
-    {{ content_for_header }}
-
-    {%- liquid
-      assign body_font_bold = settings.type_body_font | font_modify: 'weight', 'bold'
-      assign body_font_italic = settings.type_body_font | font_modify: 'style', 'italic'
-      assign body_font_bold_italic = body_font_bold | font_modify: 'style', 'italic'
-    %}
-
-    {% style %}
-      {{ settings.type_body_font | font_face: font_display: 'swap' }}
-      {{ body_font_bold | font_face: font_display: 'swap' }}
-      {{ body_font_italic | font_face: font_display: 'swap' }}
-      {{ body_font_bold_italic | font_face: font_display: 'swap' }}
-      {{ settings.type_header_font | font_face: font_display: 'swap' }}
-
-      {% for scheme in settings.color_schemes -%}
-        {% assign scheme_classes = scheme_classes | append: ', .color-' | append: scheme.id %}
-        {% if forloop.index == 1 -%}
-          :root,
-        {%- endif %}
-        .color-{{ scheme.id }} {
-          --color-background: {{ scheme.settings.background.red }},{{ scheme.settings.background.green }},{{ scheme.settings.background.blue }};
-        {% if scheme.settings.background_gradient != empty %}
-          --gradient-background: {{ scheme.settings.background_gradient }};
-        {% else %}
-          --gradient-background: {{ scheme.settings.background }};
-        {% endif %}
-
-        {% liquid
-          assign background_color = scheme.settings.background
-          assign background_color_brightness = background_color | color_brightness
-          if background_color_brightness <= 26
-            assign background_color_contrast = background_color | color_lighten: 50
-          elsif background_color_brightness <= 65
-            assign background_color_contrast = background_color | color_lighten: 5
-          else
-            assign background_color_contrast = background_color | color_darken: 25
-          endif
-        %}
-
-        --color-foreground: {{ scheme.settings.text.red }},{{ scheme.settings.text.green }},{{ scheme.settings.text.blue }};
-        --color-background-contrast: {{ background_color_contrast.red }},{{ background_color_contrast.green }},{{ background_color_contrast.blue }};
-        --color-shadow: {{ scheme.settings.shadow.red }},{{ scheme.settings.shadow.green }},{{ scheme.settings.shadow.blue }};
-        --color-button: {{ scheme.settings.button.red }},{{ scheme.settings.button.green }},{{ scheme.settings.button.blue }};
-        --color-button-text: {{ scheme.settings.button_label.red }},{{ scheme.settings.button_label.green }},{{ scheme.settings.button_label.blue }};
-        --color-secondary-button: {{ scheme.settings.background.red }},{{ scheme.settings.background.green }},{{ scheme.settings.background.blue }};
-        --color-secondary-button-text: {{ scheme.settings.secondary_button_label.red }},{{ scheme.settings.secondary_button_label.green }},{{ scheme.settings.secondary_button_label.blue }};
-        --color-link: {{ scheme.settings.secondary_button_label.red }},{{ scheme.settings.secondary_button_label.green }},{{ scheme.settings.secondary_button_label.blue }};
-        --color-badge-foreground: {{ scheme.settings.text.red }},{{ scheme.settings.text.green }},{{ scheme.settings.text.blue }};
-        --color-badge-background: {{ scheme.settings.background.red }},{{ scheme.settings.background.green }},{{ scheme.settings.background.blue }};
-        --color-badge-border: {{ scheme.settings.text.red }},{{ scheme.settings.text.green }},{{ scheme.settings.text.blue }};
-        --payment-terms-background-color: rgb({{ scheme.settings.background.rgb }});
-      }
-      {% endfor %}
-
-      {{ scheme_classes | prepend: 'body' }} {
-        color: rgba(var(--color-foreground), 0.75);
-        background-color: rgb(var(--color-background));
-      }
-
-      :root {
-        --font-body-family: {{ settings.type_body_font.family }}, {{ settings.type_body_font.fallback_families }};
-        --font-body-style: {{ settings.type_body_font.style }};
-        --font-body-weight: {{ settings.type_body_font.weight }};
-        --font-body-weight-bold: {{ settings.type_body_font.weight | plus: 300 | at_most: 1000 }};
-
-        --font-heading-family: {{ settings.type_header_font.family }}, {{ settings.type_header_font.fallback_families }};
-        --font-heading-style: {{ settings.type_header_font.style }};
-        --font-heading-weight: {{ settings.type_header_font.weight }};
-
-        --font-body-scale: {{ settings.body_scale | divided_by: 100.0 }};
-        --font-heading-scale: {{ settings.heading_scale | times: 1.0 | divided_by: settings.body_scale }};
-
-        --media-padding: {{ settings.media_padding }}px;
-        --media-border-opacity: {{ settings.media_border_opacity | divided_by: 100.0 }};
-        --media-border-width: {{ settings.media_border_thickness }}px;
-        --media-radius: {{ settings.media_radius }}px;
-        --media-shadow-opacity: {{ settings.media_shadow_opacity | divided_by: 100.0 }};
-        --media-shadow-horizontal-offset: {{ settings.media_shadow_horizontal_offset }}px;
-        --media-shadow-vertical-offset: {{ settings.media_shadow_vertical_offset }}px;
-        --media-shadow-blur-radius: {{ settings.media_shadow_blur }}px;
-        --media-shadow-visible: {% if settings.media_shadow_opacity > 0 %}1{% else %}0{% endif %};
-
-        --page-width: {{ settings.page_width | divided_by: 10 }}rem;
-        --page-width-margin: {% if settings.page_width == '1600' %}2{% else %}0{% endif %}rem;
-
-        --product-card-image-padding: {{ settings.card_image_padding | divided_by: 10.0 }}rem;
-        --product-card-corner-radius: {{ settings.card_corner_radius | divided_by: 10.0 }}rem;
-        --product-card-text-alignment: {{ settings.card_text_alignment }};
-        --product-card-border-width: {{ settings.card_border_thickness | divided_by: 10.0 }}rem;
-        --product-card-border-opacity: {{ settings.card_border_opacity | divided_by: 100.0 }};
-        --product-card-shadow-opacity: {{ settings.card_shadow_opacity | divided_by: 100.0 }};
-        --product-card-shadow-visible: {% if settings.card_shadow_opacity > 0 %}1{% else %}0{% endif %};
-        --product-card-shadow-horizontal-offset: {{ settings.card_shadow_horizontal_offset | divided_by: 10.0 }}rem;
-        --product-card-shadow-vertical-offset: {{ settings.card_shadow_vertical_offset | divided_by: 10.0 }}rem;
-        --product-card-shadow-blur-radius: {{ settings.card_shadow_blur | divided_by: 10.0 }}rem;
-
-        --collection-card-image-padding: {{ settings.collection_card_image_padding | divided_by: 10.0 }}rem;
-        --collection-card-corner-radius: {{ settings.collection_card_corner_radius | divided_by: 10.0 }}rem;
-        --collection-card-text-alignment: {{ settings.collection_card_text_alignment }};
-        --collection-card-border-width: {{ settings.collection_card_border_thickness | divided_by: 10.0 }}rem;
-        --collection-card-border-opacity: {{ settings.collection_card_border_opacity | divided_by: 100.0 }};
-        --collection-card-shadow-opacity: {{ settings.collection_card_shadow_opacity | divided_by: 100.0 }};
-        --collection-card-shadow-visible: {% if settings.collection_card_shadow_opacity > 0 %}1{% else %}0{% endif %};
-        --collection-card-shadow-horizontal-offset: {{ settings.collection_card_shadow_horizontal_offset | divided_by: 10.0 }}rem;
-        --collection-card-shadow-vertical-offset: {{ settings.collection_card_shadow_vertical_offset | divided_by: 10.0 }}rem;
-        --collection-card-shadow-blur-radius: {{ settings.collection_card_shadow_blur | divided_by: 10.0 }}rem;
-
-        --blog-card-image-padding: {{ settings.blog_card_image_padding | divided_by: 10.0 }}rem;
-        --blog-card-corner-radius: {{ settings.blog_card_corner_radius | divided_by: 10.0 }}rem;
-        --blog-card-text-alignment: {{ settings.blog_card_text_alignment }};
-        --blog-card-border-width: {{ settings.blog_card_border_thickness | divided_by: 10.0 }}rem;
-        --blog-card-border-opacity: {{ settings.blog_card_border_opacity | divided_by: 100.0 }};
-        --blog-card-shadow-opacity: {{ settings.blog_card_shadow_opacity | divided_by: 100.0 }};
-        --blog-card-shadow-visible: {% if settings.blog_card_shadow_opacity > 0 %}1{% else %}0{% endif %};
-        --blog-card-shadow-horizontal-offset: {{ settings.blog_card_shadow_horizontal_offset | divided_by: 10.0 }}rem;
-        --blog-card-shadow-vertical-offset: {{ settings.blog_card_shadow_vertical_offset | divided_by: 10.0 }}rem;
-        --blog-card-shadow-blur-radius: {{ settings.blog_card_shadow_blur | divided_by: 10.0 }}rem;
-
-        --badge-corner-radius: {{ settings.badge_corner_radius | divided_by: 10.0 }}rem;
-
-        --popup-border-width: {{ settings.popup_border_thickness }}px;
-        --popup-border-opacity: {{ settings.popup_border_opacity | divided_by: 100.0 }};
-        --popup-corner-radius: {{ settings.popup_corner_radius }}px;
-        --popup-shadow-opacity: {{ settings.popup_shadow_opacity | divided_by: 100.0 }};
-        --popup-shadow-horizontal-offset: {{ settings.popup_shadow_horizontal_offset }}px;
-        --popup-shadow-vertical-offset: {{ settings.popup_shadow_vertical_offset }}px;
-        --popup-shadow-blur-radius: {{ settings.popup_shadow_blur }}px;
-
-        --drawer-border-width: {{ settings.drawer_border_thickness }}px;
-        --drawer-border-opacity: {{ settings.drawer_border_opacity | divided_by: 100.0 }};
-        --drawer-shadow-opacity: {{ settings.drawer_shadow_opacity | divided_by: 100.0 }};
-        --drawer-shadow-horizontal-offset: {{ settings.drawer_shadow_horizontal_offset }}px;
-        --drawer-shadow-vertical-offset: {{ settings.drawer_shadow_vertical_offset }}px;
-        --drawer-shadow-blur-radius: {{ settings.drawer_shadow_blur }}px;
-
-        --spacing-sections-desktop: {{ settings.spacing_sections }}px;
-        --spacing-sections-mobile: {% if settings.spacing_sections < 24 %}{{ settings.spacing_sections }}{% else %}{{ settings.spacing_sections | times: 0.7 | round | at_least: 20 }}{% endif %}px;
-
-        --grid-desktop-vertical-spacing: {{ settings.spacing_grid_vertical }}px;
-        --grid-desktop-horizontal-spacing: {{ settings.spacing_grid_horizontal }}px;
-        --grid-mobile-vertical-spacing: {{ settings.spacing_grid_vertical | divided_by: 2 }}px;
-        --grid-mobile-horizontal-spacing: {{ settings.spacing_grid_horizontal | divided_by: 2 }}px;
-
-        --text-boxes-border-opacity: {{ settings.text_boxes_border_opacity | divided_by: 100.0 }};
-        --text-boxes-border-width: {{ settings.text_boxes_border_thickness }}px;
-        --text-boxes-radius: {{ settings.text_boxes_radius }}px;
-        --text-boxes-shadow-opacity: {{ settings.text_boxes_shadow_opacity | divided_by: 100.0 }};
-        --text-boxes-shadow-visible: {% if settings.text_boxes_shadow_opacity > 0 %}1{% else %}0{% endif %};
-        --text-boxes-shadow-horizontal-offset: {{ settings.text_boxes_shadow_horizontal_offset }}px;
-        --text-boxes-shadow-vertical-offset: {{ settings.text_boxes_shadow_vertical_offset }}px;
-        --text-boxes-shadow-blur-radius: {{ settings.text_boxes_shadow_blur }}px;
-
-        --buttons-radius: {{ settings.buttons_radius }}px;
-        --buttons-radius-outset: {% if settings.buttons_radius > 0 %}{{ settings.buttons_radius | plus: settings.buttons_border_thickness }}{% else %}0{% endif %}px;
-        --buttons-border-width: {% if settings.buttons_border_opacity > 0 %}{{ settings.buttons_border_thickness }}{% else %}0{% endif %}px;
-        --buttons-border-opacity: {{ settings.buttons_border_opacity | divided_by: 100.0 }};
-        --buttons-shadow-opacity: {{ settings.buttons_shadow_opacity | divided_by: 100.0 }};
-        --buttons-shadow-visible: {% if settings.buttons_shadow_opacity > 0 %}1{% else %}0{% endif %};
-        --buttons-shadow-horizontal-offset: {{ settings.buttons_shadow_horizontal_offset }}px;
-        --buttons-shadow-vertical-offset: {{ settings.buttons_shadow_vertical_offset }}px;
-        --buttons-shadow-blur-radius: {{ settings.buttons_shadow_blur }}px;
-        --buttons-border-offset: {% if settings.buttons_radius > 0 or settings.buttons_shadow_opacity > 0 %}0.3{% else %}0{% endif %}px;
-
-        --inputs-radius: {{ settings.inputs_radius }}px;
-        --inputs-border-width: {{ settings.inputs_border_thickness }}px;
-        --inputs-border-opacity: {{ settings.inputs_border_opacity | divided_by: 100.0 }};
-        --inputs-shadow-opacity: {{ settings.inputs_shadow_opacity | divided_by: 100.0 }};
-        --inputs-shadow-horizontal-offset: {{ settings.inputs_shadow_horizontal_offset }}px;
-        --inputs-margin-offset: {% if settings.inputs_shadow_vertical_offset != 0 and settings.inputs_shadow_opacity > 0 %}{{ settings.inputs_shadow_vertical_offset | abs }}{% else %}0{% endif %}px;
-        --inputs-shadow-vertical-offset: {{ settings.inputs_shadow_vertical_offset }}px;
-        --inputs-shadow-blur-radius: {{ settings.inputs_shadow_blur }}px;
-        --inputs-radius-outset: {% if settings.inputs_radius > 0 %}{{ settings.inputs_radius | plus: settings.inputs_border_thickness }}{% else %}0{% endif %}px;
-
-        --variant-pills-radius: {{ settings.variant_pills_radius }}px;
-        --variant-pills-border-width: {{ settings.variant_pills_border_thickness }}px;
-        --variant-pills-border-opacity: {{ settings.variant_pills_border_opacity | divided_by: 100.0 }};
-        --variant-pills-shadow-opacity: {{ settings.variant_pills_shadow_opacity | divided_by: 100.0 }};
-        --variant-pills-shadow-horizontal-offset: {{ settings.variant_pills_shadow_horizontal_offset }}px;
-        --variant-pills-shadow-vertical-offset: {{ settings.variant_pills_shadow_vertical_offset }}px;
-        --variant-pills-shadow-blur-radius: {{ settings.variant_pills_shadow_blur }}px;
-      }
-
-      *,
-      *::before,
-      *::after {
-        box-sizing: inherit;
-      }
-
-      html {
-        box-sizing: border-box;
-        font-size: calc(var(--font-body-scale) * 62.5%);
-        height: 100%;
-      }
-
-      body {
-        display: flex;
-        flex-direction: column;
-        min-height: 100%;
-        margin: 0;
-        font-size: 1.5rem;
-        letter-spacing: 0.06rem;
-        line-height: calc(1 + 0.8 / var(--font-body-scale));
-        font-family: var(--font-body-family);
-        font-style: var(--font-body-style);
-        font-weight: var(--font-body-weight);
-      }
-
-      @media screen and (min-width: 750px) {
-        body {
-          font-size: 1.6rem;
-        }
-      }
-    {% endstyle %}
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Open+Sans:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
-
-    {{ 'base.css' | asset_url | stylesheet_tag }}
-    {{ 'llamarada-theme.css' | asset_url | stylesheet_tag }}
-    <link rel="stylesheet" href="{{ 'component-cart-items.css' | asset_url }}" media="print" onload="this.media='all'">
-
-    {%- if settings.cart_type == 'drawer' -%}
-      {{ 'component-cart-drawer.css' | asset_url | stylesheet_tag }}
-      {{ 'component-cart.css' | asset_url | stylesheet_tag }}
-      {{ 'component-totals.css' | asset_url | stylesheet_tag }}
-      {{ 'component-price.css' | asset_url | stylesheet_tag }}
-      {{ 'component-discounts.css' | asset_url | stylesheet_tag }}
-    {%- endif -%}
-
-    {%- unless settings.type_body_font.system? -%}
-      {% comment %}theme-check-disable AssetPreload{% endcomment %}
-      <link rel="preload" as="font" href="{{ settings.type_body_font | font_url }}" type="font/woff2" crossorigin>
-      {% comment %}theme-check-enable AssetPreload{% endcomment %}
-    {%- endunless -%}
-    {%- unless settings.type_header_font.system? -%}
-      {% comment %}theme-check-disable AssetPreload{% endcomment %}
-      <link rel="preload" as="font" href="{{ settings.type_header_font | font_url }}" type="font/woff2" crossorigin>
-      {% comment %}theme-check-enable AssetPreload{% endcomment %}
-    {%- endunless -%}
-
-    {%- if localization.available_countries.size > 1 or localization.available_languages.size > 1 -%}
-      {{ 'component-localization-form.css' | asset_url | stylesheet_tag: preload: true }}
-      <script src="{{ 'localization-form.js' | asset_url }}" defer="defer"></script>
-    {%- endif -%}
-
-    {%- if settings.predictive_search_enabled -%}
-      <link
-        rel="stylesheet"
-        href="{{ 'component-predictive-search.css' | asset_url }}"
-        media="print"
-        onload="this.media='all'"
-      >
-    {%- endif -%}
-
-    <script>
-      if (Shopify.designMode) {
-        document.documentElement.classList.add('shopify-design-mode');
-      }
-    </script>
-    {{ 'llamarada-theme.css' | asset_url | stylesheet_tag }}
-  </head>
-
-  <body class="gradient{% if settings.animations_hover_elements != 'none' %} animate--hover-{{ settings.animations_hover_elements }}{% endif %}">
-    <a class="skip-to-content-link button visually-hidden" href="#MainContent">
-      {{ 'accessibility.skip_to_text' | t }}
-    </a>
-
-    {%- if settings.cart_type == 'drawer' -%}
-      {%- render 'cart-drawer' -%}
-    {%- endif -%}
-
-    {% sections 'header-group' %}
-
-    <main
-      id="MainContent"
-      class="content-for-layout focus-none"
-      role="main"
-      tabindex="-1"
-      data-template="{{ template.name }}"
+    {%- if page_description -%}<meta name="description" content="{{ page_description | escape }}">{%- endif -%}
+    <meta name="theme-color" content="{{ settings.accent_color }}">
+    <meta name="MobileOptimized" content="320">
+    <meta name="HandheldFriendly" content="true">
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=5, viewport-fit=cover, shrink-to-fit=no"
     >
-      {{ content_for_layout }}
-    </main>
-
-    {% sections 'footer-group' %}
-
-    <ul hidden>
-      <li id="a11y-refresh-page-message">{{ 'accessibility.refresh_page' | t }}</li>
-      <li id="a11y-new-window-message">{{ 'accessibility.link_messages.new_window' | t }}</li>
-    </ul>
-
+    <meta name="msapplication-config" content="{{ 'browserconfig.xml' | asset_url }}">
+    <link rel="canonical" href="{{ canonical_url }}">
+    {% unless settings.primary_font.system? and settings.secondary_font.system? -%}
+      <link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
+    {%- endunless -%}
+    <link rel="preload" as="style" href="{{ 'screen.css' | asset_url }}">
+    <link rel="preload" as="style" href="{{ 'screen-settings.css' | asset_url }}">
+    {% if rtl_languages contains localization.language.iso_code -%}
+      <link rel="preload" as="style" href="{{ 'rtl.css' | asset_url }}">
+    {%- endif %}
+    {%- if settings.custom_primary_font_snippet -%}{{ settings.custom_primary_font_snippet }}{%- endif -%}
+    {%- if settings.custom_secondary_font_snippet -%}{{ settings.custom_secondary_font_snippet }}{%- endif -%}
+    {% unless settings.primary_font.system? -%}
+      <link rel="preload" as="font" href="{{ settings.primary_font | font_url }}" type="font/woff2" crossorigin>
+    {%- endunless %}
+    {% unless settings.secondary_font.system? -%}
+      <link rel="preload" as="font" href="{{ settings.secondary_font | font_url }}" type="font/woff2" crossorigin>
+    {%- endunless %}
+    <link rel="preload" as="font" href="{{ 'icomoon.woff' | asset_url }}" crossorigin>
+    <link media="screen" rel="stylesheet" href="{{ 'screen.css' | asset_url }}" id="core-css">
+    <noscript><link rel="stylesheet" href="{{ 'async-menu.css' | asset_url }}"></noscript>
+    {%- if template.name == 'collection' or template.name == 'search' -%}
+      <link media="screen" rel="stylesheet" href="{{ 'page-collection.css' | asset_url }}" id="collection-css">
+    {%- endif -%}
+    {%- if template.name == '404' -%}
+      <link media="screen" rel="stylesheet" href="{{ 'page-misc.css' | asset_url }}" id="misc-css">
+    {%- endif -%}
+    {%- if template.name == 'product' -%}
+      <link media="screen" rel="stylesheet" href="{{ 'page-product.css' | asset_url }}" id="product-css">
+    {%- endif -%}
+    <link media="screen" rel="stylesheet" href="{{ 'screen-settings.css' | asset_url }}" id="custom-css">
+    {%- if settings.favicon -%}
+      <link rel="icon" href="{{ settings.favicon | image_url: width: 32, height: 32 }}" type="image/png">
+      <link rel="mask-icon" href="safari-pinned-tab.svg" color="#333333">
+      <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    {%- endif -%}
     <script>
-      window.shopUrl = '{{ request.origin }}';
-      window.routes = {
-        cart_add_url: '{{ routes.cart_add_url }}',
-        cart_change_url: '{{ routes.cart_change_url }}',
-        cart_update_url: '{{ routes.cart_update_url }}',
-        cart_url: '{{ routes.cart_url }}',
-        predictive_search_url: '{{ routes.predictive_search_url }}',
-      };
-
-      window.cartStrings = {
-        error: `{{ 'sections.cart.cart_error' | t }}`,
-        quantityError: `{{ 'sections.cart.cart_quantity_error_html' | t: quantity: '[quantity]' }}`,
-      };
-
-      window.variantStrings = {
-        addToCart: `{{ 'products.product.add_to_cart' | t }}`,
-        soldOut: `{{ 'products.product.sold_out' | t }}`,
-        unavailable: `{{ 'products.product.unavailable' | t }}`,
-        unavailable_with_option: `{{ 'products.product.value_unavailable' | t: option_value: '[value]' }}`,
-      };
-
-      window.quickOrderListStrings = {
-        itemsAdded: `{{ 'sections.quick_order_list.items_added.other' | t: quantity: '[quantity]' }}`,
-        itemAdded: `{{ 'sections.quick_order_list.items_added.one' | t: quantity: '[quantity]' }}`,
-        itemsRemoved: `{{ 'sections.quick_order_list.items_removed.other' | t: quantity: '[quantity]' }}`,
-        itemRemoved: `{{ 'sections.quick_order_list.items_removed.one' | t: quantity: '[quantity]' }}`,
-        viewCart: `{{- 'sections.quick_order_list.view_cart' | t -}}`,
-        each: `{{- 'sections.quick_order_list.each' | t: money: '[money]' }}`,
-        min_error: `{{- 'sections.quick_order_list.min_error' | t: min: '[min]' }}`,
-        max_error: `{{- 'sections.quick_order_list.max_error' | t: max: '[max]' }}`,
-        step_error: `{{- 'sections.quick_order_list.step_error' | t: step: '[step]' }}`,
-      };
-
-      window.accessibilityStrings = {
-        imageAvailable: `{{ 'products.product.media.image_available' | t: index: '[index]' }}`,
-        shareSuccess: `{{ 'general.share.success_message' | t }}`,
-        pauseSlideshow: `{{ 'sections.slideshow.pause_slideshow' | t }}`,
-        playSlideshow: `{{ 'sections.slideshow.play_slideshow' | t }}`,
-        recipientFormExpanded: `{{ 'recipient.form.expanded' | t }}`,
-        recipientFormCollapsed: `{{ 'recipient.form.collapsed' | t }}`,
-        countrySelectorSearchCount: `{{ 'localization.country_results_count' | t: count: '[count]' }}`,
-      };
+      document.documentElement.classList.remove('no-js');
     </script>
+    {% render 'social-meta-tags' %}
+    {{ content_for_header }}
+    {{ settings.custom_script_for_head }}
+    <style>
+      {% for scheme in settings.color_schemes -%}
+        :root {
+          --{{ scheme.id }}:                      {% if scheme.settings.primary_bg_gradient != empty %}{{ scheme.settings.primary_bg_gradient }}{% else %}{{ scheme.settings.primary_bg }}{% endif %};
+          --{{ scheme.id }}_solid:                {{ scheme.settings.primary_bg }};
+          --{{ scheme.id }}_bg:                   var(--{{ scheme.id }});
+          --{{ scheme.id }}_bg_dark:              {% assign primary_bg_hex = scheme.settings.primary_bg | color_to_hex  %}{% if primary_bg_hex == '#ffffff' or primary_bg_hex == '#FFFFFF' %}var(--{{ scheme.id }}_bg);{% else %}{{ scheme.settings.primary_bg | color_darken: 2 }};{% endif %}
+          --{{ scheme.id }}_bg_var:               var(--{{ scheme.id }}_bg_dark);
+          --{{ scheme.id }}_bg_secondary:         {{ scheme.settings.secondary_bg }};
+          --{{ scheme.id }}_fg:                   {{ scheme.settings.primary_fg }};
+          --{{ scheme.id }}_fg_sat:               {{ scheme.settings.primary_fg | color_lighten: 75 }};
+          --{{ scheme.id }}_title:                {% if scheme.settings.title_color_gradient != empty %}{{ scheme.settings.title_color_gradient }}{% else %}{{ scheme.settings.title_color }}{% endif %};
+          --{{ scheme.id }}_title_solid:          {{ scheme.settings.title_color }};
 
-    {%- if settings.predictive_search_enabled -%}
-      <script src="{{ 'predictive-search.js' | asset_url }}" defer="defer"></script>
-    {%- endif -%}
+          --{{ scheme.id }}_primary_btn_bg:       {{ scheme.settings.primary_button_bg }};
+          --{{ scheme.id }}_primary_btn_bg_dark:  {{ scheme.settings.primary_button_bg | color_darken: 7 }};
+          --{{ scheme.id }}_primary_btn_fg:       {{ scheme.settings.primary_button_fg }};
+          --{{ scheme.id }}_secondary_btn_bg:     {{ scheme.settings.secondary_button_bg }};
+          --{{ scheme.id }}_secondary_btn_bg_dark:{{ scheme.settings.secondary_button_bg | color_darken: 7 }};
+          --{{ scheme.id }}_secondary_btn_fg:     {{ scheme.settings.secondary_button_fg }};
+          --{{ scheme.id }}_tertiary_btn_bg:      {{ scheme.settings.tertiary_button_bg }};
+          --{{ scheme.id }}_tertiary_btn_bg_dark: {{ scheme.settings.tertiary_button_bg | color_darken: 7 }};
+          --{{ scheme.id }}_tertiary_btn_fg:      {{ scheme.settings.tertiary_button_fg }};
+          --{{ scheme.id }}_btn_bg:       		var(--{{ scheme.id }}_primary_btn_bg);
+          --{{ scheme.id }}_btn_bg_dark:  		var(--{{ scheme.id }}_primary_btn_bg_dark);
+          --{{ scheme.id }}_btn_fg:       		var(--{{ scheme.id }}_primary_btn_fg);
+          --{{ scheme.id }}_bd:                   {{ scheme.settings.primary_bd }};
+          --{{ scheme.id }}_input_bg:             {{ scheme.settings.input_bg }};
+          --{{ scheme.id }}_input_bg_dark:        {{ scheme.settings.input_bg  | color_darken: 5 }};
+          --{{ scheme.id }}_input_fg:             {{ scheme.settings.input_fg }};
+          --{{ scheme.id }}_input_pl:             {{ scheme.settings.input_fg | color_lighten: 4 }};
+          --{{ scheme.id }}_accent:               {{ scheme.settings.accent }};
+          --{{ scheme.id }}_accent_gradient:      {% if scheme.settings.accent_gradient != empty %}{{ scheme.settings.accent_gradient }}{% else %}{{ scheme.settings.accent }}{% endif %};
+          {% assign brightness = scheme.settings.primary_fg | color_brightness %}
+          --{{ scheme.id }}_fg_brightness: {% if brightness >= 128 %}1{% else %}0{% endif %}; {% comment %}0 is dark, 1 is light{% endcomment %}
+          {% if scheme.id == settings.default_color_scheme.id %}
+            --body_bg:            				var(--{{ scheme.id }}_bg);
+          {% endif %}
+          --{{ scheme.id }}_bg_darkmode:        {{ scheme.settings.primary_bg_darkmode }};
+          --{{ scheme.id }}_fg_darkmode:        {{ scheme.settings.primary_fg_darkmode }};
+          --{{ scheme.id }}_primary_btn_bg_darkmode: {{ scheme.settings.primary_button_bg_darkmode }};
+          --{{ scheme.id }}_primary_btn_fg_darkmode: {{ scheme.settings.primary_button_fg_darkmode }};
+          --{{ scheme.id }}_accent_darkmode:    {{ scheme.settings.accent_darkmode }};
+        }
+        {% if scheme.id == settings.default_color_scheme.id %}:root, {% endif %}[class*="palette-{{ scheme.id }}"], [data-active-content*="{{ scheme.id }}"] {
+        --primary_bg:             var(--{{ scheme.id }}_bg);
+        --bg_secondary:           var(--{{ scheme.id }}_bg_secondary);
+        --primary_text:           var(--{{ scheme.id }}_fg);
+        --primary_text_h:         var(--{{ scheme.id }}_title);
+        --headings_text:          var(--primary_text_h);
+        --headings_text_solid:    var(--{{ scheme.id }}_title_solid);
+        --primary_btn_bg:         var(--{{ scheme.id }}_primary_btn_bg);
+        --primary_btn_bg_dark:    var(--{{ scheme.id }}_primary_btn_bg_dark);
+        --primary_btn_fg:       var(--{{ scheme.id }}_primary_btn_fg);
+        --secondary_btn_bg:       var(--{{ scheme.id }}_secondary_btn_bg);
+        --secondary_btn_bg_dark:  var(--{{ scheme.id }}_secondary_btn_bg_dark);
+        --secondary_btn_fg:     var(--{{ scheme.id }}_secondary_btn_fg);
+        --tertiary_btn_bg:        var(--{{ scheme.id }}_tertiary_btn_bg);
+        --tertiary_btn_bg_dark:   var(--{{ scheme.id }}_tertiary_btn_bg_dark);
+        --tertiary_btn_fg:      var(--{{ scheme.id }}_tertiary_btn_fg);
+        --input_bg:               var(--{{ scheme.id }}_input_bg);
+        --input_bg_dark:          var(--{{ scheme.id }}_input_bg_dark);
+        --input_fg:               var(--{{ scheme.id }}_input_fg);
+        --input_pl:               var(--{{ scheme.id }}_input_pl);
+        --input_bd:               var(--{{ scheme.id }}_bd);
+        --custom_bd:              var(--custom_input_bd);
+        --secondary_bg: 		  var(--primary_btn_bg);
+        --accent:                 var(--{{ scheme.id }}_accent);
+        --theme_bg:               var(--accent);
+        --accent_gradient:        var(--{{ scheme.id }}_accent_gradient);
+        --primary_text_brightness:var(--{{ scheme.id }}_fg_brightness);
+        --primary_default_body_text:     var(--{{ settings.default_color_scheme.id }}_fg);
+        --primary_default_heading_text:  var(--{{ settings.default_color_scheme.id }}_title);
+        }
+        {% if scheme.settings.title_color_gradient != empty %}
+          {% if scheme.id == settings.default_color_scheme.id %}h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6,{% endif %}
+          [class*="palette-{{ scheme.id }}"] h1, [data-active-content*="{{ scheme.id }}"] h1,
+          [class*="palette-{{ scheme.id }}"] h2, [data-active-content*="{{ scheme.id }}"] h2,
+          [class*="palette-{{ scheme.id }}"] h3, [data-active-content*="{{ scheme.id }}"] h3,
+          [class*="palette-{{ scheme.id }}"] h4, [data-active-content*="{{ scheme.id }}"] h4,
+          [class*="palette-{{ scheme.id }}"] h5, [data-active-content*="{{ scheme.id }}"] h5,
+          [class*="palette-{{ scheme.id }}"] h6, [data-active-content*="{{ scheme.id }}"] h6,
+          [class*="palette-{{ scheme.id }}"] .ff-heading, [data-active-content*="{{ scheme.id }}"] .ff-heading {
+            background: var(--headings_text);
+            background-clip: text; -webkit-background-clip: text;
+            text-fill-color: transparent; -webkit-text-fill-color: transparent;
+            line-height: max(1.25, var(--main_lh_h));
+          }
+        {% endif %}
+        .day-switched {
+          --{{ scheme.id }}_bg:     var(--{{ scheme.id }}_bg_darkmode);
+          --{{ scheme.id }}_fg:     var(--{{ scheme.id }}_fg_darkmode);
+          --{{ scheme.id }}_btn_bg: var(--{{ scheme.id }}_primary_btn_bg_darkmode);
+          --{{ scheme.id }}_btn_fg: var(--{{ scheme.id }}_primary_btn_fg_darkmode);
+          --{{ scheme.id }}_accent: var(--{{ scheme.id }}_accent_darkmode);
+        }
+        {% if scheme.id == settings.default_color_scheme.id %}.day-switched, {% endif %}.day-switched [class*="palette-{{ scheme.id }}"], .day-switched [data-active-content*="{{ scheme.id }}"] {
+          --primary_bg:             var(--{{ scheme.id }}_bg);
+          --bg_secondary:           var(--primary_bg);
+          --primary_text:           var(--{{ scheme.id }}_fg);
+          --primary_text_h:         var(--primary_text);
+          --headings_text:          var(--primary_text);
+          --headings_text_solid:    var(--primary_text);
+          --primary_btn_bg:         var(--{{ scheme.id }}_btn_bg);
+          --primary_btn_bg_dark:    var(--primary_btn_bg);
+          --primary_btn_fg:         var(--{{ scheme.id }}_btn_fg);
+          --secondary_btn_bg:       var(--primary_btn_bg);
+          --secondary_btn_bg_dark:  var(--primary_btn_bg);
+          --secondary_btn_fg:       var(--primary_btn_fg);
+          --tertiary_btn_bg:        var(--primary_btn_bg);
+          --tertiary_btn_bg_dark:   var(--primary_btn_bg);
+          --tertiary_btn_fg:        var(--primary_btn_fg);
+          --primary_default_body_text:     var(--primary_text);
+          --primary_default_heading_text:  var(--primary_text);
+          --accent:                 var(--{{ scheme.id }}_accent);
+          {% if scheme.id == settings.default_color_scheme.id %}
+            --body_bg:            	var(--primary_bg);
+          {% endif %}
+        }
+      {% endfor %}
+      @media only screen and (max-width: 47.5em) {
+        .text-palette-default-mobile, [class*="palette-"].text-palette-default-mobile { --primary_text: var(--{{ settings.default_color_scheme.id }}_fg); --headings_text: var(--{{ settings.default_color_scheme.id }}_title);}
+      }
 
-    {%- if settings.cart_type == 'drawer' -%}
-      <script src="{{ 'cart-drawer.js' | asset_url }}" defer="defer"></script>
+      {% if request.design_mode %}
+        #root li:has(.block-shopify-attributes) { position: relative; }
+        #root .block-shopify-attributes { height: 100%; left: 0; position: absolute; top: 0; width: 100%; z-index: 99999; }
+        html:not(.inspect-mode-enabled) #root .block-shopify-attributes { pointer-events: none; }
+      {% endif %}
+    </style>
+  </head>
+  <body class="template-{{ template.name | handle }}">
+    <div id="root">
+      {%- render 'accessibility-menu' %}
+      {%- sections 'header-group' -%}
+      {%- sections 'overlay-group' -%}
+      <main
+        id="content"
+        class="{% if template.name == '404' %}fullheight align-center-static{% endif %}"
+        style="{% if template.name == 'account' or template.name == 'addresses' %}--glw: 1320px;{% endif %}"
+      >
+        {{ content_for_layout }}
+        {%- sections 'footer-group' -%}
+      </main>
+      {%- liquid
+        if template.name == 'product'
+          section 'sticky-add-to-cart'
+        endif
+        unless customer
+          render 'login-drawer'
+          render 'register-drawer'
+        endunless
+        render 'quickshop-container'
+        render 'pickup-availability-container'
+        if settings.show_newsletterpopup
+          render 'newsletter-popup'
+        endif
+        if settings.show_age_verify_popup
+          render 'age-verify-popup'
+        elsif settings.show_cookiebanner != 'none'
+          render 'cookie-banner'
+        endif
+        if settings.back_to_top_button
+          render 'back-to-top-button'
+        endif
+      -%}
+    </div>
+    {% render 'global-variables' %}
+    {%- if rtl_languages contains localization.language.iso_code -%}
+      <link media="screen" rel="stylesheet" href="{{ 'rtl.css' | asset_url }}">
     {%- endif -%}
+    {% render 'color-swatches' %}
+    <script defer src="{{ 'scripts.js' | asset_url }}"></script>
+    <script defer src="{{ 'custom.js' | asset_url }}"></script>
+    {{ settings.custom_script_for_body }}
   </body>
 </html>
