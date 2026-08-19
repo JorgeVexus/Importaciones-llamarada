@@ -9,22 +9,6 @@
  */
 {
   "sections": {
-    "breadcrumbs": {
-      "type": "breadcrumbs",
-      "disabled": true,
-      "settings": {
-        "hide_mobile": false,
-        "back_button": false
-      }
-    },
-    "bf0b384d-202b-4f4e-8587-41b332a2635b": {
-      "type": "section-spacer",
-      "disabled": true,
-      "settings": {
-        "height": 30,
-        "height_mobile": 10
-      }
-    },
     "112ec1f3-bac2-49b0-9c62-650432a289fb": {
       "type": "section-image-with-text",
       "blocks": {
@@ -157,8 +141,6 @@
     }
   },
   "order": [
-    "breadcrumbs",
-    "bf0b384d-202b-4f4e-8587-41b332a2635b",
     "112ec1f3-bac2-49b0-9c62-650432a289fb",
     "section-google-maps",
     "arsenal_contact_form_hYiiYq"
