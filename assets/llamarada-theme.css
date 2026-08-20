@@ -47,6 +47,54 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+
+/* ==========================================================================
+   LAYOUT CONTAINERS & FLEX FLOW RULES
+   ========================================================================== */
+html, body {
+  min-height: 100% !important;
+  height: auto !important;
+  background-color: var(--ll-bg-page) !important;
+}
+
+body {
+  display: flex !important;
+  flex-direction: column !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.shopify-section-group-header-group,
+.section-header,
+header.ll-header {
+  display: block !important;
+  width: 100% !important;
+  height: auto !important;
+  min-height: auto !important;
+  max-height: none !important;
+  flex: 0 0 auto !important;
+  flex-grow: 0 !important;
+  flex-shrink: 0 !important;
+  position: relative !important;
+}
+
+#MainContent,
+main.content-for-layout {
+  flex: 1 0 auto !important;
+  width: 100% !important;
+  display: block !important;
+  background-color: var(--ll-bg-page) !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.shopify-section-group-footer-group,
+.section-footer {
+  flex: 0 0 auto !important;
+  width: 100% !important;
+  height: auto !important;
+}
+
 /* Override Dawn container constraints & Grid Layout */
 #MainContent, main.content-for-layout {
   padding: 0 !important;
@@ -467,18 +515,20 @@ body {
 
 /* Hero Section */
 .ll-hero {
-  position: relative;
-  background: linear-gradient(105deg, var(--ll-purple) 0%, var(--ll-flame-red) 100%);
-  border-radius: 16px;
-  padding: 80px 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  overflow: hidden;
-  box-shadow: 0px 10px 20px -3px rgba(0, 0, 0, 0.12), 0px 4px 6px -4px rgba(0, 0, 0, 0.1);
-  min-height: 280px;
-  box-sizing: border-box;
+  position: relative !important;
+  background: linear-gradient(105deg, var(--ll-purple) 0%, var(--ll-flame-red) 100%) !important;
+  border-radius: 16px !important;
+  padding: 60px 40px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+  overflow: hidden !important;
+  box-shadow: 0px 10px 20px -3px rgba(0, 0, 0, 0.12), 0px 4px 6px -4px rgba(0, 0, 0, 0.1) !important;
+  min-height: 280px !important;
+  max-height: 380px !important;
+  height: auto !important;
+  box-sizing: border-box !important;
 }
 
 .ll-hero picture,
@@ -570,7 +620,13 @@ body {
 }
 
 .ll-hero__cta {
-  display: inline-block;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  align-self: center !important;
+  width: fit-content !important;
+  height: auto !important;
+  max-height: 56px !important;
   background: var(--ll-accent-green) !important;
   color: #1b1b1b !important;
   font-family: var(--ll-font-heading) !important;
