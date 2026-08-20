@@ -113,13 +113,14 @@ main.content-for-layout {
     display: grid !important;
     grid-template-columns: 256px minmax(0, 1fr) !important;
     gap: 32px !important;
+    grid-auto-rows: min-content !important;
     align-items: start !important;
     box-sizing: border-box !important;
   }
 
   .shopify-section.section-llamarada-sidebar {
     grid-column: 1 !important;
-    grid-row: 1 / span 50 !important;
+    grid-row: 1 !important;
     position: sticky !important;
     top: 20px !important;
     z-index: 20 !important;
@@ -166,14 +167,14 @@ main.content-for-layout {
 }
 
 /* ==========================================================================
-   HEADER COMPONENT
+   HEADER COMPONENT (CLEAN WHITE WITH PURPLE BRAND ACCENTS)
    ========================================================================== */
 .ll-header {
-  background: var(--ll-purple) !important;
+  background: #ffffff !important;
   width: 100%;
   position: relative;
-  box-shadow: 0px 4px 6px -1px rgba(0, 0, 0, 0.1), 0px 2px 4px -2px rgba(0, 0, 0, 0.1);
-  border-bottom: 1px solid var(--ll-purple);
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.04);
+  border-bottom: 1px solid #eaeaea;
   z-index: 50;
   box-sizing: border-box;
 }
@@ -203,15 +204,15 @@ main.content-for-layout {
 }
 
 .ll-header__logo-img {
-  height: 55px;
+  height: 50px;
   width: auto;
   max-width: 240px;
   object-fit: contain;
   display: block;
-  background: #ffffff;
-  padding: 4px 10px;
-  border-radius: 8px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  background: transparent;
+  padding: 0;
+  border-radius: 0;
+  box-shadow: none;
 }
 
 .ll-header__search-wrap {
@@ -227,22 +228,23 @@ main.content-for-layout {
 
 .ll-header__search-input {
   width: 100%;
-  background: #ffffff !important;
-  border: 1px solid var(--ll-border-color) !important;
+  background: #f8f8fa !important;
+  border: 1.5px solid #e2e2e8 !important;
   border-radius: 12px !important;
   padding: 10px 42px 10px 16px !important;
   font-family: var(--ll-font-body) !important;
   font-size: 14px !important;
   color: var(--ll-text-dark) !important;
   outline: none;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  transition: border-color 0.2s, box-shadow 0.2s, background-color 0.2s;
   box-sizing: border-box;
   height: 42px !important;
 }
 
 .ll-header__search-input:focus {
-  border-color: var(--ll-accent-yellow) !important;
-  box-shadow: 0 0 0 3px rgba(254, 192, 23, 0.25) !important;
+  background: #ffffff !important;
+  border-color: var(--ll-purple) !important;
+  box-shadow: 0 0 0 3px rgba(148, 36, 164, 0.15) !important;
 }
 
 .ll-header__search-btn {
@@ -274,10 +276,10 @@ main.content-for-layout {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #ffffff;
+  color: var(--ll-purple);
   padding: 6px;
   text-decoration: none;
-  transition: opacity 0.2s;
+  transition: opacity 0.2s, transform 0.15s;
 }
 
 .ll-header__action-btn:hover {
@@ -319,20 +321,20 @@ main.content-for-layout {
   font-family: var(--ll-font-body) !important;
   font-weight: 700 !important;
   font-size: 14px !important;
-  color: #ffffff !important;
-  opacity: 0.9;
+  color: var(--ll-purple) !important;
+  opacity: 0.85;
   text-decoration: none !important;
   white-space: nowrap;
-  padding-bottom: 6px;
+  padding: 4px 8px 6px 8px;
   border-bottom: 2px solid transparent;
   transition: all 0.2s ease;
 }
 
 .ll-header__nav-link:hover,
 .ll-header__nav-link.is-active {
-  color: var(--ll-accent-yellow) !important;
+  color: var(--ll-purple-dark) !important;
   opacity: 1;
-  border-bottom-color: var(--ll-accent-yellow) !important;
+  border-bottom-color: var(--ll-purple) !important;
 }
 
 /* ==========================================================================
@@ -393,22 +395,23 @@ main.content-for-layout {
 .ll-sidebar__btn-login {
   display: block;
   width: 100%;
-  background: var(--ll-flame-red) !important;
-  color: #ffffff !important;
+  background: var(--ll-accent-green) !important;
+  color: #1b1b1b !important;
   text-align: center;
-  font-family: var(--ll-font-body) !important;
+  font-family: var(--ll-font-heading) !important;
   font-weight: 700 !important;
   font-size: 14px !important;
-  padding: 9px 12px;
-  border-radius: 6px;
+  padding: 10px 12px;
+  border-radius: 8px;
   text-decoration: none !important;
-  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1);
-  transition: background 0.2s;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.08);
+  transition: background-color 0.2s, transform 0.15s;
   box-sizing: border-box;
 }
 
 .ll-sidebar__btn-login:hover {
-  background: var(--ll-flame-red-dark) !important;
+  background: var(--ll-accent-green-hover) !important;
+  transform: translateY(-1px);
 }
 
 .ll-sidebar__user-box {
@@ -454,12 +457,12 @@ main.content-for-layout {
 }
 
 .ll-sidebar__nav-item.is-active {
-  background: var(--ll-flame-red) !important;
-  color: #ffffff !important;
+  background: var(--ll-accent-green) !important;
+  color: #1b1b1b !important;
 }
 
 .ll-sidebar__nav-item.is-active svg path {
-  fill: #ffffff !important;
+  fill: #1b1b1b !important;
 }
 
 .ll-sidebar__icon {
@@ -474,21 +477,21 @@ main.content-for-layout {
 .ll-sidebar__btn-purple {
   display: block;
   width: 100%;
-  background: var(--ll-purple) !important;
-  color: #ffffff !important;
+  background: var(--ll-accent-green) !important;
+  color: #1b1b1b !important;
   text-align: center;
   font-family: var(--ll-font-heading) !important;
-  font-weight: 600 !important;
-  font-size: 16px !important;
-  padding: 9px 12px;
-  border-radius: 6px;
+  font-weight: 700 !important;
+  font-size: 15px !important;
+  padding: 10px 12px;
+  border-radius: 8px;
   text-decoration: none !important;
-  transition: background 0.2s;
+  transition: background-color 0.2s;
   box-sizing: border-box;
 }
 
 .ll-sidebar__btn-purple:hover {
-  background: var(--ll-purple-dark) !important;
+  background: var(--ll-accent-green-hover) !important;
 }
 
 .ll-sidebar__footer-links {
