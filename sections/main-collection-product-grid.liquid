@@ -1,4 +1,4 @@
-{%- paginate collection.products by section.settings.products_per_page | default: 16 -%}
+{%- paginate collection.products by section.settings.products_per_page -%}
 <div class="ll-home">
   <!-- Reusable Sidebar with active category detection -->
   {% render 'llamarada-sidebar', active_handle: collection.handle %}
@@ -296,3 +296,14 @@
   ]
 }
 {% endschema %}
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "{%- paginate collection.products by section.settings.products_per_page |
+    default: 16 -%}"
+  to: "{%- paginate collection.products by section.settings.products_per_page -%}"
+  position: 0..74
+{% endcomment %}

@@ -1,4 +1,4 @@
-{%- paginate collection.products by section.settings.products_per_page | default: 16 -%}
+{%- paginate collection.products by section.settings.products_per_page -%}
 <section class="ll-products-grid" aria-label="Productos de la categoría">
   {%- if collection.products.size > 0 -%}
     {%- for product in collection.products -%}
@@ -234,3 +234,14 @@
   ]
 }
 {% endschema %}
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "{%- paginate collection.products by section.settings.products_per_page |
+    default: 16 -%}"
+  to: "{%- paginate collection.products by section.settings.products_per_page -%}"
+  position: 0..74
+{% endcomment %}
