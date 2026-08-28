@@ -2446,3 +2446,211 @@ main.content-for-layout {
   }
 }
 
+/* ==========================================================================
+   Apple Design: Header Glassmorphism Dropdowns & Sidebar Accordions
+   ========================================================================== */
+
+/* Header Dropdowns */
+.ll-header__dropdown-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.ll-header__nav-link--has-dropdown {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.ll-header__chevron {
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ll-header__dropdown-wrapper:hover .ll-header__chevron,
+.ll-header__dropdown-wrapper:focus-within .ll-header__chevron {
+  transform: rotate(180deg);
+}
+
+.ll-header__dropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  min-width: 220px;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.04);
+  border-radius: 14px;
+  padding: 6px;
+  z-index: 1000;
+  transform-origin: top center;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-6px) scale(0.96);
+  transition: opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+              visibility 0.22s;
+  pointer-events: none;
+}
+
+.ll-header__dropdown-wrapper:hover .ll-header__dropdown,
+.ll-header__dropdown-wrapper:focus-within .ll-header__dropdown {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+.ll-header__dropdown-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ll-header__dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ll-text-dark);
+  text-decoration: none;
+  transition: background 0.16s ease, color 0.16s ease, transform 0.16s ease;
+}
+
+.ll-header__dropdown-item:hover {
+  background: rgba(148, 36, 164, 0.08);
+  color: var(--ll-purple);
+  transform: translateX(2px);
+}
+
+.ll-header__dropdown-item.is-active {
+  background: rgba(148, 36, 164, 0.12);
+  color: var(--ll-purple);
+  font-weight: 700;
+}
+
+.ll-header__dropdown-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  color: var(--ll-purple);
+  flex-shrink: 0;
+}
+
+/* Sidebar Accordion (Details / Summary) */
+.ll-sidebar__details {
+  display: block;
+  width: 100%;
+}
+
+.ll-sidebar__summary {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ll-text-dark);
+  transition: background 0.18s cubic-bezier(0.16, 1, 0.3, 1),
+              color 0.18s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.12s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ll-sidebar__summary::-webkit-details-marker {
+  display: none;
+}
+
+.ll-sidebar__summary:hover {
+  background: rgba(148, 36, 164, 0.06);
+  color: var(--ll-purple);
+}
+
+.ll-sidebar__summary:active {
+  transform: scale(0.98);
+}
+
+.ll-sidebar__summary.is-active {
+  background: rgba(148, 36, 164, 0.1);
+  color: var(--ll-purple);
+  font-weight: 700;
+}
+
+.ll-sidebar__summary .ll-sidebar__chevron {
+  margin-left: auto;
+  color: var(--ll-text-muted);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ll-sidebar__details[open] > .ll-sidebar__summary .ll-sidebar__chevron {
+  transform: rotate(180deg);
+  color: var(--ll-purple);
+}
+
+.ll-sidebar__sublist {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 4px 0 4px 12px;
+  margin-left: 20px;
+  border-left: 2px solid rgba(148, 36, 164, 0.15);
+  animation: llSidebarSublistOpen 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes llSidebarSublistOpen {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.ll-sidebar__subitem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ll-text-muted);
+  text-decoration: none;
+  transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ll-sidebar__subitem:hover {
+  color: var(--ll-purple);
+  background: rgba(148, 36, 164, 0.06);
+  transform: translateX(2px);
+}
+
+.ll-sidebar__subitem.is-active {
+  color: var(--ll-purple);
+  background: rgba(148, 36, 164, 0.1);
+  font-weight: 700;
+}
+
+.ll-sidebar__subicon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  color: currentColor;
+  opacity: 0.85;
+}
+
+

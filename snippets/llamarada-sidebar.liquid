@@ -24,50 +24,43 @@
     {%- endif -%}
   </div>
 
-  <!-- Category Nav List -->
+  <!-- Category Nav List with dynamic icons and fallbacks -->
   <nav class="ll-sidebar__nav" aria-label="Categorías">
     <a href="{{ routes.root_url }}" class="ll-sidebar__nav-item{% if request.page_type == 'index' %} is-active{% endif %}">
-      <span class="ll-sidebar__icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" fill="currentColor"/></svg></span>
+      <span class="ll-sidebar__icon">{%- render 'llamarada-icon-helper', icon: 'inicio', size: 20 -%}</span>
       <span>Inicio</span>
     </a>
     <a href="/collections/hogar" class="ll-sidebar__nav-item{% if request.page_type == 'collection' and current_handle == 'hogar' %} is-active{% endif %}">
-      <span class="ll-sidebar__icon"><svg width="20" height="20" viewBox="0 0 22 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M16 6H18V4H16V6V6M16 10H18V8H16V10V10M16 14H18V12H16V14V14M16 18V16H20V2H11V3.4L9 1.95V0H22V18H16V18M0 18V8L7 3L14 8V18H8V13H6V18H0V18M2 16H4V11H10V16H12V9L7 5.45L2 9V16V16M16 7V7V7V7V7V7V7V7M10 16V16V11H4V16V16V11H7H10V16V16" fill="currentColor"/></svg></span>
+      <span class="ll-sidebar__icon">{%- render 'llamarada-icon-helper', icon: 'hogar', size: 20 -%}</span>
       <span>Hogar</span>
     </a>
     <a href="/collections/juguetes" class="ll-sidebar__nav-item{% if request.page_type == 'collection' and current_handle == 'juguetes' %} is-active{% endif %}">
-      <span class="ll-sidebar__icon"><svg width="20" height="20" viewBox="0 0 22 19" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M15 15H17V13H15V15V15M15 9H17V7H15V9V9M5 9H7V7H5V9V9M5 15H7V13H5V15V15M10.05 0H11.95C11.95 0 11.95 3.02 14.1 3.52C16.25 4.02 17.65 1.87 17.65 1.87L19 3.22C19 3.22 16.85 4.62 17.35 6.77C17.85 8.92 20.87 8.92 20.87 8.92V10.82C20.87 10.82 17.85 10.82 17.35 12.97C16.85 15.12 19 16.52 19 16.52L17.65 17.87C17.65 17.87 16.25 15.72 14.1 16.22C11.95 16.72 11.95 19.74 11.95 19.74H10.05C10.05 19.74 10.05 16.72 7.9 16.22C5.75 15.72 4.35 17.87 4.35 17.87L3 16.52C3 16.52 5.15 15.12 4.65 12.97C4.15 10.82 1.13 10.82 1.13 10.82V8.92C1.13 8.92 4.15 8.92 4.65 6.77C5.15 4.62 3 3.22 3 3.22L4.35 1.87C4.35 1.87 5.75 4.02 7.9 3.52C10.05 3.02 10.05 0 10.05 0V0" fill="currentColor"/></svg></span>
+      <span class="ll-sidebar__icon">{%- render 'llamarada-icon-helper', icon: 'juguetes', size: 20 -%}</span>
       <span>Juguetes</span>
     </a>
     <a href="/collections/cocina" class="ll-sidebar__nav-item{% if request.page_type == 'collection' and current_handle == 'cocina' %} is-active{% endif %}">
-      <span class="ll-sidebar__icon"><svg width="20" height="20" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M18 6H2V4H18V6ZM16 16H4V8H16V16ZM19 2H1V0H19V2ZM10 10H6V14H10V10Z" fill="currentColor"/></svg></span>
+      <span class="ll-sidebar__icon">{%- render 'llamarada-icon-helper', icon: 'cocina', size: 20 -%}</span>
       <span>Cocina</span>
     </a>
     <a href="/collections/articulos-de-limpieza" class="ll-sidebar__nav-item{% if request.page_type == 'collection' and current_handle contains 'limpieza' %} is-active{% endif %}">
-      <span class="ll-sidebar__icon"><svg width="20" height="20" viewBox="0 0 18 22" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14 8V2H16V0H2V2H4V8L0 12V22H18V12L14 8ZM6 2H12V8H6V2ZM16 20H2V13H16V20Z" fill="currentColor"/></svg></span>
+      <span class="ll-sidebar__icon">{%- render 'llamarada-icon-helper', icon: 'limpieza', size: 20 -%}</span>
       <span>Artículos de Limpieza</span>
     </a>
     <a href="/collections/bebes" class="ll-sidebar__nav-item{% if request.page_type == 'collection' and current_handle == 'bebes' %} is-active{% endif %}">
-      <span class="ll-sidebar__icon"><svg width="20" height="20" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 0C4.03 0 0 4.03 0 9C0 13.97 4.03 18 9 18C13.97 18 18 13.97 18 9C18 4.03 13.97 0 9 0ZM9 2C12.87 2 16 5.13 16 9C16 12.87 12.87 16 9 16C5.13 16 2 12.87 2 9C2 5.13 5.13 2 9 2ZM6 7C5.45 7 5 7.45 5 8C5 8.55 5.45 9 6 9C6.55 9 7 8.55 7 8C7 7.45 6.55 7 6 7ZM12 7C11.45 7 11 7.45 11 8C11 8.55 11.45 9 12 9C12.55 9 13 8.55 13 8C13 7.45 12.55 7 12 7ZM9 11C7.33 11 5.92 12.08 5.38 13.6C5.22 14.05 5.56 14.5 6.04 14.5H11.96C12.44 14.5 12.78 14.05 12.62 13.6C12.08 12.08 10.67 11 9 11Z" fill="currentColor"/></svg></span>
+      <span class="ll-sidebar__icon">{%- render 'llamarada-icon-helper', icon: 'bebes', size: 20 -%}</span>
       <span>Bebés</span>
     </a>
     <a href="/collections/abarrotes" class="ll-sidebar__nav-item{% if request.page_type == 'collection' and current_handle == 'abarrotes' %} is-active{% endif %}">
-      <span class="ll-sidebar__icon"><svg width="20" height="20" viewBox="0 0 22 19" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M19 6H16.71L12.55 0.17L10.92 1.33L14.26 6H7.74L11.08 1.33L9.45 0.17L5.29 6H3C1.34 6 0 7.34 0 9V17C0 18.66 1.34 20 3 20H19C20.66 20 22 18.66 22 17V9C22 7.34 20.66 6 19 6ZM19 18H3C2.45 18 2 17.55 2 17V9C2 8.45 2.45 8 3 8H19C19.55 8 20 8.45 20 9V17C20 17.55 19.55 18 19 18Z" fill="currentColor"/></svg></span>
+      <span class="ll-sidebar__icon">{%- render 'llamarada-icon-helper', icon: 'abarrotes', size: 20 -%}</span>
       <span>Abarrotes</span>
     </a>
   </nav>
 
-  <!-- Footer Links -->
+  <!-- Footer Links (Only Ayuda) -->
   <div class="ll-sidebar__footer-links">
-    <a href="/pages/recien-llegados" class="ll-sidebar__footer-link{% if request.path == '/pages/recien-llegados' %} ll-footer__link--active{% endif %}">
-      <span class="ll-sidebar__icon">
-        <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10 0L12.25 6.75L19 9L12.25 11.25L10 18L7.75 11.25L1 9L7.75 6.75L10 0Z" fill="currentColor"/></svg>
-      </span>
-      <span>Novedades</span>
-    </a>
-
     <a href="/pages/contact" class="ll-sidebar__footer-link{% if request.path == '/pages/contact' %} ll-footer__link--active{% endif %}">
       <span class="ll-sidebar__icon">
-        <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10 0C4.48 0 0 4.48 0 10C0 15.52 4.48 20 10 20C15.52 20 20 15.52 20 10C20 4.48 15.52 0 10 0ZM11 16H9V14H11V16ZM12.07 9.25L11.17 10.17C10.45 10.9 10 11.5 10 13H8V12.5C8 11.4 8.45 10.4 9.17 9.67L10.41 8.41C10.78 8.05 11 7.55 11 7C11 5.9 10.1 5 9 5C7.9 5 7 5.9 7 7H5C5 4.79 6.79 3 9 3C11.21 3 13 4.79 13 7C13 7.88 12.64 8.68 12.07 9.25Z" fill="currentColor"/></svg>
+        {%- render 'llamarada-icon-helper', icon: 'ayuda', size: 18 -%}
       </span>
       <span>Ayuda</span>
     </a>
