@@ -1,144 +1,444 @@
-{%- assign selected_collection = section.settings.collection -%}
+{%- assign main_collection = section.settings.collection -%}
+{%- assign collections_list = section.settings.collections -%}
+{%- assign collection_blocks = section.blocks | where: 'type', 'collection_tab' -%}
+{%- assign product_blocks = section.blocks | where: 'type', 'grid_item' -%}
+{%- assign products_limit = section.settings.products_to_show | default: 10 -%}
 
-<div class="ll-new-grid-sec">
+{%- assign has_dynamic_tabs = false -%}
+{%- if collections_list != blank or collection_blocks.size > 0 -%}
+  {%- assign has_dynamic_tabs = true -%}
+{%- endif -%}
+
+<div class="ll-new-grid-sec" id="ll-new-grid-sec-{{ section.id }}">
   <div class="ll-new-grid-sec__container">
     <div class="ll-new-grid-sec__header">
-      <h2 class="ll-new-grid-sec__title">{{ section.settings.title | default: 'Catálogo de Mas Novedades' }}</h2>
+      <h2 class="ll-new-grid-sec__title">{{ section.settings.title | default: 'Catálogo de Más Novedades' }}</h2>
       
       <!-- iOS Pill Filter Bar -->
-      <div class="ll-new-grid-sec__pills-wrap">
-        <button type="button" class="ll-new-grid-sec__pill is-active">Todos</button>
-        <button type="button" class="ll-new-grid-sec__pill">Hogar</button>
-        <button type="button" class="ll-new-grid-sec__pill">Juguetes</button>
-        <button type="button" class="ll-new-grid-sec__pill">Cocina</button>
-        <button type="button" class="ll-new-grid-sec__pill">Limpieza</button>
+      <div class="ll-new-grid-sec__pills-wrap" role="tablist" aria-label="Filtro de colecciones">
+        {%- if has_dynamic_tabs -%}
+          {%- if section.settings.show_all_tab -%}
+            <button type="button" 
+                    class="ll-new-grid-sec__pill is-active" 
+                    role="tab" 
+                    aria-selected="true" 
+                    data-tab="tab-all-{{ section.id }}">
+              {{ section.settings.all_tab_label | default: 'Todos' }}
+            </button>
+          {%- endif -%}
+
+          {%- if collections_list != blank -%}
+            {%- for col in collections_list -%}
+              <button type="button" 
+                      class="ll-new-grid-sec__pill{% if section.settings.show_all_tab == false and forloop.first %} is-active{% endif %}" 
+                      role="tab" 
+                      aria-selected="{% if section.settings.show_all_tab == false and forloop.first %}true{% else %}false{% endif %}" 
+                      data-tab="tab-col-{{ col.id }}-{{ section.id }}">
+                {{ col.title }}
+              </button>
+            {%- endfor -%}
+          {%- elsif collection_blocks.size > 0 -%}
+            {%- for block in collection_blocks -%}
+              {%- assign col_block = block.settings.collection -%}
+              {%- assign tab_title = block.settings.title | default: col_block.title | default: 'Colección' -%}
+              <button type="button" 
+                      class="ll-new-grid-sec__pill{% if section.settings.show_all_tab == false and forloop.first %} is-active{% endif %}" 
+                      role="tab" 
+                      aria-selected="{% if section.settings.show_all_tab == false and forloop.first %}true{% else %}false{% endif %}" 
+                      data-tab="tab-block-{{ block.id }}-{{ section.id }}"
+                      {{ block.shopify_attributes }}>
+                {{ tab_title }}
+              </button>
+            {%- endfor -%}
+          {%- endif -%}
+        {%- else -%}
+          <!-- Fallback pills for demo mode -->
+          <button type="button" class="ll-new-grid-sec__pill is-active" role="tab" aria-selected="true" data-tab="tab-demo-all-{{ section.id }}">Todos</button>
+          <button type="button" class="ll-new-grid-sec__pill" role="tab" aria-selected="false" data-tab="tab-demo-hogar-{{ section.id }}">Hogar</button>
+          <button type="button" class="ll-new-grid-sec__pill" role="tab" aria-selected="false" data-tab="tab-demo-juguetes-{{ section.id }}">Juguetes</button>
+          <button type="button" class="ll-new-grid-sec__pill" role="tab" aria-selected="false" data-tab="tab-demo-cocina-{{ section.id }}">Cocina</button>
+          <button type="button" class="ll-new-grid-sec__pill" role="tab" aria-selected="false" data-tab="tab-demo-limpieza-{{ section.id }}">Limpieza</button>
+        {%- endif -%}
       </div>
     </div>
 
-    <!-- Products Grid -->
-    <div class="ll-new-grid-sec__grid">
-      {%- if section.blocks.size > 0 -%}
-        {%- for block in section.blocks -%}
-          {%- assign item_product = block.settings.product -%}
-          <div class="ll-new-mini-card-sec" {{ block.shopify_attributes }}>
-            <div class="ll-new-mini-card-sec__media">
-              {%- if block.settings.image != blank -%}
-                <img src="{{ block.settings.image | image_url: width: 400 }}" alt="{{ block.settings.title }}" loading="lazy" width="400" height="300">
-              {%- elsif item_product != blank and item_product.featured_image != blank -%}
-                <img src="{{ item_product.featured_image | image_url: width: 400 }}" alt="{{ item_product.title }}" loading="lazy" width="400" height="300">
-              {%- else -%}
-                {%- assign img_num = forloop.index | modulo: 5 | plus: 1 -%}
-                <img src="{{ 'novedades_more_' | append: img_num | append: '.png' | asset_url }}" alt="Novedad" loading="lazy" width="400" height="300">
-              {%- endif -%}
-            </div>
-            
-            <div class="ll-new-mini-card-sec__body">
-              <h3 class="ll-new-mini-card-sec__title">
-                <a href="{{ block.settings.url | default: item_product.url | default: '#' }}">
-                  {{ block.settings.title | default: item_product.title | default: 'Producto Novedad' }}
-                </a>
-              </h3>
-              
-              <div class="ll-new-mini-card-sec__footer">
-                <span class="ll-new-mini-card-sec__price">
-                  {%- if item_product != blank -%}
-                    {{ item_product.price | money }}
-                  {%- else -%}
-                    {{ block.settings.price | default: '$180.00 MXN' }}
+    <!-- Tab Content Panels -->
+    <div class="ll-new-grid-sec__panels">
+      {%- if has_dynamic_tabs -%}
+        {%- if section.settings.show_all_tab -%}
+          <!-- Panel: TODOS -->
+          <div class="ll-new-grid-sec__tab-panel is-active" data-tab-content="tab-all-{{ section.id }}" role="tabpanel">
+            <div class="ll-new-grid-sec__grid">
+              {%- if main_collection != blank and main_collection.products.size > 0 -%}
+                {%- for product in main_collection.products limit: products_limit -%}
+                  <div class="ll-new-mini-card-sec">
+                    <div class="ll-new-mini-card-sec__media">
+                      {%- if product.featured_image != blank -%}
+                        <img src="{{ product.featured_image | image_url: width: 400 }}" alt="{{ product.title | escape }}" loading="lazy" width="400" height="300">
+                      {%- else -%}
+                        <img src="{{ 'novedades_more_1.png' | asset_url }}" alt="{{ product.title | escape }}" loading="lazy" width="400" height="300">
+                      {%- endif -%}
+                    </div>
+                    <div class="ll-new-mini-card-sec__body">
+                      <h3 class="ll-new-mini-card-sec__title">
+                        <a href="{{ product.url }}">{{ product.title }}</a>
+                      </h3>
+                      <div class="ll-new-mini-card-sec__footer">
+                        <span class="ll-new-mini-card-sec__price">{{ product.price | money }}</span>
+                        <a href="{{ product.url }}" class="ll-new-mini-card-sec__btn-view">Ver</a>
+                      </div>
+                    </div>
+                  </div>
+                {%- endfor -%}
+              {%- elsif collections_list != blank -%}
+                {%- for col in collections_list -%}
+                  {%- for product in col.products limit: 4 -%}
+                    <div class="ll-new-mini-card-sec">
+                      <div class="ll-new-mini-card-sec__media">
+                        {%- if product.featured_image != blank -%}
+                          <img src="{{ product.featured_image | image_url: width: 400 }}" alt="{{ product.title | escape }}" loading="lazy" width="400" height="300">
+                        {%- else -%}
+                          <img src="{{ 'novedades_more_1.png' | asset_url }}" alt="{{ product.title | escape }}" loading="lazy" width="400" height="300">
+                        {%- endif -%}
+                      </div>
+                      <div class="ll-new-mini-card-sec__body">
+                        <h3 class="ll-new-mini-card-sec__title">
+                          <a href="{{ product.url }}">{{ product.title }}</a>
+                        </h3>
+                        <div class="ll-new-mini-card-sec__footer">
+                          <span class="ll-new-mini-card-sec__price">{{ product.price | money }}</span>
+                          <a href="{{ product.url }}" class="ll-new-mini-card-sec__btn-view">Ver</a>
+                        </div>
+                      </div>
+                    </div>
+                  {%- endfor -%}
+                {%- endfor -%}
+              {%- elsif collection_blocks.size > 0 -%}
+                {%- for block in collection_blocks -%}
+                  {%- assign col_block = block.settings.collection -%}
+                  {%- if col_block != blank -%}
+                    {%- for product in col_block.products limit: 4 -%}
+                      <div class="ll-new-mini-card-sec">
+                        <div class="ll-new-mini-card-sec__media">
+                          {%- if product.featured_image != blank -%}
+                            <img src="{{ product.featured_image | image_url: width: 400 }}" alt="{{ product.title | escape }}" loading="lazy" width="400" height="300">
+                          {%- else -%}
+                            <img src="{{ 'novedades_more_1.png' | asset_url }}" alt="{{ product.title | escape }}" loading="lazy" width="400" height="300">
+                          {%- endif -%}
+                        </div>
+                        <div class="ll-new-mini-card-sec__body">
+                          <h3 class="ll-new-mini-card-sec__title">
+                            <a href="{{ product.url }}">{{ product.title }}</a>
+                          </h3>
+                          <div class="ll-new-mini-card-sec__footer">
+                            <span class="ll-new-mini-card-sec__price">{{ product.price | money }}</span>
+                            <a href="{{ product.url }}" class="ll-new-mini-card-sec__btn-view">Ver</a>
+                          </div>
+                        </div>
+                      </div>
+                    {%- endfor -%}
                   {%- endif -%}
-                </span>
+                {%- endfor -%}
+              {%- elsif product_blocks.size > 0 -%}
+                {%- for block in product_blocks -%}
+                  {%- assign item_product = block.settings.product -%}
+                  <div class="ll-new-mini-card-sec" {{ block.shopify_attributes }}>
+                    <div class="ll-new-mini-card-sec__media">
+                      {%- if block.settings.image != blank -%}
+                        <img src="{{ block.settings.image | image_url: width: 400 }}" alt="{{ block.settings.title | escape }}" loading="lazy" width="400" height="300">
+                      {%- elsif item_product != blank and item_product.featured_image != blank -%}
+                        <img src="{{ item_product.featured_image | image_url: width: 400 }}" alt="{{ item_product.title | escape }}" loading="lazy" width="400" height="300">
+                      {%- else -%}
+                        {%- assign img_num = forloop.index | modulo: 5 | plus: 1 -%}
+                        <img src="{{ 'novedades_more_' | append: img_num | append: '.png' | asset_url }}" alt="Novedad" loading="lazy" width="400" height="300">
+                      {%- endif -%}
+                    </div>
+                    
+                    <div class="ll-new-mini-card-sec__body">
+                      <h3 class="ll-new-mini-card-sec__title">
+                        <a href="{{ block.settings.url | default: item_product.url | default: '#' }}">
+                          {{ block.settings.title | default: item_product.title | default: 'Producto Novedad' }}
+                        </a>
+                      </h3>
+                      
+                      <div class="ll-new-mini-card-sec__footer">
+                        <span class="ll-new-mini-card-sec__price">
+                          {%- if item_product != blank -%}
+                            {{ item_product.price | money }}
+                          {%- else -%}
+                            {{ block.settings.price | default: '$180.00 MXN' }}
+                          {%- endif -%}
+                        </span>
 
-                <a href="{{ block.settings.url | default: item_product.url | default: '#' }}" class="ll-new-mini-card-sec__btn-view">
-                  Ver
-                </a>
-              </div>
-            </div>
-          </div>
-        {%- endfor -%}
-      {%- elsif selected_collection != blank and selected_collection.products.size > 0 -%}
-        {%- for product in selected_collection.products limit: section.settings.products_to_show -%}
-          <div class="ll-new-mini-card-sec">
-            <div class="ll-new-mini-card-sec__media">
-              {%- if product.featured_image != blank -%}
-                <img src="{{ product.featured_image | image_url: width: 400 }}" alt="{{ product.title }}" loading="lazy" width="400" height="300">
-              {%- else -%}
-                <img src="{{ 'novedades_more_1.png' | asset_url }}" alt="{{ product.title }}" loading="lazy" width="400" height="300">
+                        <a href="{{ block.settings.url | default: item_product.url | default: '#' }}" class="ll-new-mini-card-sec__btn-view">
+                          Ver
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                {%- endfor -%}
               {%- endif -%}
             </div>
-            <div class="ll-new-mini-card-sec__body">
-              <h3 class="ll-new-mini-card-sec__title">
-                <a href="{{ product.url }}">{{ product.title }}</a>
-              </h3>
-              <div class="ll-new-mini-card-sec__footer">
-                <span class="ll-new-mini-card-sec__price">{{ product.price | money }}</span>
-                <a href="{{ product.url }}" class="ll-new-mini-card-sec__btn-view">Ver</a>
+          </div>
+        {%- endif -%}
+
+        {%- if collections_list != blank -%}
+          {%- for col in collections_list -%}
+            <div class="ll-new-grid-sec__tab-panel{% if section.settings.show_all_tab == false and forloop.first %} is-active{% endif %}" 
+                 data-tab-content="tab-col-{{ col.id }}-{{ section.id }}" 
+                 role="tabpanel">
+              {%- if col.products.size > 0 -%}
+                <div class="ll-new-grid-sec__grid">
+                  {%- for product in col.products limit: products_limit -%}
+                    <div class="ll-new-mini-card-sec">
+                      <div class="ll-new-mini-card-sec__media">
+                        {%- if product.featured_image != blank -%}
+                          <img src="{{ product.featured_image | image_url: width: 400 }}" alt="{{ product.title | escape }}" loading="lazy" width="400" height="300">
+                        {%- else -%}
+                          <img src="{{ 'novedades_more_1.png' | asset_url }}" alt="{{ product.title | escape }}" loading="lazy" width="400" height="300">
+                        {%- endif -%}
+                      </div>
+                      <div class="ll-new-mini-card-sec__body">
+                        <h3 class="ll-new-mini-card-sec__title">
+                          <a href="{{ product.url }}">{{ product.title }}</a>
+                        </h3>
+                        <div class="ll-new-mini-card-sec__footer">
+                          <span class="ll-new-mini-card-sec__price">{{ product.price | money }}</span>
+                          <a href="{{ product.url }}" class="ll-new-mini-card-sec__btn-view">Ver</a>
+                        </div>
+                      </div>
+                    </div>
+                  {%- endfor -%}
+                </div>
+              {%- else -%}
+                <div class="ll-new-grid-sec__empty">
+                  <p>No hay productos disponibles en esta colección por el momento.</p>
+                </div>
+              {%- endif -%}
+            </div>
+          {%- endfor -%}
+        {%- elsif collection_blocks.size > 0 -%}
+          {%- for block in collection_blocks -%}
+            {%- assign col_block = block.settings.collection -%}
+            <div class="ll-new-grid-sec__tab-panel{% if section.settings.show_all_tab == false and forloop.first %} is-active{% endif %}" 
+                 data-tab-content="tab-block-{{ block.id }}-{{ section.id }}" 
+                 role="tabpanel"
+                 {{ block.shopify_attributes }}>
+              {%- if col_block != blank and col_block.products.size > 0 -%}
+                <div class="ll-new-grid-sec__grid">
+                  {%- for product in col_block.products limit: products_limit -%}
+                    <div class="ll-new-mini-card-sec">
+                      <div class="ll-new-mini-card-sec__media">
+                        {%- if product.featured_image != blank -%}
+                          <img src="{{ product.featured_image | image_url: width: 400 }}" alt="{{ product.title | escape }}" loading="lazy" width="400" height="300">
+                        {%- else -%}
+                          <img src="{{ 'novedades_more_1.png' | asset_url }}" alt="{{ product.title | escape }}" loading="lazy" width="400" height="300">
+                        {%- endif -%}
+                      </div>
+                      <div class="ll-new-mini-card-sec__body">
+                        <h3 class="ll-new-mini-card-sec__title">
+                          <a href="{{ product.url }}">{{ product.title }}</a>
+                        </h3>
+                        <div class="ll-new-mini-card-sec__footer">
+                          <span class="ll-new-mini-card-sec__price">{{ product.price | money }}</span>
+                          <a href="{{ product.url }}" class="ll-new-mini-card-sec__btn-view">Ver</a>
+                        </div>
+                      </div>
+                    </div>
+                  {%- endfor -%}
+                </div>
+              {%- else -%}
+                <div class="ll-new-grid-sec__empty">
+                  <p>Selecciona una colección válida para esta pestaña en el editor de temas.</p>
+                </div>
+              {%- endif -%}
+            </div>
+          {%- endfor -%}
+        {%- endif -%}
+
+      {%- else -%}
+        <!-- Demo Panels when no dynamic collections are connected yet -->
+        <!-- All Demo Panel -->
+        <div class="ll-new-grid-sec__tab-panel is-active" data-tab-content="tab-demo-all-{{ section.id }}" role="tabpanel">
+          <div class="ll-new-grid-sec__grid">
+            {%- if product_blocks.size > 0 -%}
+              {%- for block in product_blocks -%}
+                {%- assign item_product = block.settings.product -%}
+                <div class="ll-new-mini-card-sec" {{ block.shopify_attributes }}>
+                  <div class="ll-new-mini-card-sec__media">
+                    {%- if block.settings.image != blank -%}
+                      <img src="{{ block.settings.image | image_url: width: 400 }}" alt="{{ block.settings.title | escape }}" loading="lazy" width="400" height="300">
+                    {%- elsif item_product != blank and item_product.featured_image != blank -%}
+                      <img src="{{ item_product.featured_image | image_url: width: 400 }}" alt="{{ item_product.title | escape }}" loading="lazy" width="400" height="300">
+                    {%- else -%}
+                      {%- assign img_num = forloop.index | modulo: 5 | plus: 1 -%}
+                      <img src="{{ 'novedades_more_' | append: img_num | append: '.png' | asset_url }}" alt="Novedad" loading="lazy" width="400" height="300">
+                    {%- endif -%}
+                  </div>
+                  <div class="ll-new-mini-card-sec__body">
+                    <h3 class="ll-new-mini-card-sec__title">
+                      <a href="{{ block.settings.url | default: item_product.url | default: '#' }}">
+                        {{ block.settings.title | default: item_product.title | default: 'Producto Novedad' }}
+                      </a>
+                    </h3>
+                    <div class="ll-new-mini-card-sec__footer">
+                      <span class="ll-new-mini-card-sec__price">
+                        {%- if item_product != blank -%}
+                          {{ item_product.price | money }}
+                        {%- else -%}
+                          {{ block.settings.price | default: '$180.00 MXN' }}
+                        {%- endif -%}
+                      </span>
+                      <a href="{{ block.settings.url | default: item_product.url | default: '#' }}" class="ll-new-mini-card-sec__btn-view">Ver</a>
+                    </div>
+                  </div>
+                </div>
+              {%- endfor -%}
+            {%- else -%}
+              <div class="ll-new-mini-card-sec">
+                <div class="ll-new-mini-card-sec__media">
+                  <img src="{{ 'novedades_more_1.png' | asset_url }}" alt="Mini Cámara HD" loading="lazy" width="400" height="300">
+                </div>
+                <div class="ll-new-mini-card-sec__body">
+                  <h3 class="ll-new-mini-card-sec__title"><a href="#">Mini Cámaras Seguridad WiFi A9</a></h3>
+                  <div class="ll-new-mini-card-sec__footer">
+                    <span class="ll-new-mini-card-sec__price">$85.00 MXN</span>
+                    <a href="#" class="ll-new-mini-card-sec__btn-view">Ver</a>
+                  </div>
+                </div>
+              </div>
+              <div class="ll-new-mini-card-sec">
+                <div class="ll-new-mini-card-sec__media">
+                  <img src="{{ 'novedades_more_2.png' | asset_url }}" alt="Organizador Acrílico" loading="lazy" width="400" height="300">
+                </div>
+                <div class="ll-new-mini-card-sec__body">
+                  <h3 class="ll-new-mini-card-sec__title"><a href="#">Organizadores Acrílicos Cosmetiqueros</a></h3>
+                  <div class="ll-new-mini-card-sec__footer">
+                    <span class="ll-new-mini-card-sec__price">$120.00 MXN</span>
+                    <a href="#" class="ll-new-mini-card-sec__btn-view">Ver</a>
+                  </div>
+                </div>
+              </div>
+              <div class="ll-new-mini-card-sec">
+                <div class="ll-new-mini-card-sec__media">
+                  <img src="{{ 'novedades_more_3.png' | asset_url }}" alt="Foco Proyector Galaxia" loading="lazy" width="400" height="300">
+                </div>
+                <div class="ll-new-mini-card-sec__body">
+                  <h3 class="ll-new-mini-card-sec__title"><a href="#">Focos Proyectores Galaxia Astronauta</a></h3>
+                  <div class="ll-new-mini-card-sec__footer">
+                    <span class="ll-new-mini-card-sec__price">$290.00 MXN</span>
+                    <a href="#" class="ll-new-mini-card-sec__btn-view">Ver</a>
+                  </div>
+                </div>
+              </div>
+              <div class="ll-new-mini-card-sec">
+                <div class="ll-new-mini-card-sec__media">
+                  <img src="{{ 'novedades_more_4.png' | asset_url }}" alt="Sellador de Bolsas USB" loading="lazy" width="400" height="300">
+                </div>
+                <div class="ll-new-mini-card-sec__body">
+                  <h3 class="ll-new-mini-card-sec__title"><a href="#">Mini Selladores de Bolsas Portátiles USB</a></h3>
+                  <div class="ll-new-mini-card-sec__footer">
+                    <span class="ll-new-mini-card-sec__price">$45.00 MXN</span>
+                    <a href="#" class="ll-new-mini-card-sec__btn-view">Ver</a>
+                  </div>
+                </div>
+              </div>
+              <div class="ll-new-mini-card-sec">
+                <div class="ll-new-mini-card-sec__media">
+                  <img src="{{ 'novedades_more_5.png' | asset_url }}" alt="Set de Brochas Maquillaje" loading="lazy" width="400" height="300">
+                </div>
+                <div class="ll-new-mini-card-sec__body">
+                  <h3 class="ll-new-mini-card-sec__title"><a href="#">Set Brochas de Maquillaje 12 pzas</a></h3>
+                  <div class="ll-new-mini-card-sec__footer">
+                    <span class="ll-new-mini-card-sec__price">$65.00 MXN</span>
+                    <a href="#" class="ll-new-mini-card-sec__btn-view">Ver</a>
+                  </div>
+                </div>
+              </div>
+            {%- endif -%}
+          </div>
+        </div>
+
+        <!-- Demo Hogar Panel -->
+        <div class="ll-new-grid-sec__tab-panel" data-tab-content="tab-demo-hogar-{{ section.id }}" role="tabpanel">
+          <div class="ll-new-grid-sec__grid">
+            <div class="ll-new-mini-card-sec">
+              <div class="ll-new-mini-card-sec__media">
+                <img src="{{ 'novedades_more_2.png' | asset_url }}" alt="Organizador Acrílico" loading="lazy" width="400" height="300">
+              </div>
+              <div class="ll-new-mini-card-sec__body">
+                <h3 class="ll-new-mini-card-sec__title"><a href="#">Organizadores Acrílicos Cosmetiqueros</a></h3>
+                <div class="ll-new-mini-card-sec__footer">
+                  <span class="ll-new-mini-card-sec__price">$120.00 MXN</span>
+                  <a href="#" class="ll-new-mini-card-sec__btn-view">Ver</a>
+                </div>
+              </div>
+            </div>
+            <div class="ll-new-mini-card-sec">
+              <div class="ll-new-mini-card-sec__media">
+                <img src="{{ 'novedades_more_3.png' | asset_url }}" alt="Foco Proyector Galaxia" loading="lazy" width="400" height="300">
+              </div>
+              <div class="ll-new-mini-card-sec__body">
+                <h3 class="ll-new-mini-card-sec__title"><a href="#">Focos Proyectores Galaxia Astronauta</a></h3>
+                <div class="ll-new-mini-card-sec__footer">
+                  <span class="ll-new-mini-card-sec__price">$290.00 MXN</span>
+                  <a href="#" class="ll-new-mini-card-sec__btn-view">Ver</a>
+                </div>
               </div>
             </div>
           </div>
-        {%- endfor -%}
-      {%- else -%}
-        <!-- Fallback cards matching Figma design -->
-        <div class="ll-new-mini-card-sec">
-          <div class="ll-new-mini-card-sec__media">
-            <img src="{{ 'novedades_more_1.png' | asset_url }}" alt="Mini Cámara HD" loading="lazy" width="400" height="300">
-          </div>
-          <div class="ll-new-mini-card-sec__body">
-            <h3 class="ll-new-mini-card-sec__title"><a href="#">Mini Cámaras Seguridad WiFi A9</a></h3>
-            <div class="ll-new-mini-card-sec__footer">
-              <span class="ll-new-mini-card-sec__price">$85.00 MXN</span>
-              <a href="#" class="ll-new-mini-card-sec__btn-view">Ver</a>
+        </div>
+
+        <!-- Demo Juguetes Panel -->
+        <div class="ll-new-grid-sec__tab-panel" data-tab-content="tab-demo-juguetes-{{ section.id }}" role="tabpanel">
+          <div class="ll-new-grid-sec__grid">
+            <div class="ll-new-mini-card-sec">
+              <div class="ll-new-mini-card-sec__media">
+                <img src="{{ 'novedades_more_1.png' | asset_url }}" alt="Mini Cámara HD" loading="lazy" width="400" height="300">
+              </div>
+              <div class="ll-new-mini-card-sec__body">
+                <h3 class="ll-new-mini-card-sec__title"><a href="#">Mini Cámaras Seguridad WiFi A9</a></h3>
+                <div class="ll-new-mini-card-sec__footer">
+                  <span class="ll-new-mini-card-sec__price">$85.00 MXN</span>
+                  <a href="#" class="ll-new-mini-card-sec__btn-view">Ver</a>
+                </div>
+              </div>
             </div>
           </div>
         </div>
 
-        <div class="ll-new-mini-card-sec">
-          <div class="ll-new-mini-card-sec__media">
-            <img src="{{ 'novedades_more_2.png' | asset_url }}" alt="Organizador Acrílico" loading="lazy" width="400" height="300">
-          </div>
-          <div class="ll-new-mini-card-sec__body">
-            <h3 class="ll-new-mini-card-sec__title"><a href="#">Organizadores Acrílicos Cosmetiqueros</a></h3>
-            <div class="ll-new-mini-card-sec__footer">
-              <span class="ll-new-mini-card-sec__price">$120.00 MXN</span>
-              <a href="#" class="ll-new-mini-card-sec__btn-view">Ver</a>
+        <!-- Demo Cocina Panel -->
+        <div class="ll-new-grid-sec__tab-panel" data-tab-content="tab-demo-cocina-{{ section.id }}" role="tabpanel">
+          <div class="ll-new-grid-sec__grid">
+            <div class="ll-new-mini-card-sec">
+              <div class="ll-new-mini-card-sec__media">
+                <img src="{{ 'novedades_more_4.png' | asset_url }}" alt="Sellador de Bolsas USB" loading="lazy" width="400" height="300">
+              </div>
+              <div class="ll-new-mini-card-sec__body">
+                <h3 class="ll-new-mini-card-sec__title"><a href="#">Mini Selladores de Bolsas Portátiles USB</a></h3>
+                <div class="ll-new-mini-card-sec__footer">
+                  <span class="ll-new-mini-card-sec__price">$45.00 MXN</span>
+                  <a href="#" class="ll-new-mini-card-sec__btn-view">Ver</a>
+                </div>
+              </div>
             </div>
           </div>
         </div>
 
-        <div class="ll-new-mini-card-sec">
-          <div class="ll-new-mini-card-sec__media">
-            <img src="{{ 'novedades_more_3.png' | asset_url }}" alt="Foco Proyector Galaxia" loading="lazy" width="400" height="300">
-          </div>
-          <div class="ll-new-mini-card-sec__body">
-            <h3 class="ll-new-mini-card-sec__title"><a href="#">Focos Proyectores Galaxia Astronauta</a></h3>
-            <div class="ll-new-mini-card-sec__footer">
-              <span class="ll-new-mini-card-sec__price">$290.00 MXN</span>
-              <a href="#" class="ll-new-mini-card-sec__btn-view">Ver</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="ll-new-mini-card-sec">
-          <div class="ll-new-mini-card-sec__media">
-            <img src="{{ 'novedades_more_4.png' | asset_url }}" alt="Sellador de Bolsas USB" loading="lazy" width="400" height="300">
-          </div>
-          <div class="ll-new-mini-card-sec__body">
-            <h3 class="ll-new-mini-card-sec__title"><a href="#">Mini Selladores de Bolsas Portátiles USB</a></h3>
-            <div class="ll-new-mini-card-sec__footer">
-              <span class="ll-new-mini-card-sec__price">$45.00 MXN</span>
-              <a href="#" class="ll-new-mini-card-sec__btn-view">Ver</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="ll-new-mini-card-sec">
-          <div class="ll-new-mini-card-sec__media">
-            <img src="{{ 'novedades_more_5.png' | asset_url }}" alt="Set de Brochas Maquillaje" loading="lazy" width="400" height="300">
-          </div>
-          <div class="ll-new-mini-card-sec__body">
-            <h3 class="ll-new-mini-card-sec__title"><a href="#">Set Brochas de Maquillaje 12 pzas</a></h3>
-            <div class="ll-new-mini-card-sec__footer">
-              <span class="ll-new-mini-card-sec__price">$65.00 MXN</span>
-              <a href="#" class="ll-new-mini-card-sec__btn-view">Ver</a>
+        <!-- Demo Limpieza Panel -->
+        <div class="ll-new-grid-sec__tab-panel" data-tab-content="tab-demo-limpieza-{{ section.id }}" role="tabpanel">
+          <div class="ll-new-grid-sec__grid">
+            <div class="ll-new-mini-card-sec">
+              <div class="ll-new-mini-card-sec__media">
+                <img src="{{ 'novedades_more_5.png' | asset_url }}" alt="Set de Brochas Maquillaje" loading="lazy" width="400" height="300">
+              </div>
+              <div class="ll-new-mini-card-sec__body">
+                <h3 class="ll-new-mini-card-sec__title"><a href="#">Set Brochas de Maquillaje 12 pzas</a></h3>
+                <div class="ll-new-mini-card-sec__footer">
+                  <span class="ll-new-mini-card-sec__price">$65.00 MXN</span>
+                  <a href="#" class="ll-new-mini-card-sec__btn-view">Ver</a>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -146,6 +446,53 @@
     </div>
   </div>
 </div>
+
+<script>
+  (function() {
+    function initLlamaradaTabs() {
+      const section = document.getElementById('ll-new-grid-sec-{{ section.id }}');
+      if (!section) return;
+
+      const pills = section.querySelectorAll('.ll-new-grid-sec__pill');
+      const panels = section.querySelectorAll('.ll-new-grid-sec__tab-panel');
+
+      pills.forEach(function(pill) {
+        pill.addEventListener('click', function() {
+          const targetTab = this.getAttribute('data-tab');
+          if (!targetTab) return;
+
+          pills.forEach(function(p) {
+            p.classList.remove('is-active');
+            p.setAttribute('aria-selected', 'false');
+          });
+
+          this.classList.add('is-active');
+          this.setAttribute('aria-selected', 'true');
+
+          panels.forEach(function(panel) {
+            if (panel.getAttribute('data-tab-content') === targetTab) {
+              panel.classList.add('is-active');
+            } else {
+              panel.classList.remove('is-active');
+            }
+          });
+        });
+      });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initLlamaradaTabs);
+    } else {
+      initLlamaradaTabs();
+    }
+
+    document.addEventListener('shopify:section:load', function(e) {
+      if (e.detail && e.detail.sectionId === '{{ section.id }}') {
+        initLlamaradaTabs();
+      }
+    });
+  })();
+</script>
 
 {% schema %}
 {
@@ -159,21 +506,55 @@
       "default": "Catálogo de Más Novedades"
     },
     {
+      "type": "collection_list",
+      "id": "collections",
+      "label": "Colecciones para las pestañas",
+      "info": "Selecciona varias colecciones para generar las pestañas dinámicas."
+    },
+    {
       "type": "collection",
       "id": "collection",
-      "label": "Colección de productos"
+      "label": "Colección Principal (para pestaña Todos)"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_all_tab",
+      "label": "Mostrar pestaña 'Todos'",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "all_tab_label",
+      "label": "Etiqueta de pestaña 'Todos'",
+      "default": "Todos"
     },
     {
       "type": "range",
       "id": "products_to_show",
       "min": 4,
-      "max": 20,
+      "max": 24,
       "step": 1,
       "default": 10,
-      "label": "Cantidad de productos a mostrar"
+      "label": "Cantidad de productos a mostrar por pestaña"
     }
   ],
   "blocks": [
+    {
+      "type": "collection_tab",
+      "name": "Pestaña de Colección",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Colección"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Nombre personalizado de pestaña (opcional)"
+        }
+      ]
+    },
     {
       "type": "grid_item",
       "name": "Producto Individual",
@@ -220,3 +601,4 @@
   ]
 }
 {% endschema %}
+

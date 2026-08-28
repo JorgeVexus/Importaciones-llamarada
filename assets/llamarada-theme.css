@@ -2227,6 +2227,30 @@ main.content-for-layout {
   box-shadow: 0 2px 8px rgba(148, 36, 164, 0.25);
 }
 
+.ll-new-grid-sec__tab-panel {
+  display: none;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1), transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ll-new-grid-sec__tab-panel.is-active {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.ll-new-grid-sec__empty {
+  padding: 40px 20px;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 12px;
+  border: 1px dashed rgba(226, 226, 226, 0.9);
+  color: var(--ll-text-muted);
+  font-size: 14px;
+  font-weight: 500;
+}
+
 .ll-new-grid-sec__grid {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
