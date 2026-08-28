@@ -73,21 +73,47 @@
     <nav class="ll-header__nav" aria-label="Categorías principales">
       {%- if section.settings.menu != blank -%}
         {%- for link in section.settings.menu.links -%}
+          {%- assign is_hdr_active = false -%}
+          {%- assign link_h = link.object.handle | default: link.title | handleize -%}
+          {%- if request.page_type == 'index' -%}
+            {%- if link.url == '/' or link.url == routes.root_url or link_h == 'inicio' -%}
+              {%- assign is_hdr_active = true -%}
+            {%- endif -%}
+          {%- elsif request.page_type == 'collection' -%}
+            {%- if collection.handle != blank -%}
+              {%- if collection.handle == link_h or link.url contains collection.handle -%}
+                {%- assign is_hdr_active = true -%}
+              {%- endif -%}
+            {%- endif -%}
+          {%- elsif link.active or link.current -%}
+            {%- assign is_hdr_active = true -%}
+          {%- endif -%}
           <a
             href="{{ link.url }}"
-            class="ll-header__nav-link{% if link.current or forloop.first %} is-active{% endif %}"
+            class="ll-header__nav-link{% if is_hdr_active %} is-active{% endif %}"
           >
-            {{ link.title }}
+            {%- if link_h == 'inicio' or forloop.first and link.url == '/' or link.url == routes.root_url -%}
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 6px; vertical-align: middle; display: inline-block;">
+                <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" fill="currentColor"/>
+              </svg>
+            {%- endif -%}
+            <span>{{ link.title }}</span>
           </a>
         {%- endfor -%}
       {%- else -%}
-        <a href="/collections/hogar" class="ll-header__nav-link is-active">Hogar</a>
-        <a href="/collections/juguetes" class="ll-header__nav-link">Juguetes</a>
-        <a href="/collections/fiesta" class="ll-header__nav-link">Fiesta</a>
-        <a href="/collections/belleza" class="ll-header__nav-link">Belleza</a>
-        <a href="/collections/cocina" class="ll-header__nav-link">Cocina</a>
-        <a href="/collections/bebes" class="ll-header__nav-link">Bebés</a>
-        <a href="/collections/abarrotes" class="ll-header__nav-link">Abarrotes</a>
+        <a href="{{ routes.root_url }}" class="ll-header__nav-link{% if request.page_type == 'index' %} is-active{% endif %}">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 6px; vertical-align: middle; display: inline-block;">
+            <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" fill="currentColor"/>
+          </svg>
+          <span>Inicio</span>
+        </a>
+        <a href="/collections/hogar" class="ll-header__nav-link{% if request.page_type == 'collection' and collection.handle == 'hogar' %} is-active{% endif %}">Hogar</a>
+        <a href="/collections/juguetes" class="ll-header__nav-link{% if request.page_type == 'collection' and collection.handle == 'juguetes' %} is-active{% endif %}">Juguetes</a>
+        <a href="/collections/fiesta" class="ll-header__nav-link{% if request.page_type == 'collection' and collection.handle == 'fiesta' %} is-active{% endif %}">Fiesta</a>
+        <a href="/collections/belleza" class="ll-header__nav-link{% if request.page_type == 'collection' and collection.handle == 'belleza' %} is-active{% endif %}">Belleza</a>
+        <a href="/collections/cocina" class="ll-header__nav-link{% if request.page_type == 'collection' and collection.handle == 'cocina' %} is-active{% endif %}">Cocina</a>
+        <a href="/collections/bebes" class="ll-header__nav-link{% if request.page_type == 'collection' and collection.handle == 'bebes' %} is-active{% endif %}">Bebés</a>
+        <a href="/collections/abarrotes" class="ll-header__nav-link{% if request.page_type == 'collection' and collection.handle == 'abarrotes' %} is-active{% endif %}">Abarrotes</a>
       {%- endif -%}
     </nav>
   </div>

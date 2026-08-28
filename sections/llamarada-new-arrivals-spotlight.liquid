@@ -1,5 +1,44 @@
 {%- assign selected_product = section.settings.product -%}
 
+{%- assign spotlight_title = selected_product.title -%}
+{%- if spotlight_title == blank or section.settings.title != blank and section.settings.title != 'Vasos Foco Neón LED (Caja con 100 pzas)' -%}
+  {%- if section.settings.title != blank -%}
+    {%- assign spotlight_title = section.settings.title -%}
+  {%- else -%}
+    {%- assign spotlight_title = 'Vasos Foco Neón LED (Caja con 100 pzas)' -%}
+  {%- endif -%}
+{%- endif -%}
+
+{%- assign spotlight_desc = selected_product.description | strip_html | truncatewords: 35 -%}
+{%- if spotlight_desc == blank or section.settings.description != blank and section.settings.description != 'Increíbles vasos con iluminación LED multicolor y sorbete flexible. Ideal para eventos, fiestas y venta al detalle. Alta rotación comercial.' -%}
+  {%- if section.settings.description != blank -%}
+    {%- assign spotlight_desc = section.settings.description -%}
+  {%- else -%}
+    {%- assign spotlight_desc = 'Increíbles vasos con iluminación LED multicolor y sorbete flexible. Ideal para eventos, fiestas y venta al detalle. Alta rotación comercial.' -%}
+  {%- endif -%}
+{%- endif -%}
+
+{%- assign spotlight_price = selected_product.price | money -%}
+{%- if selected_product == blank -%}
+  {%- assign spotlight_price = section.settings.price | default: '$1,850.00 MXN' -%}
+{%- elsif section.settings.price != blank and section.settings.price != '$1,850.00 MXN' -%}
+  {%- assign spotlight_price = section.settings.price -%}
+{%- endif -%}
+
+{%- assign spotlight_compare = '' -%}
+{%- if selected_product != blank and selected_product.compare_at_price > selected_product.price -%}
+  {%- assign spotlight_compare = selected_product.compare_at_price | money -%}
+{%- elsif section.settings.compare_price != blank and section.settings.compare_price != '$2,400.00 MXN' -%}
+  {%- assign spotlight_compare = section.settings.compare_price -%}
+{%- elsif selected_product == blank -%}
+  {%- assign spotlight_compare = section.settings.compare_price | default: '$2,400.00 MXN' -%}
+{%- endif -%}
+
+{%- assign spotlight_url = selected_product.url -%}
+{%- if spotlight_url == blank or section.settings.button_url != blank -%}
+  {%- assign spotlight_url = section.settings.button_url | default: '/collections/all' -%}
+{%- endif -%}
+
 <div class="ll-new-spotlight-sec">
   <div class="ll-new-spotlight-sec__container">
     <div class="ll-new-spotlight-sec__grid">
@@ -13,9 +52,9 @@
 
         <div class="ll-new-spotlight-sec__media">
           {%- if section.settings.image != blank -%}
-            <img src="{{ section.settings.image | image_url: width: 800 }}" alt="{{ section.settings.title }}" loading="lazy" width="800" height="600">
+            <img src="{{ section.settings.image | image_url: width: 800 }}" alt="{{ spotlight_title | escape }}" loading="lazy" width="800" height="600">
           {%- elsif selected_product != blank and selected_product.featured_image != blank -%}
-            <img src="{{ selected_product.featured_image | image_url: width: 800 }}" alt="{{ selected_product.title }}" loading="lazy" width="800" height="600">
+            <img src="{{ selected_product.featured_image | image_url: width: 800 }}" alt="{{ spotlight_title | escape }}" loading="lazy" width="800" height="600">
           {%- else -%}
             <img src="{{ 'novedades_spotlight.png' | asset_url }}" alt="Spotlight Novedad" loading="lazy" width="800" height="600">
           {%- endif -%}
@@ -27,30 +66,22 @@
         <span class="ll-new-spotlight-sec__tag">{{ section.settings.tagline | default: 'Lanzamiento Estrella' }}</span>
         
         <h2 class="ll-new-spotlight-sec__title">
-          {{ section.settings.title | default: selected_product.title | default: 'Vasos Foco Neón LED (Caja con 100 pzas)' }}
+          {{ spotlight_title }}
         </h2>
 
         <p class="ll-new-spotlight-sec__desc">
-          {{ section.settings.description | default: selected_product.description | strip_html | truncatewords: 35 | default: 'Increíbles vasos con iluminación LED multicolor y sorbete flexible. Ideal para eventos, fiestas y venta al detalle. Alta rotación comercial.' }}
+          {{ spotlight_desc }}
         </p>
 
         <!-- Pricing info -->
         <div class="ll-new-spotlight-sec__pricing">
           <div class="ll-new-spotlight-sec__price-main">
             <span class="ll-new-spotlight-sec__unit-price">
-              {%- if selected_product != blank -%}
-                {{ selected_product.price | money }}
-              {%- else -%}
-                {{ section.settings.price | default: '$1,850.00 MXN' }}
-              {%- endif -%}
+              {{ spotlight_price }}
             </span>
-            {%- if section.settings.compare_price != blank or selected_product.compare_at_price > selected_product.price -%}
+            {%- if spotlight_compare != blank -%}
               <span class="ll-new-spotlight-sec__compare-price">
-                {%- if selected_product != blank and selected_product.compare_at_price > selected_product.price -%}
-                  {{ selected_product.compare_at_price | money }}
-                {%- else -%}
-                  {{ section.settings.compare_price | default: '$2,400.00 MXN' }}
-                {%- endif -%}
+                {{ spotlight_compare }}
               </span>
             {%- endif -%}
           </div>
@@ -62,7 +93,7 @@
 
         <!-- Actions -->
         <div class="ll-new-spotlight-sec__actions">
-          <a href="{{ section.settings.button_url | default: selected_product.url | default: '/collections/all' }}" class="ll-new-spotlight-sec__btn-primary">
+          <a href="{{ spotlight_url }}" class="ll-new-spotlight-sec__btn-primary">
             <span>{{ section.settings.button_text | default: 'Ver Producto Destacado' }}</span>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </a>
@@ -86,12 +117,12 @@
     {
       "type": "product",
       "id": "product",
-      "label": "Producto destacado (opcional)"
+      "label": "Producto destacado (carga datos automáticamente)"
     },
     {
       "type": "image_picker",
       "id": "image",
-      "label": "Imagen personalizada (sobrescribe imagen del producto)"
+      "label": "Imagen personalizada (opcional, sobrescribe imagen del producto)"
     },
     {
       "type": "text",
@@ -108,26 +139,22 @@
     {
       "type": "text",
       "id": "title",
-      "label": "Título de la novedad estrella",
-      "default": "Vasos Foco Neón LED (Caja con 100 pzas)"
+      "label": "Título personalizado (opcional si selecciona producto)"
     },
     {
       "type": "textarea",
       "id": "description",
-      "label": "Descripción corta",
-      "default": "Increíbles vasos con iluminación LED multicolor y sorbete flexible. Ideal para eventos, fiestas y venta al detalle. Alta rotación comercial."
+      "label": "Descripción personalizada (opcional si selecciona producto)"
     },
     {
       "type": "text",
       "id": "price",
-      "label": "Precio manual (si no selecciona producto)",
-      "default": "$1,850.00 MXN"
+      "label": "Precio manual (opcional si selecciona producto)"
     },
     {
       "type": "text",
       "id": "compare_price",
-      "label": "Precio tachado manual",
-      "default": "$2,400.00 MXN"
+      "label": "Precio tachado manual (opcional si selecciona producto)"
     },
     {
       "type": "text",
@@ -144,7 +171,7 @@
     {
       "type": "url",
       "id": "button_url",
-      "label": "Enlace del botón"
+      "label": "Enlace personalizado (opcional)"
     },
     {
       "type": "text",
